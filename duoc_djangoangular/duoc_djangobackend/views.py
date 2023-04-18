@@ -35,3 +35,6 @@ def login(request):
         # Login failed
         response_data = {"error": "Datos de login invalidos"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+# _________________ CRUDS _______________________
