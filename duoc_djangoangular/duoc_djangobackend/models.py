@@ -1,14 +1,23 @@
 from djongo import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.hashers import make_password
 
 
-class Administrator(AbstractUser):
-    pass
+class Administrator(models.Model):
+    username = models.CharField(max_length=30, unique=True)
+    password = models.CharField(max_length=100)
+
+    def save(self, *args, **kwargs):
+        self.password = make_password(self.password)
+        super(Administrator, self).save(*args, **kwargs)
 
 
-class ResponsableUnidad(AbstractUser):
-    id_facultad = models.IntegerField()
-    id_unidad = models.IntegerField()
+class ResponsableUnidad(models.Model):
+    username = models.CharField(max_length=30, unique=True)
+    password = models.CharField(max_length=100)
+
+    def save(self, *args, **kwargs):
+        self.password = make_password(self.password)
+        super(ResponsableUnidad, self).save(*args, **kwargs)
 
 
 class ProveedoresTelefonia(models.Model):
