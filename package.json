@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@angular-devkit/build-angular": "^15.2.6",
+    "@angular/cli": "^15.2.6",
+    "@angular/platform-browser-dynamic": "^15.2.8",
+    "@coreui/angular": "^4.4.1",
+    "@coreui/coreui": "^4.2.6",
+    "@coreui/icons": "^3.0.1"
+  }
+}
