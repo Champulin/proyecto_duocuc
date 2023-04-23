@@ -2,8 +2,8 @@ from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from serializers import *
-from models import *
+from .serializers import *
+from .models import *
 
 
 @api_view(["POST"])
@@ -35,6 +35,6 @@ def login(request):
         # Login failed
         response_data = {"error": "Datos de login invalidos"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-    
-    
+
+
 # _________________ CRUDS _______________________

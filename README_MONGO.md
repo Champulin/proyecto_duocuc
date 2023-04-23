@@ -2,11 +2,9 @@
 
 Proyecto de titulo DuocUC 2023
 
-Pre-requisitos:
+Haber 
 
-Haber realizado guia de instalacion de Mongo y creacion de base de datos: README_MONGO.md
-
-Tener instalado Pip, Python, MongoDB, Node JS
+Tener instalado Pip, Python, MongoDB, Node JS y tener NPM o NVM
 
 Intrucciones de levantamiento de ambientes de desarrollo:
 
@@ -40,18 +38,8 @@ nombre_env\Scripts\activate
 pip install -r requirements.txt
 ```
 
-#Realizar creacion de modelos, poblado y migracion de BD:
-
-Dirigirse a la carpeta duoc_djangoanular
-
 #luego de instalar los requerimientos de django instalar Angular
 
 ```
 npm install -g @angular/cli
-```
-
-Dirigirse a carpeta de duoc_angularfrontend
-
-```
-npm install
 ```
