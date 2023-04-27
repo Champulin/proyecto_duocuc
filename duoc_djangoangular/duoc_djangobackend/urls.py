@@ -16,7 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from .views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    
+]
+
+# URLS API
+
+urlpatterns += [
+    # Proveedor
+    path('api/proveedor/', proveedor_collection, name="proveedor_collection"),
+    path('api/proveedor/<int:pk>', proveedor_element, name="proveedor_element"),
+    # Responsable de unidad
+    
+    
 ]

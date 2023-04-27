@@ -3,6 +3,7 @@ from django.contrib.auth.hashers import make_password
 
 
 class Administrator(models.Model):
+    _id = models.ObjectIdField()
     username = models.CharField(max_length=30, unique=True)
     password = models.CharField(max_length=100)
     
@@ -17,6 +18,7 @@ class Administrator(models.Model):
 
 
 class ResponsableUnidad(models.Model):
+    _id = models.ObjectIdField()
     username = models.CharField(max_length=30, unique=True)
     password = models.CharField(max_length=100)
 
@@ -31,6 +33,7 @@ class ResponsableUnidad(models.Model):
 
 
 class ProveedoresTelefonia(models.Model):
+    _id = models.ObjectIdField()
     id_proveedor = models.IntegerField()
     nombre_proveedor = models.CharField(max_length=50)
     costo_seg_cel = models.IntegerField()
@@ -44,6 +47,7 @@ class ProveedoresTelefonia(models.Model):
 
 
 class CuentaPresupuestaria(models.Model):
+    _id = models.ObjectIdField()
     id_proveedor = models.IntegerField()
     id_facultad = models.IntegerField()
     nombre_facultad = models.CharField(max_length=50)
@@ -55,6 +59,7 @@ class CuentaPresupuestaria(models.Model):
 
 
 class Unidad(models.Model):
+    _id = models.ObjectIdField()
     id_unidad = models.IntegerField()
     nombre_depto = models.CharField(max_length=50)
     siglas_depto = models.CharField(max_length=10)
@@ -67,6 +72,7 @@ class Unidad(models.Model):
 
 
 class Anexo(models.Model):
+    _id = models.ObjectIdField()
     id_anexo = models.IntegerField()
     id_facultad = models.IntegerField()
     id_unidad = models.IntegerField()
@@ -77,10 +83,12 @@ class Anexo(models.Model):
         db_table =  "Anexo"
         verbose_name= "Anexo"
         verbose_name_plural = "Anexos"
+
     
 
 
 class RegistroLlamada(models.Model):
+    _id = models.ObjectIdField()
     id_anexo = models.IntegerField()
     id_facultad = models.IntegerField()
     id_unidad = models.IntegerField()
@@ -103,6 +111,7 @@ class RegistroLlamada(models.Model):
 
 
 class CalculoMensual(models.Model):
+    _id = models.ObjectIdField()
     id_facultad = models.IntegerField()
     nombre_depto = models.CharField(max_length=50)
     tarificacion_general = models.IntegerField()
