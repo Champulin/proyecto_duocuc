@@ -27,9 +27,15 @@ urlpatterns = [
 
 urlpatterns += [
     # Proveedor
+    # RECORDAR COLLECTION ES PARA CREAR O LISTAR GENERAL | ELEMENT PARA UNO
     path('api/proveedor/', proveedor_collection, name="proveedor_collection"),
     path('api/proveedor/<int:pk>', proveedor_element, name="proveedor_element"),
-    # Responsable de unidad
+    # Cuenta presupuestaria
+    path('api/cuentapre/', cuentapre_collection.as_view(), name="cuentapre_collection"),
+    path('api/cuentapre/<int:id_facultad>', cuentapre_element.as_view(), name="cuentapre_element"),
+    # Anexo
+    # path('api/anexo/', proveedor_collection, name="anexo_collection"),
+    # path('api/anexo/<int:pk>', proveedor_element, name="anexo_element"),
     
     
 ]

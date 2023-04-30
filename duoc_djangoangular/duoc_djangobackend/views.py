@@ -7,6 +7,14 @@ from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
 
+#  NORMAL GENERICS
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+
+# GENERICS API
+
+from rest_framework import generics
+
+
 # Conversiones a json
 
 from django.http.response import JsonResponse
@@ -94,4 +102,81 @@ def proveedor_element(request, pk):
         # Respuesta sin contenido
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# _________________ PROVEEDOR TELEFONIA CRUD API __________________________
+# ___________________________ API GENERICS __________________________
+
+# Cuentas presupuestarias
+
+class cuentapre_collection(generics.ListCreateAPIView):
+    queryset = CuentaPresupuestaria.objects.all()
+    serializer_class = CuentaPresupuestariaSerializer
+    
+class cuentapre_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    # LOOKUP_FIELD = CAMPO QUE BUSCARA EN LA BD | LOOKUP_URL_KWARG = NOMBRE DEL VALOR EN LA URL PARA BUSCAR EL CAMPO
+    
+    queryset = CuentaPresupuestaria.objects.all()
+    serializer_class = CuentaPresupuestariaSerializer
+    lookup_field = 'id_facultad'
+    lookup_url_kwarg = 'pk'
+    
+# Unidad
+
+class unidad_collection(generics.ListCreateAPIView):
+    queryset = Unidad.objects.all()
+    serializer_class = UnidadSerializer
+    
+class unidad_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    queryset = Unidad.objects.all()
+    serializer_class = UnidadSerializer
+    lookup_field = 'id_unidad'
+    lookup_url_kwarg = 'pk'
+
+# Anexo
+
+class anexo_collection(generics.ListCreateAPIView):
+    queryset = Anexo.objects.all()
+    serializer_class = AnexoSerializer
+    
+class anexo_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    queryset = Anexo.objects.all()
+    serializer_class = AnexoSerializer
+    lookup_field = 'id_anexo'
+    lookup_url_kwarg = 'pk'
+
+# Registro llamada
+
+class registro_collection(generics.ListCreateAPIView):
+    queryset = RegistroLlamada.objects.all()
+    serializer_class = RegistroLlamadaSerializer
+    
+class registro_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    queryset = RegistroLlamada.objects.all()
+    serializer_class = RegistroLlamadaSerializer
+    lookup_field = 'id_anexo'
+    lookup_url_kwarg = 'pk'
+
+# Calculo mensual
+
+class calculo_collection(generics.ListCreateAPIView):
+    queryset = CalculoMensual.objects.all()
+    serializer_class = CalculoMensualSerializer
+    
+class calculo_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    queryset = CalculoMensual.objects.all()
+    serializer_class = CalculoMensualSerializer
+    lookup_field = 'id_facultad'
+    lookup_url_kwarg = 'pk'
+    
+            
+            
+    
+        
+ 
+        
+        
+    
+    
