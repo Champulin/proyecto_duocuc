@@ -36,4 +36,5 @@ urlpatterns += [
     # Anexo
     # path('api/anexo/', proveedor_collection, name="anexo_collection"),
     # path('api/anexo/<int:pk>', proveedor_element, name="anexo_element"),
+    path("login/", login),
 ]
