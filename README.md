@@ -1,45 +1,109 @@
-# proyecto_duocuc
+# Instrucciones de despliegue de aplicación.
 
-Proyecto de titulo DuocUC 2023
+# Creación de usuario admin para MongoDB
 
-Pre-requisitos: 
+Requisitos:
 
-Tener instalado Pip, Python, MongoDB, Node JS y tener NPM o NVM
+Haber seguido guia de instalación de MongoDB Compass y tenerlo correctamente instalado.
 
-Intrucciones de levantamiento de ambientes de desarrollo:
+> Descargar MongoShell desde: [Mongo Shell](chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#ttl=MongoDB%20Shell%20Download%20%7C%20MongoDB&pos=1000&uri=https://www.mongodb.com/try/download/shell)
 
-#Todos los comandos son a ejecutar en la linea de comandos cmd.
+> Descomprimir y dirigirse a directorio bin
 
-#con la terminal de comandos en el root del proyecto
+> Ejecutar mongosh.exe
 
-#Instalar ambiente virtual
+![1682279232927](image/README_MONGO/1682279232927.png)
+
+Escribir los siguientes comandos:
+
+```
+use admin
+
+```
+
+```
+db.createUser(
+  {
+    user: "myAdmin",
+    pwd: "myAdminPassword",
+    roles: [ { role: "root", db: "admin" } ]
+  }
+)
+```
+
+Comprobar creación de usuario con:
+
+```
+db.getUser("myAdmin")
+```
+
+# Instalación y configuración de BackEnd
+
+Prerrequisitos:
+
+Tener creado usuario Admin a través de Mongo Shell y haber instalado MongoDB Compass
+
+Tener instalado Pip, Python, NodeJS
+
+Instrucciones de levantamiento de ambientes de desarrollo:
+
+> Todos los comandos son a ejecutar en la línea de comandos cmd.
+
+> con la terminal de comandos en el directorio root del proyecto
+
+Instalar ambiente virtual
 
 ```
 pip install virtualenv
 ```
 
-#Crear ambiente virtual el nombre es opcional, si se crea uno que no sea "nombre_env" cambiar por su respectivo nombre 
+Crear ambiente virtual, utilizamos "django_env" en este ejemplo, cambiar nombre de env en caso de usar otro.
 
 ```
-virtualenv nombre_env
+virtualenv django_env
 ```
 
-#Activar ambiente virtual --este comando debera reejecutarse cada vez que se quiera lanzar django, todas las instalaciones subsiguientes se realizaran con el env activado
+Activar ambiente virtual --este comando debera reejecutarse cada vez que se quiera lanzar django, todas las instalaciones subsiguientes se realizaran con el env activado
 
 ```
-nombre_env\Scripts\activate
+django_env\Scripts\activate
 ```
 
-#una vez activado, la terminal deberia verse asi (nombre_env)path\to\project\proyecto_duocuc>, siento "path\to\project" la ruta de su computador hacia el proyecto clonado.
+Una vez activado, la terminal debería verse de tal manera (nombre_env)path\to\project\proyecto_duocuc>, siendo "path\to\project" la ruta de su computador hacia el proyecto clonado.
 
-#instalacion requerimientos del proyecto
+> Imagen de ejemplo:
+
+![1682279843309](image/README/1682279843309.png)
+
+Instalacion requerimientos del proyecto
 
 ```
 pip install -r requirements.txt
 ```
 
-#luego de instalar los requerimientos de django instalar Angular 
+#Realizar creacion de modelos, poblado y migracion de BD:
+
+Dirigirse a la carpeta duoc_djangoanular
+
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+Luego de ver el output con los mensajes de OK, dirigirse a MongoDB compass para comprobar la correcta creacion de la base de datos y sus datos predefinidos:
+
+![1682278928902](image/README/1682278928902.png)
+
+# Instalación de dependencias FrontEnd
+
+Luego de instalar los requerimientos de django instalar Angular
 
 ```
 npm install -g @angular/cli
+```
+
+Dirigirse a carpeta de duoc_angularfrontend
+
+```
+npm install
 ```

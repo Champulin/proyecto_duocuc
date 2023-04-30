@@ -171,12 +171,3 @@ class calculo_element(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id_facultad'
     lookup_url_kwarg = 'pk'
     
-            
-            
-    
-        
- 
-        
-        
-    
-    
