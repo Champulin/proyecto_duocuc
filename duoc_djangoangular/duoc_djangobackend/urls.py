@@ -24,9 +24,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", login),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # URLS API
 
 urlpatterns += [
@@ -52,3 +49,6 @@ urlpatterns += [
     path('api/calculo/', calculo_collection.as_view(), name="anexo_collection"),
     path('api/calculo/<int:pk>', calculo_element.as_view(), name="anexo_element"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

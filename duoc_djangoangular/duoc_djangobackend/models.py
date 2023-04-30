@@ -57,7 +57,7 @@ class ProveedoresTelefonia(models.Model):
 class CuentaPresupuestaria(models.Model):
     _id = models.ObjectIdField()
     id_proveedor = models.IntegerField()
-    id_facultad = models.IntegerField()
+    id_facultad = models.IntegerField(unique=True)
     nombre_facultad = models.CharField(max_length=50)
     siglas_facultad = models.CharField(max_length=10)
     class Meta:
@@ -68,7 +68,7 @@ class CuentaPresupuestaria(models.Model):
 
 class Unidad(models.Model):
     _id = models.ObjectIdField()
-    id_unidad = models.IntegerField()
+    id_unidad = models.IntegerField(unique=True)
     nombre_depto = models.CharField(max_length=50)
     siglas_depto = models.CharField(max_length=10)
     id_facultad = models.IntegerField()
