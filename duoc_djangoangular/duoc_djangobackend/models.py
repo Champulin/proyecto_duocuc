@@ -4,6 +4,9 @@ from django.contrib.auth.hashers import make_password
 
 class Administrator(models.Model):
     _id = models.ObjectIdField()
+    name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
+    email = models.EmailField(unique=True, null=True)
     username = models.CharField(max_length=30, unique=True)
     password = models.CharField(max_length=100)
     
@@ -19,6 +22,11 @@ class Administrator(models.Model):
 
 class ResponsableUnidad(models.Model):
     _id = models.ObjectIdField()
+    name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
+    email = models.EmailField(unique=True, null=True)
+    id_unidad = models.IntegerField()
+    id_facultad = models.IntegerField()
     username = models.CharField(max_length=30, unique=True)
     password = models.CharField(max_length=100)
 
@@ -34,7 +42,7 @@ class ResponsableUnidad(models.Model):
 
 class ProveedoresTelefonia(models.Model):
     _id = models.ObjectIdField()
-    id_proveedor = models.IntegerField()
+    id_proveedor = models.IntegerField(unique=True)
     nombre_proveedor = models.CharField(max_length=50)
     costo_seg_cel = models.IntegerField()
     costo_seg_ldi = models.IntegerField()
@@ -74,6 +82,7 @@ class Unidad(models.Model):
 class Anexo(models.Model):
     _id = models.ObjectIdField()
     id_anexo = models.IntegerField()
+    file = models.FileField(upload_to="anexos/", null=True)
     id_facultad = models.IntegerField()
     id_unidad = models.IntegerField()
     nombre_anexo = models.CharField(max_length=50)
@@ -95,7 +104,6 @@ class RegistroLlamada(models.Model):
     nombre_proveedor = models.CharField(max_length=50)
     tipo_llamada_siglas = models.CharField(max_length=10)
     numero_telefono = models.IntegerField()
-    siglas_depto = models.CharField(max_length=10)
     fecha_llamada = models.DateField()
     hora_llamada = models.DateField()
     duracion_llamada = models.IntegerField()
