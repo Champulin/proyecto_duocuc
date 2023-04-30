@@ -20,7 +20,7 @@ from .views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    
+    path("login/", login),
 ]
 
 # URLS API
@@ -33,8 +33,16 @@ urlpatterns += [
     # Cuenta presupuestaria
     path('api/cuentapre/', cuentapre_collection.as_view(), name="cuentapre_collection"),
     path('api/cuentapre/<int:id_facultad>', cuentapre_element.as_view(), name="cuentapre_element"),
+    # Unidad
+    path('api/anexo/', unidad_collection.as_view(), name="anexo_collection"),
+    path('api/anexo/<int:pk>', unidad_element.as_view(), name="anexo_element"),
     # Anexo
-    # path('api/anexo/', proveedor_collection, name="anexo_collection"),
-    # path('api/anexo/<int:pk>', proveedor_element, name="anexo_element"),
-    path("login/", login),
+    path('api/anexo/', anexo_collection.as_view(), name="anexo_collection"),
+    path('api/anexo/<int:pk>', anexo_element.as_view(), name="anexo_element"),
+    # Registro
+    path('api/anexo/', registro_collection.as_view(), name="anexo_collection"),
+    path('api/anexo/<int:pk>', registro_element.as_view(), name="anexo_element"),
+    # Calculo mensual
+    path('api/anexo/', calculo_collection.as_view(), name="anexo_collection"),
+    path('api/anexo/<int:pk>', calculo_element.as_view(), name="anexo_element"),
 ]
