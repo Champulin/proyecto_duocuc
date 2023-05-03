@@ -21,8 +21,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    # path("", admin.site.urls),
     path("admin/", admin.site.urls),
     path("login/", login),
+    path("insertar_anexo/", insert_anexo),
 ]
 # URLS API
 
@@ -30,24 +32,28 @@ urlpatterns += [
     # Proveedor
     # RECORDAR COLLECTION ES PARA CREAR O LISTAR GENERAL | ELEMENT PARA UNO
     # _____________ NORMAL ________________
-    path('api/proveedor/', proveedor_collection, name="proveedor_collection"),
-    path('api/proveedor/<int:pk>', proveedor_element, name="proveedor_element"),
+    path("api/proveedor/", proveedor_collection, name="proveedor_collection"),
+    path("api/proveedor/<int:pk>", proveedor_element, name="proveedor_element"),
     # _____________ GENERICOS ________________
     # Cuenta presupuestaria
-    path('api/cuentapre/', cuentapre_collection.as_view(), name="cuentapre_collection"),
-    path('api/cuentapre/<int:id_facultad>', cuentapre_element.as_view(), name="cuentapre_element"),
+    path("api/cuentapre/", cuentapre_collection.as_view(), name="cuentapre_collection"),
+    path(
+        "api/cuentapre/<int:id_facultad>",
+        cuentapre_element.as_view(),
+        name="cuentapre_element",
+    ),
     # Unidad
-    path('api/unidad/', unidad_collection.as_view(), name="anexo_collection"),
-    path('api/unidad/<int:pk>', unidad_element.as_view(), name="anexo_element"),
+    path("api/unidad/", unidad_collection.as_view(), name="anexo_collection"),
+    path("api/unidad/<int:pk>", unidad_element.as_view(), name="anexo_element"),
     # Anexo
-    path('api/anexo/', anexo_collection.as_view(), name="anexo_collection"),
-    path('api/anexo/<int:pk>', anexo_element.as_view(), name="anexo_element"),
+    path("api/anexo/", anexo_collection.as_view(), name="anexo_collection"),
+    path("api/anexo/<int:pk>", anexo_element.as_view(), name="anexo_element"),
     # Registro
-    path('api/registro/', registro_collection.as_view(), name="anexo_collection"),
-    path('api/registro/<int:pk>', registro_element.as_view(), name="anexo_element"),
+    path("api/registro/", registro_collection.as_view(), name="anexo_collection"),
+    path("api/registro/<int:pk>", registro_element.as_view(), name="anexo_element"),
     # Calculo mensual
-    path('api/calculo/', calculo_collection.as_view(), name="anexo_collection"),
-    path('api/calculo/<int:pk>', calculo_element.as_view(), name="anexo_element"),
+    path("api/calculo/", calculo_collection.as_view(), name="anexo_collection"),
+    path("api/calculo/<int:pk>", calculo_element.as_view(), name="anexo_element"),
 ]
 
 if settings.DEBUG:
