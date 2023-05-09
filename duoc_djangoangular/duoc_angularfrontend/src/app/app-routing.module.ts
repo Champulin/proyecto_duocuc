@@ -26,6 +26,26 @@ const routes: Routes = [
           import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
       },
       {
+        path: 'menu-usuario',
+        loadChildren: () =>
+          import('./views/menu-gestion-usuarios/menu-gestion-usuarios.module').then((m) => m.MenuGestionUsuariosModule)
+      },
+      {
+        path: 'menu-unidades',
+        loadChildren: () =>
+          import('./views/gestion-unidades/gestion-unidades.module').then((m) => m.GestionUnidadesModule)
+      },
+      {
+        path: 'menu-proveedores',
+        loadChildren: () =>
+          import('./views/gestion-proveedor/gestion-proveedor.module').then((m) => m.GestionProveedorModule)
+      },
+      {
+        path: 'menu-cuentas',
+        loadChildren: () =>
+          import('./views/gestion-cuentas/gestion-cuentas.module').then((m) => m.GestionCuentasModule)
+      },
+      {
         path: 'theme',
         loadChildren: () =>
           import('./views/theme/theme.module').then((m) => m.ThemeModule)

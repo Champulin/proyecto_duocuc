@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import {
   PERFECT_SCROLLBAR_CONFIG,
@@ -46,6 +47,9 @@ import {
 
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 
+// import services
+import { UserDataService } from 'src/app/services/user-data/user-data.service';
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
 };
@@ -68,6 +72,7 @@ const APP_CONTAINERS = [
     DropdownModule,
     GridModule,
     HeaderModule,
+    HttpClientModule,
     SidebarModule,
     IconModule,
     PerfectScrollbarModule,
@@ -77,6 +82,8 @@ const APP_CONTAINERS = [
     UtilitiesModule,
     ButtonGroupModule,
     ReactiveFormsModule,
+    FormModule,
+    FormsModule,
     SidebarModule,
     SharedModule,
     TabsModule,
@@ -96,7 +103,8 @@ const APP_CONTAINERS = [
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
     IconSetService,
-    Title
+    Title,
+    UserDataService
   ],
   bootstrap: [AppComponent],
 })
