@@ -4,8 +4,8 @@
 
 Requisitos:
 
-Haber seguido guia de instalación de MongoDB Compass y tenerlo correctamente instalado.
-
+Haber seguido guia de instalación de MongoDB Community Server https://www.mongodb.com/try/download/community y tenerlo correctamente instalado.
+> Si se trabaja desde Windows:
 > Descargar MongoShell desde: [Mongo Shell](chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#ttl=MongoDB%20Shell%20Download%20%7C%20MongoDB&pos=1000&uri=https://www.mongodb.com/try/download/shell)
 
 > Descomprimir y dirigirse a directorio bin
