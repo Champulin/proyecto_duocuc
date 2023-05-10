@@ -6,5 +6,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class UserDataService {
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
+
+  //Currently url.py does not have a retrieve all users url for the API, so abandon this service until that has been solved.
+/*
+  list() {
+    return this.http.get('api/usuarios');
+  }
+*/
 }

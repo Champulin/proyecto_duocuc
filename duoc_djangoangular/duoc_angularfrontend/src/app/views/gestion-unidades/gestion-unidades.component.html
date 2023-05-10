@@ -1,1 +1,63 @@
-<p>gestion-unidades works!</p>
+<c-row>
+    <c-col xs="auto">
+      <input aria-label="Facultad" cFormControl placeholder="Facultad" />
+    </c-col>
+    <c-col xs="auto">
+      <input aria-label="Unidad" cFormControl placeholder="Unidad" />
+    </c-col>
+    <c-col>
+      <button cButton color="info">
+        <svg cIcon name="cilSearch"></svg>
+        &nbsp; Search
+      </button>
+    </c-col>
+  </c-row>
+  <br />
+  <br />
+  <h4>Usuarios</h4>
+  <table cTable class="listaUnidades">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Sigla</th>
+        <th scope="col">Facultad</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let unit of listedUnits">
+      <tr>
+        <th scope="row">{{unit.id}}</th>
+        <td>{{unit.nombre}}</td>
+        <td>{{unit.sigla | uppercase}}</td>
+        <td>{{unit.facultad}}</td>
+        <td>
+          <button cButton color="success" (click)="onSelect(unit)" [class.selected]="unit === selectedUnit">
+          <svg cIcon name="cilPencil"></svg>
+          </button>
+          <button cButton color="danger">
+          <svg cIcon name="cilTrash"></svg>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <ul class="listaUnidades">
+    <li *ngFor="let unit of listedUnits">
+        <button type="button" (click)="onSelect(unit)" [class.selected]="unit === selectedUnit">
+            <span class="badge">{{unit.id}}</span>
+            <span class="name">{{unit.nombre}}</span>
+        </button>
+    </li>
+  </ul>
+
+
+  <!--Current selected user data test-->
+<div *ngIf="selectedUnit"><span>ID: {{selectedUnit.id}}</span></div>
+<div *ngIf="selectedUnit"><span>NAME: {{selectedUnit.nombre}}</span></div>
+<div *ngIf="selectedUnit"><span>ACRONYM: {{selectedUnit.sigla}}</span></div> 
+<div *ngIf="selectedUnit"><span>FACULTY: {{selectedUnit.facultad}}</span></div> 
+
+<br><br>
+Unit DB Information: {{ units | json }}
+<br><br>

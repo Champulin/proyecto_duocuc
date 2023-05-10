@@ -43,7 +43,9 @@ urlpatterns += [
         name="cuentapre_element",
     ),
     # Unidad
+        #This one is for List(get) and Creat(post)
     path("api/unidad/", unidad_collection.as_view(), name="anexo_collection"),
+        #This one is for Get, Put, Patch and Delete
     path("api/unidad/<int:pk>", unidad_element.as_view(), name="anexo_element"),
     # Anexo
     path("api/anexo/", anexo_collection.as_view(), name="anexo_collection"),

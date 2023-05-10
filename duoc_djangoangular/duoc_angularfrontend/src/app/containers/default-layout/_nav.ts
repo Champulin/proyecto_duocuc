@@ -17,38 +17,22 @@ export const navItems: INavData[] = [
   {
     name: 'Gestion de Usuarios',
     url: '/menu-usuario',
-    iconComponent: { name: 'cil-pencil' },
-    badge: {
-      color: 'info',
-      text: 'OLD'
-    }
+    iconComponent: { name: 'cil-pencil' }
   },
   {
     name: 'Gestion de Unidades',
     url: '/menu-unidades',
-    iconComponent: { name: 'cil-pencil' },
-    badge: {
-      color: 'info',
-      text: 'OLD'
-    }
+    iconComponent: { name: 'cil-pencil' }
   },
   {
     name: 'Gestion de Cuentas',
     url: '/menu-cuentas',
-    iconComponent: { name: 'cil-pencil' },
-    badge: {
-      color: 'info',
-      text: 'OLD'
-    }
+    iconComponent: { name: 'cil-pencil' }
   },
   {
     name: 'Gestion de Proveedores',
     url: '/menu-proveedores',
-    iconComponent: { name: 'cil-pencil' },
-    badge: {
-      color: 'info',
-      text: 'OLD'
-    }
+    iconComponent: { name: 'cil-pencil' }
   },
   {
     title: true,

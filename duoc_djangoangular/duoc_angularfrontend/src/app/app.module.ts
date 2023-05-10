@@ -49,6 +49,7 @@ import { IconModule, IconSetService } from '@coreui/icons-angular';
 
 // import services
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
+import { UnitDataService } from 'src/app/services/unit-data/unit-data.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -104,7 +105,8 @@ const APP_CONTAINERS = [
     },
     IconSetService,
     Title,
-    UserDataService
+    UserDataService,
+    UnitDataService
   ],
   bootstrap: [AppComponent],
 })
