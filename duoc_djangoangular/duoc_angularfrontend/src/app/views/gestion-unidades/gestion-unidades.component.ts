@@ -46,20 +46,18 @@ export class GestionUnidadesComponent implements OnInit {
   }
 
   // CODE TO CREATE NEW UNIT ENTRY
-  createUnits() {
-    //sending request to the service with the data for the new unit
-    this._unitDataService.create(this.newUnit).subscribe(
-     data => {
-        //if the data successfully sends then log it and ask for the data from the DB again to refresh tables
-        console.log('Data Sent: ' + data);
-        this.getUnits();
-        return true;
-      },
-      error => {
-        console.error('Error creating Unit');
-        return throwError(error);
-      }
-    )
-  }
+  // createUnits() {
+  //   this._unitDataService.create(this.newUnit).subscribe(
+  //    data => {
+  //       console.log('Data Sent: ' + data);
+  //       this.getUnits();
+  //       return true;
+  //     },
+  //     error => {
+  //       console.error('Error creating Unit');
+  //       return throwError(error);
+  //     }
+  //   )
+  // }
 }
 

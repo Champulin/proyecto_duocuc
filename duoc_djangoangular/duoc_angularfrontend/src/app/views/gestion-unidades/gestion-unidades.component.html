@@ -14,17 +14,17 @@
   </c-row>
   <br />
   <br />
-  <h4>Usuarios</h4>
+  <h4>Unidades</h4>
   <table cTable class="listaUnidades">
     <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Nombre</th>
         <th scope="col">Sigla</th>
-        <th scope="col">Facultad</th>
+        <th scope="col">#Facultad</th>
       </tr>
     </thead>
-    <tbody *ngFor="let unit of listedUnits">
+    <tbody *ngFor="let unit of units">
       <tr>
         <th scope="row">{{unit.id}}</th>
         <td>{{unit.nombre}}</td>

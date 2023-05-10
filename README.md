@@ -4,7 +4,7 @@
 
 Requisitos:
 
-Haber seguido guia de instalación de MongoDB Community Server https://www.mongodb.com/try/download/community y tenerlo correctamente instalado.
+Haber seguido guía de instalación de MongoDB Community Server https://www.mongodb.com/try/download/community y tenerlo correctamente instalado.
 > Si se trabaja desde Windows:
 > Descargar MongoShell desde: [Mongo Shell](chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#ttl=MongoDB%20Shell%20Download%20%7C%20MongoDB&pos=1000&uri=https://www.mongodb.com/try/download/shell)
 
@@ -39,7 +39,7 @@ db.getUser("myAdmin")
 
 # Instalación y configuración de BackEnd
 
-Prerrequisitos:
+Pre-requisitos:
 
 Tener creado usuario Admin a través de Mongo Shell y haber instalado MongoDB Compass
 
@@ -63,7 +63,7 @@ Crear ambiente virtual, utilizamos "django_env" en este ejemplo, cambiar nombre 
 virtualenv django_env
 ```
 
-Activar ambiente virtual --este comando debera reejecutarse cada vez que se quiera lanzar django, todas las instalaciones subsiguientes se realizaran con el env activado
+Activar ambiente virtual --este comando deberá re-ejecutarse cada vez que se quiera lanzar django, todas las instalaciones subsiguientes se realizaran con el env activado
 
 ```
 django_env\Scripts\activate
@@ -75,13 +75,13 @@ Una vez activado, la terminal debería verse de tal manera (nombre_env)path\to\p
 
 ![1682279843309](image/README/1682279843309.png)
 
-Instalacion requerimientos del proyecto
+Instalación requerimientos del proyecto
 
 ```
 pip install -r requirements.txt
 ```
 
-#Realizar creacion de modelos, poblado y migracion de BD:
+#Realizar creación de modelos, poblado y migración de BD:
 
 Dirigirse a la carpeta duoc_djangoanular
 
@@ -90,7 +90,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-Luego de ver el output con los mensajes de OK, dirigirse a MongoDB compass para comprobar la correcta creacion de la base de datos y sus datos predefinidos:
+Luego de ver el output con los mensajes de OK, dirigirse a MongoDB compass para comprobar la correcta creación de la base de datos y sus datos predefinidos:
 
 ![1682278928902](image/README/1682278928902.png)
 
