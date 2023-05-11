@@ -37,7 +37,7 @@ export class GestionUnidadesComponent implements OnInit {
     this._unitDataService.list().subscribe(
       data => {
         // If data retrieved exists log it in console for testing and assign it to the local variable that handles it.
-        console.log('Data Received: ' + data);
+        console.log('Data Received: ' + JSON.stringify(data));
         this.units = data;
       },
       err => console.error(err),

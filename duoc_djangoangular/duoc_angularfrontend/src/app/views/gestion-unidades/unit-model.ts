@@ -1,6 +1,7 @@
 export interface unitData {
-    id: number;
-    nombre: string;
-    sigla: string;
-    facultad: number;
+    _id: string;
+    id_unidad: number;
+    nombre_depto: string;
+    siglas_depto: string;
+    id_facultad: number;
 }

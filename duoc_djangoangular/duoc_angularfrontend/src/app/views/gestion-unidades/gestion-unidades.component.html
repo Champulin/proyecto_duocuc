@@ -24,14 +24,14 @@
         <th scope="col">#Facultad</th>
       </tr>
     </thead>
-    <tbody *ngFor="let unit of units">
+    <tbody *ngFor="let each of units">
       <tr>
-        <th scope="row">{{unit.id}}</th>
-        <td>{{unit.nombre}}</td>
-        <td>{{unit.sigla | uppercase}}</td>
-        <td>{{unit.facultad}}</td>
+        <th scope="row">{{each.id_unidad}}</th>
+        <td>{{each.nombre_depto}}</td>
+        <td>{{each.siglas_depto | uppercase}}</td>
+        <td>{{each.id_facultad}}</td>
         <td>
-          <button cButton color="success" (click)="onSelect(unit)" [class.selected]="unit === selectedUnit">
+          <button cButton color="success" (click)="onSelect(each)" [class.selected]="each === selectedUnit">
           <svg cIcon name="cilPencil"></svg>
           </button>
           <button cButton color="danger">
@@ -45,18 +45,18 @@
   <ul class="listaUnidades">
     <li *ngFor="let unit of listedUnits">
         <button type="button" (click)="onSelect(unit)" [class.selected]="unit === selectedUnit">
-            <span class="badge">{{unit.id}}</span>
-            <span class="name">{{unit.nombre}}</span>
+            <span class="badge">{{unit.id_unidad}}</span>
+            <span class="name">{{unit.nombre_depto}}</span>
         </button>
     </li>
   </ul>
 
 
   <!--Current selected user data test-->
-<div *ngIf="selectedUnit"><span>ID: {{selectedUnit.id}}</span></div>
-<div *ngIf="selectedUnit"><span>NAME: {{selectedUnit.nombre}}</span></div>
-<div *ngIf="selectedUnit"><span>ACRONYM: {{selectedUnit.sigla}}</span></div> 
-<div *ngIf="selectedUnit"><span>FACULTY: {{selectedUnit.facultad}}</span></div> 
+<div *ngIf="selectedUnit"><span>ID: {{selectedUnit.id_unidad}}</span></div>
+<div *ngIf="selectedUnit"><span>NAME: {{selectedUnit.nombre_depto}}</span></div>
+<div *ngIf="selectedUnit"><span>ACRONYM: {{selectedUnit.siglas_depto}}</span></div> 
+<div *ngIf="selectedUnit"><span>FACULTY: {{selectedUnit.id_facultad}}</span></div> 
 
 <br><br>
 Unit DB Information: {{ units | json }}

@@ -11,7 +11,7 @@ export class UnitDataService {
   constructor(private http:HttpClient) { }
 
   list(): Observable<unitData[]>{
-    return this.http.get<unitData[]>('api/unidad');
+    return this.http.get<unitData[]>('http://127.0.0.1:8000/api/unidad/');
 
   }
 
@@ -27,7 +27,7 @@ export class UnitDataService {
   //   return this.http.post('/api/unidad', JSON.stringify(newUnit), httpOptions);
   // }
 
-  edit() {}
+  // edit() {}
 
-  delete() {}
+  // delete() {}
 }
