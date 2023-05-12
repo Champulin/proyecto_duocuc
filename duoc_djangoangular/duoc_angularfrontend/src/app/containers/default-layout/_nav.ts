@@ -123,17 +123,17 @@ export const navItems: INavData[] = [
   },
 
 
-  {
-    name: 'Consultas',
-    url: '/Consultas',
-    iconComponent: { name: 'cil-cursor' },
-    children: [
-      {
-        name: 'Tarificacion Telefonica',
-        url: '/pages/Consultas/proveedores.telefonia.html '
-      },
-    ]
-  },
+  // {
+  //   name: 'Consultas',
+  //   url: '/Consultas',
+  //   iconComponent: { name: 'cil-cursor' },
+  //   children: [
+  //     {
+  //       name: 'Tarificacion Telefonica',
+  //       url: '/pages/Consultas/proveedores.telefonia.html '
+  //     },
+  //   ]
+  // },
   {
     name: 'Buttons',
     url: '/buttons',

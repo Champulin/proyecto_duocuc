@@ -82,7 +82,7 @@
       <li>
         <a routerLink="./" cDropdownItem>
           <svg cIcon class="me-2" name="cilBell"></svg>
-          Notificacion
+          Notificación
           <c-badge class="ms-2 float-end" color="info">
             5
           </c-badge>
@@ -108,7 +108,7 @@
         </a>
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
+        <a routerLink="/menu-usuario" cDropdownItem>
           <svg cIcon class="me-2" name="cilSettings"></svg>
           Ajustes Personales
         </a>
@@ -126,7 +126,7 @@
         <hr cDropdownDivider/>
       </li>
       <li>
-        <a routerLink="./lo" cDropdownItem>
+        <a class="dropdown-item" (click)="logOut()">
           <svg cIcon class="me-2" name="cilLockLocked"></svg>
           Cerrar Sesión
         </a>

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { AuthGuard } from './auth-guard.guard'
 
 import { DefaultLayoutComponent } from './containers';
 import { Page404Component } from './views/pages/page404/page404.component';
@@ -22,34 +23,34 @@ const routes: Routes = [
     },
     children: [
       {
-        path: 'Consultas',
-        loadChildren: () =>
-          import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
-      },
-      {
         path: 'dashboard',
         loadChildren: () =>
-          import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
+          import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule),
+        canActivate:[AuthGuard]
       },
       {
         path: 'menu-usuario',
         loadChildren: () =>
-          import('./views/menu-gestion-usuarios/menu-gestion-usuarios.module').then((m) => m.MenuGestionUsuariosModule)
+          import('./views/menu-gestion-usuarios/menu-gestion-usuarios.module').then((m) => m.MenuGestionUsuariosModule),
+          canActivate:[AuthGuard]
       },
       {
         path: 'menu-unidades',
         loadChildren: () =>
-          import('./views/gestion-unidades/gestion-unidades.module').then((m) => m.GestionUnidadesModule)
+          import('./views/gestion-unidades/gestion-unidades.module').then((m) => m.GestionUnidadesModule),
+          canActivate:[AuthGuard]
       },
       {
         path: 'menu-proveedores',
         loadChildren: () =>
-          import('./views/gestion-proveedor/gestion-proveedor.module').then((m) => m.GestionProveedorModule)
+          import('./views/gestion-proveedor/gestion-proveedor.module').then((m) => m.GestionProveedorModule),
+          canActivate:[AuthGuard]
       },
       {
         path: 'menu-cuentas',
         loadChildren: () =>
-          import('./views/gestion-cuentas/gestion-cuentas.module').then((m) => m.GestionCuentasModule)
+          import('./views/gestion-cuentas/gestion-cuentas.module').then((m) => m.GestionCuentasModule),
+          canActivate:[AuthGuard]
       },
       {
         path: 'theme',

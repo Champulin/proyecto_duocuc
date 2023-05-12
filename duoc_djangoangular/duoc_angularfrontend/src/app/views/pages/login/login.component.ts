@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component,OnInit} from '@angular/core';
 import { FormGroup,FormBuilder } from '@angular/forms';
 import {Router} from '@angular/router'
-import { LoginServiceService } from 'src/app/services/login-service/login-service.service';
+import { LoginService } from 'src/app/services/login-service/login-service.service';
 import { loginData } from 'src/app/models/login-model';
 
 @Component({
@@ -16,8 +16,9 @@ export class LoginComponent implements OnInit {
 
   public loginForm !: FormGroup
   private sendLogin: loginData = {username:"", password:""};
+  public currentUser: any;
 
-  constructor(private formBuilder:FormBuilder, private _loginService:LoginServiceService) { }
+  constructor(private formBuilder:FormBuilder, private _loginService:LoginService) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -27,11 +28,12 @@ export class LoginComponent implements OnInit {
   }
 
  login(){
-  console.log("Form Username/Password: "+this.loginForm.value.username +"/"+ this.loginForm.value.password)
   this.sendLogin.username = this.loginForm.value.username;
   this.sendLogin.password = this.loginForm.value.password;
   console.log("Sent Data Username/Password: "+this.sendLogin.username +"/"+ this.sendLogin.password)
-  this._loginService.login(this.sendLogin);
+  this.currentUser = this._loginService.login(this.sendLogin);
+  console.log('current user after the whole call is done: '+ this.currentUser)
+  console.log('and in JSON: '+ JSON.stringify(this.currentUser))
   
  }
 
