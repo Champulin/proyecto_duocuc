@@ -7,7 +7,7 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-speedometer' },
     badge: {
       color: 'info',
-      text: 'NEW'
+      text: ''
     }
   },
   {
@@ -38,6 +38,7 @@ export const navItems: INavData[] = [
     title: true,
     name: 'Theme'
   },
+
   {
     name: 'Colors',
     url: '/theme/colors',
@@ -118,6 +119,19 @@ export const navItems: INavData[] = [
         name: 'Tooltips',
         url: '/base/tooltips'
       }
+    ]
+  },
+
+
+  {
+    name: 'Consultas',
+    url: '/Consultas',
+    iconComponent: { name: 'cil-cursor' },
+    children: [
+      {
+        name: 'Tarificacion Telefonica',
+        url: '/pages/Consultas/proveedores.telefonia.html '
+      },
     ]
   },
   {
