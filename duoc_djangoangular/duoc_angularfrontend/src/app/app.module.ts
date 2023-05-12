@@ -64,6 +64,7 @@ const APP_CONTAINERS = [
 @NgModule({
   declarations: [AppComponent, ...APP_CONTAINERS],
   imports: [
+    FormModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -93,6 +94,7 @@ const APP_CONTAINERS = [
     BadgeModule,
     ListGroupModule,
     CardModule,
+    HttpClientModule,
   ],
   providers: [
     {

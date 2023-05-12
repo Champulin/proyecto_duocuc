@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
       usage: 50,
       period: 'Jun 11, 2021 - Jul 10, 2021',
       payment: 'Mastercard',
-      activity: '10 sec ago',
+      activity: '1 Hora',
       avatar: './assets/img/avatars/1.jpg',
       status: 'success',
       color: 'success'
@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
       usage: 10,
       period: 'Jun 11, 2021 - Jul 10, 2021',
       payment: 'Visa',
-      activity: '5 minutes ago',
+      activity: '52 minutos ',
       avatar: './assets/img/avatars/2.jpg',
       status: 'danger',
       color: 'info'
@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
       usage: 74,
       period: 'Jun 11, 2021 - Jul 10, 2021',
       payment: 'Stripe',
-      activity: '1 hour ago',
+      activity: '5 Horas',
       avatar: './assets/img/avatars/3.jpg',
       status: 'warning',
       color: 'warning'
@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
       usage: 98,
       period: 'Jun 11, 2021 - Jul 10, 2021',
       payment: 'Paypal',
-      activity: 'Last month',
+      activity: '2 min',
       avatar: './assets/img/avatars/4.jpg',
       status: 'secondary',
       color: 'danger'
@@ -86,7 +86,7 @@ export class DashboardComponent implements OnInit {
       usage: 22,
       period: 'Jun 11, 2021 - Jul 10, 2021',
       payment: 'ApplePay',
-      activity: 'Last week',
+      activity: '10 dias',
       avatar: './assets/img/avatars/5.jpg',
       status: 'success',
       color: 'primary'
@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
       usage: 43,
       period: 'Jun 11, 2021 - Jul 10, 2021',
       payment: 'Amex',
-      activity: 'Yesterday',
+      activity: 'Martes',
       avatar: './assets/img/avatars/6.jpg',
       status: 'info',
       color: 'dark'

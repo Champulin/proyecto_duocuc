@@ -11,16 +11,21 @@ import { RegisterComponent } from './views/pages/register/register.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
+
   {
     path: '',
     component: DefaultLayoutComponent,
     data: {
-      title: 'Home'
     },
     children: [
+      {
+        path: 'Consultas',
+        loadChildren: () =>
+          import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
+      },
       {
         path: 'dashboard',
         loadChildren: () =>
@@ -93,6 +98,10 @@ const routes: Routes = [
       },
     ]
   },
+
+
+
+
   {
     path: '404',
     component: Page404Component,
@@ -100,6 +109,16 @@ const routes: Routes = [
       title: 'Page 404'
     }
   },
+
+  {
+    path: 'Consultas',
+    component: Page404Component,
+    data: {
+      title: 'Consultas'
+    }
+  },
+
+
   {
     path: '500',
     component: Page500Component,
