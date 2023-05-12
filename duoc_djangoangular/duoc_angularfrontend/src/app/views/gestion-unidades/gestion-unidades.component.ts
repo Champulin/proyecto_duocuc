@@ -65,6 +65,14 @@ export class GestionUnidadesComponent implements OnInit {
     )
   }
 
+  // Deletes the corresponding element from the list and the database
+
+  deleteUnit(unit:unitData) {
+    console.log('the argument in deleteUnit on the component: '+unit._id);
+    this._unitDataService.delete(unit._id);
+    this.getUnits();
+  }
+
   // Guarda los datos del Input en el nuevo objeto
   saveUnit() {
     this.newUnit.id_unidad = this.newUID;
@@ -72,5 +80,6 @@ export class GestionUnidadesComponent implements OnInit {
     this.newUnit.siglas_depto = this.newUSiglas;
     this.newUnit.id_facultad = this.newUFacultad;
   }
+
 }
 

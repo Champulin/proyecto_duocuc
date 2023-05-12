@@ -39,7 +39,10 @@
         >
           <svg cIcon name="cilPencil"></svg>
         </button>
-        <button cButton color="danger">
+        <button cButton 
+        color="danger"
+        (click)="deleteUnit(each)"
+        [class.selected]="each === selectedUnit">
           <svg cIcon name="cilTrash"></svg>
         </button>
       </td>

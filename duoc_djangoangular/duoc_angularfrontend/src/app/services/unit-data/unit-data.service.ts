@@ -10,6 +10,8 @@ export class UnitDataService {
 
   constructor(private http:HttpClient) { }
 
+  private killOrder:string = '';
+
   list(): Observable<unitData[]>{
     return this.http.get<unitData[]>('http://localhost:8000/api/unidad/');
 
@@ -29,5 +31,9 @@ export class UnitDataService {
 
   edit() {}
 
-  delete() {}
+  delete(idToDelete:any) {
+    this.killOrder = 'http://localhost:8000/api/unidad/' + idToDelete;
+    console.log('killOrder after appending: '+ this.killOrder);
+    return this.http.delete(this.killOrder).subscribe(() => console.log("user deleted"));
+  }
 }

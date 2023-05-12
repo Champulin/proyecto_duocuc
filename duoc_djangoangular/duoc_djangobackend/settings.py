@@ -46,9 +46,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -133,6 +133,24 @@ STATIC_URL = "static/"
 # List of origins that are allowed to make cross-origin requests
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',  # Angular origin, always run in port 4200
+]
+
+ALLOWED_HOSTS = [
+    'localhost',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:4200',
+]
+
+CORS_ALLOWED_METHODS = [
+    'POST',
+    'GET',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+    # Add other allowed methods here
 ]
 
 # Default primary key field type
