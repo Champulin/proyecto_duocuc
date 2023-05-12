@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component,OnInit} from '@angular/core';
 import { FormGroup,FormBuilder } from '@angular/forms';
 import {Router} from '@angular/router'
+import { LoginServiceService } from 'src/app/services/login-service/login-service.service';
+import { loginData } from 'src/app/models/login-model';
 
 @Component({
   selector: 'app-login',
@@ -13,42 +15,51 @@ import {Router} from '@angular/router'
 export class LoginComponent implements OnInit {
 
   public loginForm !: FormGroup
+  private sendLogin: loginData = {username:"", password:""};
 
-  constructor(private formBuilder:FormBuilder,
-    private http:HttpClient, private router: Router) { }
+  constructor(private formBuilder:FormBuilder, private _loginService:LoginServiceService) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      usuario:[''],
-      contraseña:[''],
+      username:[''],
+      password:[''],
     })
   }
 
  login(){
-  console.log((this.loginForm.value.usuario))
+  console.log("Form Username/Password: "+this.loginForm.value.username +"/"+ this.loginForm.value.password)
+  this.sendLogin.username = this.loginForm.value.username;
+  this.sendLogin.password = this.loginForm.value.password;
+  console.log("Sent Data Username/Password: "+this.sendLogin.username +"/"+ this.sendLogin.password)
+  this._loginService.login(this.sendLogin);
+  
+ }
 
-  this.http.get<any>("http://localhost:3000/signupUsers")
-    .subscribe(res =>{
-      const user = res.find((a:any)=>{
-        console.log('A Pass:' + a.contraseña)
-        console.log('A Data:' + a.usuario)
-        return a.usuario === this.loginForm.value.usuario && a.contraseña === this.loginForm.value.contraseña
-      })
 
-      console.log('User Status:' + user)
-      console.log(JSON.stringify(res))
 
-      if( user){
-      alert("Login success")
-      this.loginForm.reset();
-      this.router.navigate(['home']);
-      } else{
-        alert("Usuario incorrecto")
-      }
-    },
-    err=>{
-      alert("Incorrecto")
+  // Old Login Method without service and reading a JSON
 
-    })
-  }
+  // this.http.get<any>("http://localhost:3000/signupUsers")
+  //   .subscribe(res =>{
+  //     const user = res.find((a:any)=>{
+  //       console.log('A Pass:' + a.password)
+  //       console.log('A Data:' + a.username)
+  //       return a.username === this.loginForm.value.username && a.password === this.loginForm.value.password
+  //     })
+
+  //     console.log('User Status:' + user)
+  //     console.log(JSON.stringify(res))
+
+  //     if( user){
+  //     alert("Login success")
+  //     this.loginForm.reset();
+  //     this.router.navigate(['home']);
+  //     } else{
+  //       alert("El nombre de usuario no existe")
+  //     }
+  //   },
+  //   err=>{
+  //     alert("Incorrecto")
+
+  //   })
 }
