@@ -23,7 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     # path("", admin.site.urls),
     path("admin/", admin.site.urls),
-    path("login/", login),
+    path("login/", login_view),
     path("insertar_anexo/", insert_anexo),
 ]
 # URLS API
@@ -43,9 +43,9 @@ urlpatterns += [
         name="cuentapre_element",
     ),
     # Unidad
-        #This one is for List(get) and Create(post)
+    # This one is for List(get) and Create(post)
     path("api/unidad/", unidad_collection.as_view(), name="anexo_collection"),
-        #This one is for Get, Put, Patch and Delete
+    # This one is for Get, Put, Patch and Delete
     path("api/unidad/<int:pk>", unidad_element.as_view(), name="anexo_element"),
     # Anexo
     path("api/anexo/", anexo_collection.as_view(), name="anexo_collection"),

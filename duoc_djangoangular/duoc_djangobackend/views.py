@@ -1,4 +1,5 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from rest_framework import status
@@ -22,24 +23,27 @@ from rest_framework.parsers import JSONParser
 
 
 @api_view(["POST"])
-def login(request):
+def login_view(request):
     username = request.data.get("username")
     password = request.data.get("password")
-    user = authenticate(username=username, password=password)
-    if user is not None:
+    print("logeando user")
+    print(username, password)
+
+    user = None
+    try:
+        user = Administrator.objects.get(username=username)
+    except Administrator.DoesNotExist:
+        try:
+            user = ResponsableUnidad.objects.get(username=username)
+        except ResponsableUnidad.DoesNotExist:
+            pass
+    print(user)
+    if user is not None and check_password(password, user.password):
         # Login successful
+        request.session["_auth_user_id"] = str(user.pk)
         if isinstance(user, Administrator):
             serializer = AdministratorSerializer(user)
             user_type = "Administrator"
-            # Data adicional para usuario administrador
-        #     response_data = serializer.data,
-        # 'proveedores_telefonia': ProveedoresTelefoniaSerializer(get_all_probeedores_telefonia(), many=True).data,
-        # 'cuentas_presupuestarias': CuentaPresupuestariaSerializer(get_all_cuentas_presupuestarias(), many=True).data,
-        # 'unidades': UnidadSerializer(get_all_unidades(), many=True).data,
-        # 'anexos': AnexoSerializer(get_all_anexos(), many=True).data,
-        # 'registros_llamadas': RegistroLlamadaSerializer(get_all_registros_llamadas(), many=True).data,
-        # 'calculo_mensual': CalculoMensualSerializer(get_all_calculos_mensuales(), many=True).data,
-
         elif isinstance(user, ResponsableUnidad):
             serializer = ResponsableUnidadSerializer(user)
             user_type = "ResponsableUnidad"
