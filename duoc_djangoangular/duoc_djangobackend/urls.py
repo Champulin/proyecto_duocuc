@@ -46,7 +46,7 @@ urlpatterns += [
     # This one is for List(get) and Create(post)
     path("api/unidad/", unidad_collection.as_view(), name="anexo_collection"),
     # This one is for Get, Put, Patch and Delete
-    path("api/unidad/<str:pk>", unidad_element.as_view(), name="anexo_element"),
+    path("api/unidad/<int:pk>", unidad_element.as_view(), name="anexo_element"),
     # Anexo
     path("api/anexo/", anexo_collection.as_view(), name="anexo_collection"),
     path("api/anexo/<int:pk>", anexo_element.as_view(), name="anexo_element"),

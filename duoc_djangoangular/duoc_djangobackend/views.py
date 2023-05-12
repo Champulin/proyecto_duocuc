@@ -134,7 +134,7 @@ class unidad_collection(generics.ListCreateAPIView):
 class unidad_element(generics.RetrieveUpdateDestroyAPIView):
     queryset = Unidad.objects.all()
     serializer_class = UnidadSerializer
-    lookup_field = "_id"
+    lookup_field = "id_unidad"
     lookup_url_kwarg = "pk"
 
 

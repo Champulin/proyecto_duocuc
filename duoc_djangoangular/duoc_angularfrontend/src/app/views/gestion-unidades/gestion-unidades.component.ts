@@ -3,6 +3,7 @@ import { unitData } from './unit-model';
 import { unitNew } from './unit-new';
 import { UnitDataService } from 'src/app/services/unit-data/unit-data.service';
 import { throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gestion-unidades',
@@ -28,7 +29,7 @@ export class GestionUnidadesComponent implements OnInit {
     this.selectedUnit = unit;
   }
 
-  constructor(private _unitDataService: UnitDataService) { }
+  constructor(private _unitDataService: UnitDataService, private router:Router) { }
 
 
   public ngOnInit(): void {
@@ -68,9 +69,9 @@ export class GestionUnidadesComponent implements OnInit {
   // Deletes the corresponding element from the list and the database
 
   deleteUnit(unit:unitData) {
-    console.log('the argument in deleteUnit on the component: '+unit._id);
-    this._unitDataService.delete(unit._id);
-    this.getUnits();
+    console.log('the argument in deleteUnit on the component: '+unit.id_unidad);
+    this._unitDataService.delete(unit.id_unidad);
+    this.reloadCurrentRoute(); 
   }
 
   // Guarda los datos del Input en el nuevo objeto
@@ -81,5 +82,11 @@ export class GestionUnidadesComponent implements OnInit {
     this.newUnit.id_facultad = this.newUFacultad;
   }
 
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+}
 }
 
