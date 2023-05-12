@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { unitData } from './unit-model';
-import { unitList } from './unit-model-detail';
+import { unitNew } from './unit-new';
 import { UnitDataService } from 'src/app/services/unit-data/unit-data.service';
 import { throwError } from 'rxjs';
 
@@ -13,11 +12,17 @@ import { throwError } from 'rxjs';
 
 export class GestionUnidadesComponent implements OnInit {
   selectedUnit?: unitData;
-  listedUnits:any;
 
-  // variable para crear nueva unidad
+  //var para guardar lista desde DB
   public units: any;
-  public newUnit: any;
+  
+  // variables para crear nuevo objeto en DB
+  public newUnit : unitNew = {id_unidad: 99, nombre_depto: 'placeholder', siglas_depto: 'PHR', id_facultad: 99};
+  newUID:number = 99;
+  newUNombre:string = '';
+  newUSiglas:string = '';
+  newUFacultad:number = 99;
+
 
   onSelect(unit:unitData): void {
     this.selectedUnit = unit;
@@ -27,7 +32,6 @@ export class GestionUnidadesComponent implements OnInit {
 
 
   public ngOnInit(): void {
-      this.listedUnits = unitList;
       this.getUnits();
   }
 
@@ -46,18 +50,27 @@ export class GestionUnidadesComponent implements OnInit {
   }
 
   // CODE TO CREATE NEW UNIT ENTRY
-  // createUnits() {
-  //   this._unitDataService.create(this.newUnit).subscribe(
-  //    data => {
-  //       console.log('Data Sent: ' + data);
-  //       this.getUnits();
-  //       return true;
-  //     },
-  //     error => {
-  //       console.error('Error creating Unit');
-  //       return throwError(error);
-  //     }
-  //   )
-  // }
+  createUnit() {
+    this.saveUnit();
+    this._unitDataService.create(this.newUnit).subscribe(
+     data => {
+        console.log('Data Sent: ' + data);
+        this.getUnits();
+        return true;
+      },
+      error => {
+        console.error('Error creating Unit');
+        return throwError(error);
+      }
+    )
+  }
+
+  // Guarda los datos del Input en el nuevo objeto
+  saveUnit() {
+    this.newUnit.id_unidad = this.newUID;
+    this.newUnit.nombre_depto = this.newUNombre;
+    this.newUnit.siglas_depto = this.newUSiglas;
+    this.newUnit.id_facultad = this.newUFacultad;
+  }
 }
 

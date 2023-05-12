@@ -1,5 +1,4 @@
-export interface unitData {
-    _id: any;
+export interface unitNew {
     id_unidad: number;
     nombre_depto: string;
     siglas_depto: string;

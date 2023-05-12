@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 import { DefaultLayoutComponent } from './containers';
 import { Page404Component } from './views/pages/page404/page404.component';
@@ -151,6 +152,7 @@ const routes: Routes = [
       // relativeLinkResolution: 'legacy'
     })
   ],
+  providers: [{ provide: LocationStrategy, useClass: PathLocationStrategy }],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

@@ -34,7 +34,7 @@ urlpatterns += [
     # _____________ NORMAL ________________
     path("api/proveedor/", proveedor_collection, name="proveedor_collection"),
     path("api/proveedor/<int:pk>", proveedor_element, name="proveedor_element"),
-    # _____________ GENERICOS ________________
+    # _____________ GENÉRICOS ________________
     # Cuenta presupuestaria
     path("api/cuentapre/", cuentapre_collection.as_view(), name="cuentapre_collection"),
     path(
@@ -43,7 +43,7 @@ urlpatterns += [
         name="cuentapre_element",
     ),
     # Unidad
-        #This one is for List(get) and Creat(post)
+        #This one is for List(get) and Create(post)
     path("api/unidad/", unidad_collection.as_view(), name="anexo_collection"),
         #This one is for Get, Put, Patch and Delete
     path("api/unidad/<int:pk>", unidad_element.as_view(), name="anexo_element"),

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 import { AccordionsComponent } from './accordion/accordions.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -140,6 +141,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
+  providers: [{ provide: LocationStrategy, useClass: PathLocationStrategy }],
   exports: [RouterModule],
 })
 export class BaseRoutingModule {}

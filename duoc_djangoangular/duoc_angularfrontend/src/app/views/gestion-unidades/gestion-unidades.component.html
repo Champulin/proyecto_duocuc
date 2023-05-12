@@ -1,63 +1,144 @@
 <c-row>
-    <c-col xs="auto">
-      <input aria-label="Facultad" cFormControl placeholder="Facultad" />
-    </c-col>
-    <c-col xs="auto">
-      <input aria-label="Unidad" cFormControl placeholder="Unidad" />
-    </c-col>
-    <c-col>
-      <button cButton color="info">
-        <svg cIcon name="cilSearch"></svg>
-        &nbsp; Search
-      </button>
-    </c-col>
-  </c-row>
-  <br />
-  <br />
-  <h4>Unidades</h4>
-  <table cTable class="listaUnidades">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Sigla</th>
-        <th scope="col">#Facultad</th>
-      </tr>
-    </thead>
-    <tbody *ngFor="let each of units">
-      <tr>
-        <th scope="row">{{each.id_unidad}}</th>
-        <td>{{each.nombre_depto}}</td>
-        <td>{{each.siglas_depto | uppercase}}</td>
-        <td>{{each.id_facultad}}</td>
-        <td>
-          <button cButton color="success" (click)="onSelect(each)" [class.selected]="each === selectedUnit">
+  <c-col xs="auto">
+    <input aria-label="Facultad" cFormControl placeholder="Facultad" />
+  </c-col>
+  <c-col xs="auto">
+    <input aria-label="Unidad" cFormControl placeholder="Unidad" />
+  </c-col>
+  <c-col>
+    <button cButton color="info">
+      <svg cIcon name="cilSearch"></svg>
+      &nbsp; Search
+    </button>
+  </c-col>
+</c-row>
+<br />
+<br />
+<h4>Unidades</h4>
+<table cTable class="listaUnidades">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Sigla</th>
+      <th scope="col">#Facultad</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let each of units">
+    <tr>
+      <th scope="row">{{ each.id_unidad }}</th>
+      <td>{{ each.nombre_depto }}</td>
+      <td>{{ each.siglas_depto | uppercase }}</td>
+      <td>{{ each.id_facultad }}</td>
+      <td>
+        <button
+          cButton
+          color="success"
+          (click)="onSelect(each)"
+          [class.selected]="each === selectedUnit"
+        >
           <svg cIcon name="cilPencil"></svg>
-          </button>
-          <button cButton color="danger">
-          <svg cIcon name="cilTrash"></svg>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  
-  <ul class="listaUnidades">
-    <li *ngFor="let unit of listedUnits">
-        <button type="button" (click)="onSelect(unit)" [class.selected]="unit === selectedUnit">
-            <span class="badge">{{unit.id_unidad}}</span>
-            <span class="name">{{unit.nombre_depto}}</span>
         </button>
-    </li>
-  </ul>
+        <button cButton color="danger">
+          <svg cIcon name="cilTrash"></svg>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 
-  <!--Current selected user data test-->
-<div *ngIf="selectedUnit"><span>ID: {{selectedUnit.id_unidad}}</span></div>
-<div *ngIf="selectedUnit"><span>NAME: {{selectedUnit.nombre_depto}}</span></div>
-<div *ngIf="selectedUnit"><span>ACRONYM: {{selectedUnit.siglas_depto}}</span></div> 
-<div *ngIf="selectedUnit"><span>FACULTY: {{selectedUnit.id_facultad}}</span></div> 
+<!-- <c-row *ngIF="selectedUnit">
+  <h4>Editar Unidad</h4>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUID" type="text" aria-label="uID" cFormControl placeholder="ID" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUNombre" aria-label="uNombre" cFormControl placeholder="Nombre" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUSiglas" aria-label="uSigla" cFormControl placeholder="Sigla" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" />
+  </c-col>
+  <c-col>
+    <button cButton 
+    (click)="editUnit()"
+    color="info">
+      <svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar
+    </button>
+  </c-col>
+</c-row> -->
 
-<br><br>
-Unit DB Information: {{ units | json }}
-<br><br>
+<br /><br />
+
+<!--Create new entry-->
+<h4>Nueva Unidad</h4>
+<c-row>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUID" type="text" aria-label="uID" cFormControl placeholder="ID" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUNombre" aria-label="uNombre" cFormControl placeholder="Nombre" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUSiglas" aria-label="uSigla" cFormControl placeholder="Sigla" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" />
+  </c-col>
+  <c-col>
+    <button cButton 
+    (click)="createUnit()"
+    color="info">
+      <svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar
+    </button>
+  </c-col>
+</c-row>
+
+<!--base value of the ID placeholder should be 99-->
+<div>
+  <span>
+    ID: {{ newUID }} 
+    NAME: {{ newUNombre }} 
+    ACRONYM: {{ newUSiglas }} 
+    FACULTY: {{ newUFacultad }}
+  </span>
+</div>
+
+<!-- displays info for the newUnit variable, should change on button press -->
+
+<div>
+  <span>
+    ID: {{ newUnit.id_unidad }} 
+    NAME: {{ newUnit.nombre_depto }} 
+    ACRONYM: {{ newUnit.siglas_depto }} 
+    FACULTY: {{ newUnit.id_facultad }}
+  </span>
+</div>
+
+<br /><br />
+
+<!--Current selected user data test-->
+<div *ngIf="selectedUnit">
+  <span>ID: {{ selectedUnit._id }}</span>
+</div>
+<div *ngIf="selectedUnit">
+  <span>ID: {{ selectedUnit.id_unidad }}</span>
+</div>
+<div *ngIf="selectedUnit">
+  <span>NAME: {{ selectedUnit.nombre_depto }}</span>
+</div>
+<div *ngIf="selectedUnit">
+  <span>ACRONYM: {{ selectedUnit.siglas_depto }}</span>
+</div>
+<div *ngIf="selectedUnit">
+  <span>FACULTY: {{ selectedUnit.id_facultad }}</span>
+</div>
+
+<!-- SHOW JSON INGRESS DATA ON PAGE FOR TESTING PURPOSES -->
+<!-- <br /><br />
+Unit DB Information: {{ units | json }} <br /><br /> -->
