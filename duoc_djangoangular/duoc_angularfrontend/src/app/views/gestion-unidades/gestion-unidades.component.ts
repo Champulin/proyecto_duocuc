@@ -12,21 +12,39 @@ import { Router } from '@angular/router';
 })
 
 export class GestionUnidadesComponent implements OnInit {
+  
+  visible = [false, false];
+
   selectedUnit?: unitData;
+  public markedUnit: unitData = {_id: null, id_unidad: 0, nombre_depto: '', siglas_depto: '', id_facultad: 0};;
 
   //var para guardar lista desde DB
   public units: any;
   
   // variables para crear nuevo objeto en DB
-  public newUnit : unitNew = {id_unidad: 99, nombre_depto: 'placeholder', siglas_depto: 'PHR', id_facultad: 99};
-  newUID:number = 99;
+  public newUnit : unitNew = {id_unidad: 66, nombre_depto: 'placeholder', siglas_depto: 'PHR', id_facultad: 99};
+  newUID?:any;
   newUNombre:string = '';
   newUSiglas:string = '';
-  newUFacultad:number = 99;
+  newUFacultad?:any;
 
+  //variables para editar 
+  public bodyUnit : unitData = {_id: '', id_unidad: 0, nombre_depto: 'placeholder', siglas_depto: 'PHR', id_facultad: 0};
+  editUNombre:string = '';
+  editUSigla:string = '';
+  editUFacultad?:any;
 
   onSelect(unit:unitData): void {
     this.selectedUnit = unit;
+  }
+
+  onMarked(unit:unitData): void {
+    this.markedUnit = unit;
+    window.scroll({ 
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
+    });
   }
 
   constructor(private _unitDataService: UnitDataService, private router:Router) { }
@@ -74,6 +92,13 @@ export class GestionUnidadesComponent implements OnInit {
     this.reloadCurrentRoute(); 
   }
 
+  editUnit() {
+    this.buildEdit();
+    console.log('JSON format of the new body to send edits: '+JSON.stringify(this.bodyUnit))
+    this._unitDataService.edit(this.bodyUnit);
+    this.reloadCurrentRoute(); 
+  }
+
   // Guarda los datos del Input en el nuevo objeto
   saveUnit() {
     this.newUnit.id_unidad = this.newUID;
@@ -82,11 +107,38 @@ export class GestionUnidadesComponent implements OnInit {
     this.newUnit.id_facultad = this.newUFacultad;
   }
 
+  //Builds the format for the body data that we're going to send to patch.
+  buildEdit() {
+    this.bodyUnit._id = this.markedUnit._id;
+    this.bodyUnit.id_unidad = this.markedUnit.id_unidad;
+    if(!!this.editUNombre){
+      this.bodyUnit.nombre_depto = this.editUNombre;
+    } else {
+      this.bodyUnit.nombre_depto = this.markedUnit.nombre_depto;
+    };
+
+    if(!!this.editUSigla){
+      this.bodyUnit.siglas_depto = this.editUSigla;
+    } else {
+      this.bodyUnit.siglas_depto = this.markedUnit.siglas_depto;
+    };
+  
+    if(!!this.editUFacultad){
+      this.bodyUnit.id_facultad = this.editUFacultad;
+    } else {
+      this.bodyUnit.id_facultad = this.markedUnit.id_facultad;
+    };
+  }
+
   reloadCurrentRoute() {
     let currentUrl = this.router.url;
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
     });
-}
+  }
+
+  toggleCollapse(id: number): void {
+    this.visible[id] = !this.visible[id];
+  }
 }
 

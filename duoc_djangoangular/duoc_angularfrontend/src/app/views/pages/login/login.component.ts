@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component,OnInit} from '@angular/core';
 import { FormGroup,FormBuilder } from '@angular/forms';
 import {Router} from '@angular/router'
@@ -18,9 +17,12 @@ export class LoginComponent implements OnInit {
   private sendLogin: loginData = {username:"", password:""};
   public currentUser: any;
 
-  constructor(private formBuilder:FormBuilder, private _loginService:LoginService) { }
+  constructor(private formBuilder:FormBuilder, private _loginService:LoginService, private router:Router) { }
 
   ngOnInit(): void {
+    if(!!localStorage.getItem('sessionUser')){
+      this.router.navigate(['home']);
+    }
     this.loginForm = this.formBuilder.group({
       username:[''],
       password:[''],
@@ -30,10 +32,10 @@ export class LoginComponent implements OnInit {
  login(){
   this.sendLogin.username = this.loginForm.value.username;
   this.sendLogin.password = this.loginForm.value.password;
-  console.log("Sent Data Username/Password: "+this.sendLogin.username +"/"+ this.sendLogin.password)
+  // console.log("Sent Data Username/Password: "+this.sendLogin.username +"/"+ this.sendLogin.password)
   this.currentUser = this._loginService.login(this.sendLogin);
-  console.log('current user after the whole call is done: '+ this.currentUser)
-  console.log('and in JSON: '+ JSON.stringify(this.currentUser))
+  // console.log('current user after the whole call is done: '+ this.currentUser)
+  // console.log('and in JSON: '+ JSON.stringify(this.currentUser))
   
  }
 

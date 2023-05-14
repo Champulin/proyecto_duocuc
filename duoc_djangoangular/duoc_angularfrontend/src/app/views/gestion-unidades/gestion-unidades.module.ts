@@ -7,6 +7,7 @@ import {
   ButtonGroupModule,
   ButtonModule,
   CardModule,
+  CollapseModule,
   FormModule,
   GridModule,
   NavModule,
@@ -26,6 +27,7 @@ import { WidgetsModule } from '../widgets/widgets.module';
   imports: [
     GestionUnidadesRoutingModule,
     CardModule,
+    CollapseModule,
     NavModule,
     IconModule,
     TabsModule,
