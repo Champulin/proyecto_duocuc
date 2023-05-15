@@ -21,6 +21,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   logOut(){
     localStorage.removeItem('sessionUser');
+    localStorage.removeItem('sessionData');
     this.outRouter.navigate(['/login']);
   }
 }

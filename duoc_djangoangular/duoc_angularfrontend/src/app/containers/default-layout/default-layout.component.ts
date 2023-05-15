@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { navItems } from './_nav';
+import { navItems, navUser } from './_nav';
+import { AuthService } from 'src/app/services/auth-service/auth-service.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,11 +9,20 @@ import { navItems } from './_nav';
 })
 export class DefaultLayoutComponent {
 
-  public navItems = navItems;
+  public navItems:any;
 
   public perfectScrollbarConfig = {
     suppressScrollX: true,
   };
 
-  constructor() {}
+  constructor(private auth:AuthService) {}
+
+  public ngOnInit(): void {
+    if(this.auth.isAdmin()){
+      this.navItems = navItems;
+    } else {
+      this.navItems = navUser;
+    }
+}
+
 }

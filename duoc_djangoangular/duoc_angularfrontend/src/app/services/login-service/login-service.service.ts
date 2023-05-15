@@ -25,6 +25,9 @@ export class LoginService {
       res => {
         this.activeUser = res
         localStorage.setItem('sessionUser', JSON.stringify(res));
+        localStorage.setItem('sessionData', this.activeUser);
+        // console.log('sessionUser: '+ JSON.stringify(res))
+        // console.log('sessionData: '+ this.activeUser)
         // console.log('Data Returned: '+JSON.stringify(res))
         // console.log('activeUser inside of res: '+JSON.stringify(this.activeUser))
         if(this.activeUser != undefined) {

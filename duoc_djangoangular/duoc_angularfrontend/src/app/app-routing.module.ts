@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { AuthGuard } from './auth-guard.guard'
+import { AuthGuard } from './guards/auth-guard.guard';
+import { AdminGate } from './guards/admin-gate.guard'
 
 import { DefaultLayoutComponent } from './containers';
 import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { LoginComponent } from './views/pages/login/login.component';
-import { RegisterComponent } from './views/pages/register/register.component';
 
 const routes: Routes = [
   {
@@ -32,25 +32,25 @@ const routes: Routes = [
         path: 'menu-usuario',
         loadChildren: () =>
           import('./views/menu-gestion-usuarios/menu-gestion-usuarios.module').then((m) => m.MenuGestionUsuariosModule),
-          canActivate:[AuthGuard]
+          canActivate:[AuthGuard, AdminGate]
       },
       {
         path: 'menu-unidades',
         loadChildren: () =>
           import('./views/gestion-unidades/gestion-unidades.module').then((m) => m.GestionUnidadesModule),
-          canActivate:[AuthGuard]
+          canActivate:[AuthGuard, AdminGate]
       },
       {
         path: 'menu-proveedores',
         loadChildren: () =>
           import('./views/gestion-proveedor/gestion-proveedor.module').then((m) => m.GestionProveedorModule),
-          canActivate:[AuthGuard]
+          canActivate:[AuthGuard, AdminGate]
       },
       {
         path: 'menu-cuentas',
         loadChildren: () =>
           import('./views/gestion-cuentas/gestion-cuentas.module').then((m) => m.GestionCuentasModule),
-          canActivate:[AuthGuard]
+          canActivate:[AuthGuard, AdminGate]
       },
       {
         path: 'theme',
@@ -110,16 +110,6 @@ const routes: Routes = [
       title: 'Page 404'
     }
   },
-
-  {
-    path: 'Consultas',
-    component: Page404Component,
-    data: {
-      title: 'Consultas'
-    }
-  },
-
-
   {
     path: '500',
     component: Page500Component,
@@ -132,13 +122,6 @@ const routes: Routes = [
     component: LoginComponent,
     data: {
       title: 'Login Page'
-    }
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
-    data: {
-      title: 'Register Page'
     }
   },
   {path: '**', redirectTo: 'dashboard'}
