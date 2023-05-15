@@ -1,7 +1,5 @@
-from django.contrib.auth import login
 from django.contrib.auth.hashers import check_password
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -243,8 +241,8 @@ def calculo_unidad(request):
     Args: request (HttpRequest): Request que contiene los datos del mes a calcular, id_unidad, id_facultad, id_anexo.
     Returns: HttpResponse: Respuesta de la petición.
     """
-    id_anexo = request.POST.get("id_anexo")
-    mes = request.POST.get("mes")
+    id_anexo = request.data.get("id_anexo")
+    mes = request.data.get("mes")
     try:
         calculo_mensual_unidad(mes, id_anexo)
     except Exception as e:
@@ -252,3 +250,50 @@ def calculo_unidad(request):
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"message": "Calculo mensual terminado con exito"})
+@csrf_exempt
+@api_view(["POST"])
+def crear_usuario(request):
+    """Funcion que crea usuario admin o responsable de unidad dependiendo del request
+    Args: request (HttpRequest): Request que contiene los datos del usuario a crear.
+    Returns: HttpResponse: Respuesta de la petición.
+    """
+    tipo = request.data.get("tipo")
+    name = request.data.get("name")
+    last_name = request.data.get("last_name")
+    email = request.data.get("email")
+    username = request.data.get("username")
+    password = request.data.get("password")
+    if tipo == "admin":
+        try:
+            Administrator.objects.create(
+                name=name,
+                last_name=last_name,
+                email=email,
+                username=username,
+                password=password,
+            )
+        except Exception as e:
+            response_data = {"message": f"Error al crear usuario: {e}"}
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+    elif tipo == "responsable":
+        id_unidad = request.data.get("id_unidad")
+        id_facultad = request.data.get("id_facultad")
+        try:
+            ResponsableUnidad.objects.create(
+                name=name,
+                last_name=last_name,
+                email=email,
+                id_unidad=id_unidad,
+                id_facultad=id_facultad,
+                username=username,
+                password=password,
+            )
+        except Exception as e:
+            response_data = {"message": f"Error al crear usuario: {e}"}
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        response_data = {"message": f"Error al crear usuario: tipo de usuario invalido"}
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({"message": "Usuario creado con exito"})
+

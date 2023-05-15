@@ -25,6 +25,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", login_view),
     path("insertar_anexo/", insert_anexo),
+    path("crear_usuario/", crear_usuario),
 ]
 # URLS API
 
