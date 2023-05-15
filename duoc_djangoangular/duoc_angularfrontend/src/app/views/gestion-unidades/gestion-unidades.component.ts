@@ -60,20 +60,21 @@ export class GestionUnidadesComponent implements OnInit {
     this._unitDataService.list().subscribe(
       data => {
         // If data retrieved exists log it in console for testing and assign it to the local variable that handles it.
-        console.log('Data Received: ' + JSON.stringify(data));
+        // console.log('Data Received: ' + JSON.stringify(data));
         this.units = data;
       },
       err => console.error(err),
-      () => console.log('done loading units')
+      () => console.log('Units Loaded')
     );
   }
 
-  // CODE TO CREATE NEW UNIT ENTRY
+  // Function sends the compiled new Unit info to the service to create a new unit in the DB
   createUnit() {
     this.saveUnit();
     this._unitDataService.create(this.newUnit).subscribe(
      data => {
-        console.log('Data Sent: ' + data);
+        // console.log('Data Sent: ' + data);
+        console.log('Make order executed')
         this.getUnits();
         return true;
       },
@@ -85,21 +86,40 @@ export class GestionUnidadesComponent implements OnInit {
   }
 
   // Deletes the corresponding element from the list and the database
-
   deleteUnit(unit:unitData) {
-    console.log('the argument in deleteUnit on the component: '+unit.id_unidad);
-    this._unitDataService.delete(unit.id_unidad);
-    this.reloadCurrentRoute(); 
+    // console.log('the argument in deleteUnit on the component: '+unit.id_unidad);
+    this._unitDataService.delete(unit.id_unidad).subscribe(
+      data => {
+        //  console.log('Data Sent: ' + data);
+         console.log('Kill order executed')
+         this.getUnits();
+         return true;
+       },
+       error => {
+         console.error('Error deleting Unit');
+         return throwError(error);
+       }
+     )
   }
 
+  //Changes the information of the marked element on the database before reloading the list.
   editUnit() {
     this.buildEdit();
-    console.log('JSON format of the new body to send edits: '+JSON.stringify(this.bodyUnit))
-    this._unitDataService.edit(this.bodyUnit);
-    this.reloadCurrentRoute(); 
+    // console.log('JSON format of the new body to send edits: '+JSON.stringify(this.bodyUnit))
+    this._unitDataService.edit(this.bodyUnit).subscribe(
+      data => {
+      console.log('Morph order Executed')
+      this.getUnits();
+      return true;
+    },
+    error => {
+      console.error('Error editing Unit');
+      return throwError(error);
+    }
+  )
   }
 
-  // Guarda los datos del Input en el nuevo objeto
+  // Saves input data on a new variable for deletion.
   saveUnit() {
     this.newUnit.id_unidad = this.newUID;
     this.newUnit.nombre_depto = this.newUNombre;
@@ -130,6 +150,7 @@ export class GestionUnidadesComponent implements OnInit {
     };
   }
 
+  //DEPRECATED Function reloads the route of the element after making changes to the page.
   reloadCurrentRoute() {
     let currentUrl = this.router.url;
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -137,6 +158,7 @@ export class GestionUnidadesComponent implements OnInit {
     });
   }
 
+  // Changes the visibility value of elements with a visibility toggle
   toggleCollapse(id: number): void {
     this.visible[id] = !this.visible[id];
   }
