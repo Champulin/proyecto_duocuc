@@ -31,7 +31,7 @@ const routes: Routes = [
       {
         path: 'menu-usuario',
         loadChildren: () =>
-          import('./views/menu-gestion-usuarios/menu-gestion-usuarios.module').then((m) => m.MenuGestionUsuariosModule),
+          import('./views/gestion-usuarios/gestion-usuarios.module').then((m) => m.GestionUsuariosModule),
           canActivate:[AuthGuard, AdminGate]
       },
       {

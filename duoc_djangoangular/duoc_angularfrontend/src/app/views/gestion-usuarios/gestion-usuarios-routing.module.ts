@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MenuGestionUsuariosComponent } from './menu-gestion-usuarios.component' 
+import { GestionUsuariosComponent } from './gestion-usuarios.component' 
 
 const routes: Routes = [
     {
         path: '',
-        component: MenuGestionUsuariosComponent,
+        component: GestionUsuariosComponent,
         data: {
         title: $localize`Gestion de Usuarios`
         }
@@ -17,5 +17,5 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class MenuGestionUsuariosRoutingModule {
+export class GestionUsuariosRoutingModule {
 }

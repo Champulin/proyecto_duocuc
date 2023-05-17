@@ -25,7 +25,7 @@ from rest_framework.parsers import JSONParser
 def login_view(request):
     username = request.data.get("username")
     password = request.data.get("password")
-    print("logeando user")
+    print("login user")
     print(username, password)
 
     user = None
@@ -51,7 +51,7 @@ def login_view(request):
         return Response(response_data)
     else:
         # Login failed
-        response_data = {"error": "Datos de login invalidos"}
+        response_data = {"error": "Datos de login no son correctos"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -143,6 +143,13 @@ class user_collection(generics.ListCreateAPIView):
     queryset = ResponsableUnidad.objects.all()
     serializer_class = ResponsableUnidadSerializer
 
+#Administrador
+
+class admin_collection(generics.ListCreateAPIView):
+    queryset = Administrator.objects.all()
+    serializer_class = AdministratorSerializer
+
+
 # Anexo
 
 
@@ -215,16 +222,16 @@ def insert_anexo(request):
         response_data = {"message": f"Error al crear anexo: {e}"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"message": "Insercion terminada con exito"})
+    return Response({"message": "Insertion terminada"})
 @api_view(["POST"])
 def corregir_anexo(request):
-    """Corrije la data de un anexo y vuelve a procesar sus datos
+    """Corrige la data de un anexo y vuelve a procesar sus datos
     return: HttpResponse: Respuesta de la petición.
     """
     id_anexo = request.data.get("id_anexo")
     try:
         reprocess_anexo(id_anexo)
-        return Response({"message": "Correccion terminada con exito"})
+        return Response({"message": "Corrección terminada"})
     except Exception as e:
         response_data = {"message": f"Error {e}"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
@@ -243,7 +250,7 @@ def calculo_general(request):
         response_data = {"message": f"Error al calcular el costo mensual: {e}"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"message": "Calculo mensual terminado con exito"})
+    return Response({"message": "Calculo mensual terminado"})
 
 
 @api_view(["POST"])
@@ -260,12 +267,12 @@ def calculo_unidad(request):
         response_data = {"message": f"Error al calcular el costo mensual: {e}"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"message": "Calculo mensual terminado con exito"})
+    return Response({"message": "Calculo mensual terminado"})
 
 @csrf_exempt
 @api_view(["POST"])
 def crear_usuario(request):
-    """Funcion que crea usuario admin o responsable de unidad dependiendo del request
+    """Function que crea usuario admin o responsable de unidad dependiendo del request
     Args: request (HttpRequest): Request que contiene los datos del usuario a crear.
     Returns: HttpResponse: Respuesta de la petición.
     """
@@ -307,5 +314,5 @@ def crear_usuario(request):
         response_data = {"message": f"Error al crear usuario: tipo de usuario invalido"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"message": "Usuario creado con exito"})
+    return Response({"message": "Usuario creado"})
 

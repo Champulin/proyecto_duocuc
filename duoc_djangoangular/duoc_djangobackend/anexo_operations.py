@@ -6,7 +6,7 @@ from typing import Dict
 from django.db.models import Sum
 from django.db.models.functions import ExtractMonth
 def create_calculo_name(nombre):
-    """funcion reutilizable que crea el nombre del calculo mensual en español y lo retorna para que sea usable en el modelo
+    """Función re-utilizable que crea el nombre del calculo mensual en español y lo retorna para que sea usable en el modelo
     Returns: nombre_calculo (str): Nombre del calculo mensual
     """
     #crea diccionario de nombres de mes en espanol
@@ -34,7 +34,7 @@ def create_calculo_name(nombre):
     return nombre_calculo
 def process_anexo(id_facultad, id_unidad, id_anexo, file):
     """
-    Funcion que procesa Anexo insertado por el usuario
+    Función que procesa Anexo insertado por el usuario
     Args: id_facultad (int): Id de la facultad a la que pertenece el anexo.
           id_unidad (int): Id de la unidad a la que pertenece el anexo.
           id_anexo (int): Id del anexo.
@@ -42,7 +42,7 @@ def process_anexo(id_facultad, id_unidad, id_anexo, file):
     """
     # Leer archivo excel en un dataframe.
     df = pd.read_excel(file)
-    # Iteracion de filas del dataframe.
+    # Iteración de filas del dataframe.
     try:
         for index, row in df.iterrows():
             # Perform an upsert operation
@@ -72,7 +72,7 @@ def process_anexo(id_facultad, id_unidad, id_anexo, file):
 #Reprocess Anexo
 def reprocess_anexo(id_anexo):
     """
-    Busca un los registros de un anexo en la base de datos, borra todos los registros correspondientes y los procesa denuevo con la funcion process_anexo
+    Busca un los registros de un anexo en la base de datos, borra todos los registros correspondientes y los procesa de nuevo con la function process_anexo
     Args: id_anexo
     """
     try:
@@ -85,12 +85,12 @@ def reprocess_anexo(id_anexo):
         raise Exception(error_message)
     #Busqueda de anexo en la base de datos
     anexo = Anexo.objects.get(id_anexo=id_anexo)
-    #Procesar anexo con la funcion process_anexo
+    #Procesar anexo con la function process_anexo
     process_anexo(anexo.id_facultad, anexo.id_unidad, anexo.id_anexo, anexo.file)
 # Calcular tarificacion Mensual por unidad.
 def calculo_mensual_unidad (id_anexo):
-    """Funcion que calcula la tarificacion mensual por unidad.
-    Args: id_anexo (int): Id del anexo.(cada anexo tiene una unica id_unidad y id_facultad, por lo que toda la info del respectivo anexo corresponde a una unidad y facultad en cuestion)
+    """Function que calcula la tarificacion mensual por unidad.
+    Args: id_anexo (int): Id del anexo.(cada anexo tiene una unica id_unidad y id_facultad, por lo que toda la info del respectivo anexo corresponde a una unidad y facultad)
     """
     #Busqueda de registros donde el id del anexo coincide
     registros = RegistroLlamada.objects.filter(id_anexo=id_anexo)
@@ -107,10 +107,10 @@ def calculo_mensual_unidad (id_anexo):
     costo_seg_slm = proveedor.costo_seg_slm
     #iteracion de registros
     for registro in registros:
-        #obtener el tipo de llamada y su duracion de la coleccion registro.
+        #obtener el tipo de llamada y su duracion de la collection registro.
         tipo_llamada = registro.tipo_llamada_siglas
         duracion_llamada = registro.duracion_llamada
-        #calcular precio y anadirlo al total en base al tipo de llamada
+        #calcular precio y agregarlo al total en base al tipo de llamada
         if tipo_llamada == "CEL":
             costo_total_cel += duracion_llamada * costo_seg_cel
         elif tipo_llamada == "LDI":
@@ -120,10 +120,10 @@ def calculo_mensual_unidad (id_anexo):
     #Obtener id_facultad y id_unidad desde el RegistroLlamada
     id_facultad = registros[0].id_facultad
     id_unidad = registros[0].id_unidad
-    #Consultar colleccion unidad para obtener nombre_depto
+    #Consultar collection unidad para obtener nombre_depto
     unidad = Unidad.objects.get(id_unidad=id_unidad)
     nombre_depto = unidad.nombre_depto
-    # Crea nombre leeible
+    # Crea nombre readable
     calculo_nombre = create_calculo_name(nombre_depto)
     #Crear nuevo calculo_mensual
     calculo_mensual = CalculoMensualUnidad(
@@ -167,7 +167,7 @@ def calculo_mensual_general(mes:int, id_facultad:int) -> None:
     #Obtener nombre_facultad desde CuentaPresupuestaria
     facultad = CuentaPresupuestaria.objects.get(id_facultad=id_facultad)
     nombre_facultad = facultad.nombre_facultad
-    # Crea nombre leeible
+    # Crea nombre readable
     calculo_nombre = create_calculo_name(nombre_facultad)
     #Crear nuevo calculo_mensual_general
     calculo_mensual_general = CalculoMensualFacultad(

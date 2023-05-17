@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { unitData } from './unit-model';
-import { unitNew } from './unit-new';
+import { unitData } from '../../models/unit-model';
+import { unitNew } from '../../models/unit-new';
 import { UnitDataService } from 'src/app/services/unit-data/unit-data.service';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';

@@ -1,0 +1,36 @@
+<!--List of Objects-->
+<h4>Responsables de Unidad</h4>
+<table cTable class="listaResponsables">
+  <thead>
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Apellido</th>
+      <th scope="col">E-Mail</th>
+      <th scope="col">Unidad</th>
+      <th scope="col">Username</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let each of users">
+    <tr>
+      <td>{{ each.name }}</td>
+      <td>{{ each.last_name }}</td>
+      <td>{{ each.email }}</td>
+      <td>{{ each.id_unidad }}</td>
+      <td>{{ each.id_facultad }}</td>
+      <td>
+        <button
+          cButton
+          color="success"
+          (click)="onMarked(each)"
+          [class.selected]="each === markedUser"
+        >
+          <svg cIcon name="cilPencil"></svg>
+        </button>
+        <button cButton 
+        color="danger">
+          <svg cIcon name="cilTrash"></svg>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

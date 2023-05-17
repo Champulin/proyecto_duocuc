@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { LocationStrategy, PathLocationStrategy, CommonModule } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -37,11 +37,14 @@ import {
   GridModule,
   HeaderModule,
   ListGroupModule,
+  ModalModule,
   NavModule,
+  PopoverModule,
   ProgressModule,
   SharedModule,
   SidebarModule,
   TabsModule,
+  TooltipModule,
   UtilitiesModule,
 } from '@coreui/angular';
 
@@ -97,6 +100,10 @@ const APP_CONTAINERS = [
     ListGroupModule,
     CardModule,
     HttpClientModule,
+    ModalModule,
+    PopoverModule,
+    TooltipModule,
+    CommonModule,
   ],
   providers: [
     {

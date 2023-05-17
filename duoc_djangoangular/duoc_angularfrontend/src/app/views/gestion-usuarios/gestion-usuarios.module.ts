@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import {
   AvatarModule,
   ButtonGroupModule,
   ButtonModule,
   CardModule,
+  CollapseModule,
   FormModule,
   GridModule,
   NavModule,
@@ -17,15 +18,16 @@ import {
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
 
-import { MenuGestionUsuariosRoutingModule } from './menu-gestion-usuarios-routing.module';
-import { MenuGestionUsuariosComponent } from './menu-gestion-usuarios.component';
+import { GestionUsuariosRoutingModule } from './gestion-usuarios-routing.module';
+import { GestionUsuariosComponent } from './gestion-usuarios.component';
 
 import { WidgetsModule } from '../widgets/widgets.module';
 
 @NgModule({
   imports: [
-    MenuGestionUsuariosRoutingModule,
+    GestionUsuariosRoutingModule,
     CardModule,
+    CollapseModule,
     NavModule,
     IconModule,
     TabsModule,
@@ -35,6 +37,7 @@ import { WidgetsModule } from '../widgets/widgets.module';
     ReactiveFormsModule,
     ButtonModule,
     FormModule,
+    FormsModule,
     ButtonModule,
     ButtonGroupModule,
     ChartjsModule,
@@ -42,7 +45,7 @@ import { WidgetsModule } from '../widgets/widgets.module';
     TableModule,
     WidgetsModule
   ],
-  declarations: [MenuGestionUsuariosComponent]
+  declarations: [GestionUsuariosComponent]
 })
-export class MenuGestionUsuariosModule {
+export class GestionUsuariosModule {
 }

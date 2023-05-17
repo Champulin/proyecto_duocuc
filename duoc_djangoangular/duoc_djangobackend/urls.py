@@ -48,20 +48,24 @@ urlpatterns += [
     ),
     # Unidad
     # This one is for List(get) and Create(post)
-    path("api/unidad/", unidad_collection.as_view(), name="anexo_collection"),
+    path("api/unidad/", unidad_collection.as_view(), name="unidad_collection"),
     # This one is for Get, Put, Patch and Delete
-    path("api/unidad/<int:pk>", unidad_element.as_view(), name="anexo_element"),
+    path("api/unidad/<int:pk>", unidad_element.as_view(), name="unidad_element"),
     # Anexo
     path("api/anexo/", anexo_collection.as_view(), name="anexo_collection"),
     path("api/anexo/<int:pk>", anexo_element.as_view(), name="anexo_element"),
     # Registro
-    path("api/registro/", registro_collection.as_view(), name="anexo_collection"),
-    path("api/registro/<int:pk>", registro_element.as_view(), name="anexo_element"),
+    path("api/registro/", registro_collection.as_view(), name="registro_collection"),
+    path("api/registro/<int:pk>", registro_element.as_view(), name="registro_element"),
     # Calculo mensual
-    path("api/calculo/", calculo_collection.as_view(), name="anexo_collection"),
-    path("api/calculo/<int:pk>", calculo_element.as_view(), name="anexo_element"),
+    path("api/calculo/", calculo_collection.as_view(), name="calculo_collection"),
+    path("api/calculo/<int:pk>", calculo_element.as_view(), name="calculo_element"),
     # Responsable Unidad
     path("api/responsable/", user_collection.as_view(), name="user_collection"),
+    #Admin
+    path("api/administrador/", admin_collection.as_view(), name="admin_collection")
+
+    # TODO MAKE A CALL FOR ADMIN DATA TOO
 ]
 
 if settings.DEBUG:
