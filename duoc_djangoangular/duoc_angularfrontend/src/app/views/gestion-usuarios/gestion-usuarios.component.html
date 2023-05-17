@@ -1,3 +1,76 @@
+<!--Visibility Toggle Buttons-->
+<button (click)="toggleCollapse(0)" cButton class="me-1" color="primary">Agregar Usuario</button>
+<button (click)="toggleCollapse(1)" cButton class="me-1" color="primary">Buscar</button>
+
+<br />
+
+<div [visible]="visible[0]" cCollapse>
+<br />
+<!--Create new entry-->
+<h4>Nuevo Usuario</h4>
+<c-row>
+  <c-col xs="auto">
+    <input [(ngModel)]="newName" type="text" aria-label="uNom" cFormControl placeholder="Nombre" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newLastName" aria-label="uApe" cFormControl placeholder="Apellido" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newMail" aria-label="uMail" cFormControl placeholder="E-Mail" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUnit" aria-label="uUnit" cFormControl placeholder="# Unidad" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newUsername" aria-label="uUsername" cFormControl placeholder="Nombre de Usuario" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newPass" aria-label="uPass" cFormControl placeholder="Password" />
+  </c-col>
+  <c-col>
+    <button cButton 
+    (click)="createUser()"
+    color="info">
+      <svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar
+    </button>
+  </c-col>
+</c-row>
+<br />
+</div>
+
+<!--EDIT GOES HERE WHEN ITS READY-->
+
+<!--Search List-->
+<div [visible]="visible[1]" cCollapse>
+  <br />
+  <h4>Filtrar por:</h4>
+  <c-row>
+    <c-col xs="auto">
+      <input aria-label="Nombre" cFormControl placeholder="Nombre" />
+    </c-col>
+    <c-col xs="auto">
+      <input aria-label="Apellido" cFormControl placeholder="Apellido" />
+    </c-col>
+    <c-col xs="auto">
+      <input aria-label="Mail" cFormControl placeholder="E-Mail" />
+    </c-col>
+    <c-col xs="auto">
+      <input aria-label="Username" cFormControl placeholder="Nombre de Usuario" />
+    </c-col>
+    <c-col>
+      <button cButton color="info">
+        <svg cIcon name="cilSearch"></svg>
+      </button>
+    </c-col>
+  </c-row>
+  <br />
+</div>
+<br />
+
 <!--List of Objects-->
 <h4>Responsables de Unidad</h4>
 <table cTable class="listaResponsables">

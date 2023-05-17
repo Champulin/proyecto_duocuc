@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { userData } from "../../models/modelo-usuario";
-// make new user model import goes here
+import { userData } from '../../models/user-model';
+import { userNew } from '../../models/user-new';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
@@ -21,7 +21,16 @@ export class GestionUsuariosComponent implements OnInit {
     //var para guardar list de usuarios desde DB
     public users: any;
 
-    //TODO unitNew data handling goes here, adapt to users, needs a new model to import most likely
+    // variables para crear nuevo objeto en DB
+    public newUser : userNew = {name: 'Nombre', last_name: 'Apellido', email: 'nombre.apellido@gmail.com', 
+                                id_unidad: 99, id_facultad: 99, username:'username1', password:'password1'};
+    newName:string = '';
+    newLastName:string = '';
+    newMail:string = '';
+    newUnit?:any;
+    newFacultad?:any;
+    newUsername:string = '';
+    newPass:string = '';
 
     //TODO same for editing variables once you're ready for that
  
@@ -56,6 +65,38 @@ export class GestionUsuariosComponent implements OnInit {
       err => console.error(err),
       () => console.log('User list Loaded')
     );
+  }
+
+  createUser() {
+    this.saveUser();
+    this._userDataService.create(this.newUser).subscribe(
+     data => {
+        console.log('Data Sent: ' + data);
+        console.log('Make User order executed')
+        this.getUsers();
+        return true;
+      },
+      error => {
+        console.error('Error creating User');
+        return throwError(error);
+      }
+    )
+  }
+
+  saveUser() {
+    this.newUser.name = this.newName;
+    this.newUser.last_name = this.newLastName;
+    this.newUser.email = this.newMail;
+    this.newUser.id_unidad = this.newUnit;
+    this.newUser.id_facultad = this.newFacultad;
+    this.newUser.username = this.newUsername;
+    this.newUser.password = this.newPass;
+  }
+
+
+  // Changes the visibility value of elements with a visibility toggle
+  toggleCollapse(id: number): void {
+    this.visible[id] = !this.visible[id];
   }
 
 }
