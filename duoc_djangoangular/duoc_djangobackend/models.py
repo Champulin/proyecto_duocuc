@@ -87,7 +87,7 @@ class Anexo(models.Model):
     id_facultad = models.IntegerField()
     id_unidad = models.IntegerField()
     nombre_anexo = models.CharField(max_length=50)
-    fecha_creacion = models.DateField()
+    fecha_creacion = models.DateField(auto_now=True)
 
     class Meta:
         db_table = "Anexo"
@@ -117,17 +117,33 @@ class RegistroLlamada(models.Model):
         verbose_name_plural = "Registros de llamadas"
 
 
-class CalculoMensual(models.Model):
+class CalculoMensualUnidad(models.Model):
     _id = models.ObjectIdField()
     id_facultad = models.IntegerField()
+    nombre_calculo = models.CharField(max_length=100)
     nombre_depto = models.CharField(max_length=50)
     tarificacion_general = models.IntegerField()
     tarificacion_slm = models.IntegerField()
     tarificacion_cel = models.IntegerField()
     tarificacion_ldi = models.IntegerField()
-    fecha = models.DateField()
+    fecha_calculo = models.DateField(auto_now=True)
 
     class Meta:
-        db_table = "CalculoMensual"
+        db_table = "CalculoMensualUnidad"
+        verbose_name = "Calculo Mensual"
+        verbose_name_plural = "Calculos Mensuales"
+class CalculoMensualFacultad(models.Model):
+    _id = models.ObjectIdField()
+    id_facultad = models.IntegerField()
+    nombre_calculo = models.CharField(max_length=100)
+    nombre_facultad = models.CharField(max_length=50)
+    tarificacion_general = models.IntegerField()
+    tarificacion_slm = models.IntegerField()
+    tarificacion_cel = models.IntegerField()
+    tarificacion_ldi = models.IntegerField()
+    fecha_calculo = models.DateField(auto_now=True)
+
+    class Meta:
+        db_table = "CalculoMensualFacultad"
         verbose_name = "Calculo Mensual"
         verbose_name_plural = "Calculos Mensuales"

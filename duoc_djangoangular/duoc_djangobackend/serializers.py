@@ -44,7 +44,11 @@ class RegistroLlamadaSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CalculoMensualSerializer(serializers.ModelSerializer):
+class CalculoMensualUnidadSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CalculoMensual
+        model = CalculoMensualUnidad
+        fields = "__all__"
+class CalculoMensualFacultadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CalculoMensualFacultad
         fields = "__all__"

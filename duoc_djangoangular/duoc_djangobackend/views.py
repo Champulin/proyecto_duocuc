@@ -6,7 +6,8 @@ from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
-from .anexo_operations import *
+from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general
+
 
 #  NORMAL GENERICS
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -176,37 +177,37 @@ class registro_element(generics.RetrieveUpdateDestroyAPIView):
 
 
 class calculo_collection(generics.ListCreateAPIView):
-    queryset = CalculoMensual.objects.all()
-    serializer_class = CalculoMensualSerializer
+    queryset = CalculoMensualUnidad.objects.all()
+    serializer_class = CalculoMensualUnidadSerializer
 
 
 class calculo_element(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CalculoMensual.objects.all()
-    serializer_class = CalculoMensualSerializer
+    queryset = CalculoMensualUnidad.objects.all()
+    serializer_class = CalculoMensualUnidadSerializer
     lookup_field = "id_facultad"
     lookup_url_kwarg = "pk"
 
 
-@csrf_exempt
+
 @api_view(["POST"])
 def insert_anexo(request):
     """Ingresa en la base de datos un anexo y procesa sus datos.
     Args: request (HttpRequest): Request que contiene los datos del anexo.
     Returns: HttpResponse: Respuesta de la petición.
     """
+    print('llego el request')
     id_anexo = request.POST.get("id_anexo")
     id_facultad = request.POST.get("id_facultad")
     id_unidad = request.POST.get("id_unidad")
     nombre_anexo = request.POST.get("nombre_anexo")
-    fecha_creacion = request.POST.get("fecha_creacion")
     file = request.FILES.get("file")
+    print('llegue al Try')
     try:
         Anexo.objects.create(
             id_anexo=id_anexo,
             id_facultad=id_facultad,
             id_unidad=id_unidad,
             nombre_anexo=nombre_anexo,
-            fecha_creacion=fecha_creacion,
             file=file,
         )
         process_anexo(id_facultad, id_unidad, id_anexo, file)
@@ -215,7 +216,18 @@ def insert_anexo(request):
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"message": "Insercion terminada con exito"})
-
+@api_view(["POST"])
+def corregir_anexo(request):
+    """Corrije la data de un anexo y vuelve a procesar sus datos
+    return: HttpResponse: Respuesta de la petición.
+    """
+    id_anexo = request.data.get("id_anexo")
+    try:
+        reprocess_anexo(id_anexo)
+        return Response({"message": "Correccion terminada con exito"})
+    except Exception as e:
+        response_data = {"message": f"Error {e}"}
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 def calculo_general(request):
@@ -242,14 +254,14 @@ def calculo_unidad(request):
     Returns: HttpResponse: Respuesta de la petición.
     """
     id_anexo = request.data.get("id_anexo")
-    mes = request.data.get("mes")
     try:
-        calculo_mensual_unidad(mes, id_anexo)
+        calculo_mensual_unidad(id_anexo)
     except Exception as e:
         response_data = {"message": f"Error al calcular el costo mensual: {e}"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"message": "Calculo mensual terminado con exito"})
+
 @csrf_exempt
 @api_view(["POST"])
 def crear_usuario(request):
