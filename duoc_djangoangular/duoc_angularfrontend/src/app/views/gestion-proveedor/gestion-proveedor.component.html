@@ -1,1 +1,129 @@
-<p>gestion-proveedor works!</p>
+<!--Visibility Toggle Buttons-->
+<button (click)="toggleCollapse(0)" cButton class="me-1" color="primary">Agregar Proveedor</button>
+<button (click)="toggleCollapse(1)" cButton class="me-1" color="primary">Buscar</button>
+
+<br />
+
+<div [visible]="visible[0]" cCollapse>
+<br />
+<!--Create new entry-->
+<h4>Nuevo Proveedor de Telefonia</h4>
+<c-row>
+  <c-col xs="auto">
+    <input [(ngModel)]="newPdtID" type="text" aria-label="pID" cFormControl placeholder="ID" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newPdtName" aria-label="pName" cFormControl placeholder="Nombre" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newPdtCEL" aria-label="pCEL" cFormControl placeholder="$ CEL" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newPdtLDI" aria-label="pLDI" cFormControl placeholder="$ LDI" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newPdtSLM" aria-label="pSLM" cFormControl placeholder="$ SLM" />
+  </c-col>
+  <c-col>
+    <button cButton 
+    (click)="createPDT()"
+    color="info">
+      <svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar
+    </button>
+  </c-col>
+</c-row>
+<br />
+</div>
+
+<!-- Edit marked unit -->
+<div *ngIf="markedPDT._id">
+    <br />
+    <h4>Editar Proveedor:</h4>
+    <c-row>
+      <c-col xs="auto">
+        <input [(ngModel)]="markedPDT.id_proveedor" type="text" aria-label="pID" 
+        cFormControl disabled placeholder="{{ markedPDT.id_proveedor }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editPdtName" aria-label="pName" cFormControl placeholder="{{ markedPDT.nombre_proveedor }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editPdtCEL" aria-label="pCEL" cFormControl placeholder="{{ markedPDT.costo_seg_cel }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editPdtLDI" aria-label="pLID" cFormControl placeholder="{{ markedPDT.costo_seg_ldi }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editPdtSLM" aria-label="pSLM" cFormControl placeholder="{{ markedPDT.costo_seg_slm }}" />
+      </c-col>
+      <c-col>
+        <button cButton 
+          (click)="editPDT()"
+          color="info">
+          <svg cIcon name="cilSave"></svg>
+          &nbsp; Guardar
+        </button>
+      </c-col>
+    </c-row>
+    <br />
+</div>
+
+<!--Search List-->
+<div [visible]="visible[1]" cCollapse>
+    <br />
+    <h4>Filtrar por:</h4>
+    <c-row>
+      <c-col xs="auto">
+        <input aria-label="ID" cFormControl placeholder="ID" />
+      </c-col>
+      <c-col xs="auto">
+        <input aria-label="Nombre" cFormControl placeholder="Nombre" />
+      </c-col>      
+      <c-col>
+        <button cButton color="info">
+          <svg cIcon name="cilSearch"></svg>
+        </button>
+      </c-col>
+    </c-row>
+    <br />
+  </div>
+  <br />
+
+<!--List of Objects-->
+<h4>Proveedores de Telefonia</h4>
+<table cTable class="listaPDTs">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">$CEL</th>
+      <th scope="col">$LDI</th>
+      <th scope="col">$SLM</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let each of pdtList">
+    <tr>
+      <th scope="row">{{ each.id_proveedor }}</th>
+      <td>{{ each.nombre_proveedor }}</td>
+      <td>{{ each.costo_seg_cel }}</td>
+      <td>{{ each.costo_seg_ldi }}</td>
+      <td>{{ each.costo_seg_slm }}</td>
+      <td>
+        <button
+          cButton
+          color="success"
+          (click)="onMarked(each)"
+          [class.selected]="each === markedPDT">
+          <svg cIcon name="cilPencil"></svg>
+      </button>
+      <button cButton 
+        color="danger"
+        (click)="deletePDT(each)"
+        [class.selected]="each === selectedPDT">
+          <svg cIcon name="cilTrash"></svg>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

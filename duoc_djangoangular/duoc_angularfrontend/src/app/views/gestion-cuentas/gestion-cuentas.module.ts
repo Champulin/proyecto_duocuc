@@ -1,18 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import {
   AvatarModule,
   ButtonGroupModule,
   ButtonModule,
   CardModule,
+  CollapseModule,
   FormModule,
   GridModule,
   NavModule,
   ProgressModule,
   TableModule,
-  TabsModule
+  TabsModule,
+  ModalModule
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
@@ -26,6 +28,7 @@ import { WidgetsModule } from '../widgets/widgets.module';
   imports: [
     GestionCuentasRoutingModule,
     CardModule,
+    CollapseModule,
     NavModule,
     IconModule,
     TabsModule,
@@ -35,12 +38,14 @@ import { WidgetsModule } from '../widgets/widgets.module';
     ReactiveFormsModule,
     ButtonModule,
     FormModule,
+    FormsModule,
     ButtonModule,
     ButtonGroupModule,
     ChartjsModule,
     AvatarModule,
     TableModule,
-    WidgetsModule
+    WidgetsModule,
+    ModalModule
   ],
   declarations: [GestionCuentasComponent]
 })

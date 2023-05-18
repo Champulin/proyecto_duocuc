@@ -41,11 +41,7 @@ urlpatterns += [
     # _____________ GENÉRICOS ________________
     # Cuenta presupuestaria
     path("api/cuentapre/", cuentapre_collection.as_view(), name="cuentapre_collection"),
-    path(
-        "api/cuentapre/<int:id_facultad>",
-        cuentapre_element.as_view(),
-        name="cuentapre_element",
-    ),
+    path("api/cuentapre/<int:pk>", cuentapre_element.as_view(), name="cuentapre_element"),
     # Unidad
     # This one is for List(get) and Create(post)
     path("api/unidad/", unidad_collection.as_view(), name="unidad_collection"),
@@ -64,8 +60,6 @@ urlpatterns += [
     path("api/responsable/", user_collection.as_view(), name="user_collection"),
     #Admin
     path("api/administrador/", admin_collection.as_view(), name="admin_collection")
-
-    # TODO MAKE A CALL FOR ADMIN DATA TOO
 ]
 
 if settings.DEBUG:

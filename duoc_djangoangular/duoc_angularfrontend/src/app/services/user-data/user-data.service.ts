@@ -17,6 +17,8 @@ export class UserDataService {
     return this.http.get<userData[]>('http://localhost:8000/api/responsable/');
   }
 
+  // TODO: Currently using the generic, have to alter it so that it takes both admin and responsable as user types
+  // through the crearUsuario/ url api
   create(newUser:any) {
     let httpOptions = {
       headers: new HttpHeaders({

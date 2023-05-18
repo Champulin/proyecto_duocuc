@@ -1,1 +1,128 @@
-<p>gestion-cuentas works!</p>
+<!--Visibility Toggle Buttons-->
+<button (click)="toggleCollapse(0)" cButton class="me-1" color="primary">Agregar Cuenta Presupuestaria</button>
+<button (click)="toggleCollapse(1)" cButton class="me-1" color="primary">Buscar</button>
+
+<br />
+
+<div [visible]="visible[0]" cCollapse>
+<br />
+<!--Create new entry-->
+<h4>Nueva Cuenta Presupuestaria</h4>
+<c-row>
+  <c-col xs="auto">
+    <input [(ngModel)]="newAFac" type="text" aria-label="aID" cFormControl placeholder="ID Cuenta" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newAName" aria-label="aName" cFormControl placeholder="Nombre de Facultad" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newASigla" aria-label="aSigla" cFormControl placeholder="Sigla de Facultad" />
+  </c-col>
+  <c-col xs="auto">
+    <input [(ngModel)]="newAPro" aria-label="aProvider" cFormControl placeholder="# Proveedor" />
+  </c-col>
+  <c-col>
+    <button cButton 
+    (click)="createAccount()"
+    color="info">
+      <svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar
+    </button>
+  </c-col>
+</c-row>
+<br />
+</div>
+
+<!-- Edit marked account -->
+<div *ngIf="markedAccount._id">
+  <br />
+  <h4>Editar Cuenta Presupuestaria:</h4>
+  <c-row>
+    <c-col xs="auto">
+      <input [(ngModel)]="markedAccount.id_facultad" type="text" aria-label="aID" 
+      cFormControl disabled placeholder="{{ markedAccount.id_facultad }}" />
+    </c-col>
+    <c-col xs="auto">
+      <input [(ngModel)]="editAName" aria-label="aName" cFormControl placeholder="{{ markedAccount.nombre_facultad }}" />
+    </c-col>
+    <c-col xs="auto">
+      <input [(ngModel)]="editASigla" aria-label="aSigla" cFormControl placeholder="{{ markedAccount.siglas_facultad }}" />
+    </c-col>
+    <c-col xs="auto">
+      <input [(ngModel)]="editAPro" aria-label="aProvider" cFormControl placeholder="{{ markedAccount.id_proveedor }}" />
+    </c-col>
+    <c-col>
+      <button cButton 
+        (click)="editAccount()"
+        color="info">
+        <svg cIcon name="cilSave"></svg>
+        &nbsp; Guardar
+      </button>
+    </c-col>
+  </c-row>
+  <br />
+  </div>
+
+<!--Search List-->
+<div [visible]="visible[1]" cCollapse>
+  <br />
+  <h4>Filtrar por:</h4>
+  <c-row>
+    <c-col xs="auto">
+      <input aria-label="ID" cFormControl placeholder="ID" />
+    </c-col>
+    <c-col xs="auto">
+      <input aria-label="Nombre" cFormControl placeholder="Nombre" />
+    </c-col>
+    <c-col xs="auto">
+      <input aria-label="Sigla" cFormControl placeholder="Sigla" />
+    </c-col>
+    <c-col xs="auto">
+      <input aria-label="Proveedor" cFormControl placeholder="Proveedor" />
+    </c-col>
+    <c-col>
+      <button cButton color="info">
+        <svg cIcon name="cilSearch"></svg>
+      </button>
+    </c-col>
+  </c-row>
+  <br />
+</div>
+<br />
+
+<!--List of Objects-->
+<h4>Cuentas Presupuestarias</h4>
+<table cTable class="listaCuentas">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Sigla</th>
+      <th scope="col">Proveedor de Telefonia</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let each of accounts">
+    <tr>
+      <th scope="row">{{ each.id_facultad }}</th>
+      <td>{{ each.nombre_facultad }}</td>
+      <td>{{ each.siglas_facultad | uppercase }}</td>
+      <td>{{ each.id_proveedor }}</td>
+      <td>
+        <button
+          cButton
+          color="success"
+          (click)="onMarked(each)"
+          [class.selected]="each === markedAccount">
+          <svg cIcon name="cilPencil"></svg>
+        </button>
+        <button cButton 
+        color="danger"
+        (click)="deleteAccount(each)"
+        [class.selected]="each === selectedAccount">
+          <svg cIcon name="cilTrash"></svg>
+        </button>
+        
+      </td>
+    </tr>
+  </tbody>
+</table>

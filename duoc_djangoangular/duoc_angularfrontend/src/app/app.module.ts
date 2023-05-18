@@ -51,6 +51,8 @@ import {
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 
 // import services
+import { AccountDataService } from './services/account-data/account-data.service';
+import { ProveedorDataService } from './services/proveedor-data/proveedor-data.service';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { UnitDataService } from 'src/app/services/unit-data/unit-data.service';
 import { LoginService } from './services/login-service/login-service.service';
@@ -119,7 +121,9 @@ const APP_CONTAINERS = [
     UserDataService,
     UnitDataService,
     LoginService,
-    AuthService
+    AuthService,
+    AccountDataService,
+    ProveedorDataService
   ],
   bootstrap: [AppComponent],
 })

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+
 import { unitData } from '../../models/unit-model';
 import { unitNew } from '../../models/unit-new';
 import { UnitDataService } from 'src/app/services/unit-data/unit-data.service';
+
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -16,7 +18,7 @@ export class GestionUnidadesComponent implements OnInit {
   visible = [false, false];
 
   selectedUnit?: unitData;
-  public markedUnit: unitData = {_id: null, id_unidad: 0, nombre_depto: '', siglas_depto: '', id_facultad: 0};;
+  public markedUnit: unitData = {_id: null, id_unidad: 0, nombre_depto: '', siglas_depto: '', id_facultad: 0};
 
   //var para guardar lista desde DB
   public units: any;
@@ -49,9 +51,8 @@ export class GestionUnidadesComponent implements OnInit {
 
   constructor(private _unitDataService: UnitDataService, private router:Router) { }
 
-
   public ngOnInit(): void {
-      this.getUnits();
+    this.getUnits();
   }
 
   //Function that retrieves the list of Units from the database.
@@ -83,6 +84,7 @@ export class GestionUnidadesComponent implements OnInit {
         return throwError(error);
       }
     )
+    this.toggleCollapse(0);
   }
 
   // Deletes the corresponding element from the list and the database
@@ -110,13 +112,14 @@ export class GestionUnidadesComponent implements OnInit {
       data => {
       console.log('Morph order Executed')
       this.getUnits();
+      this.markedUnit._id = null;
       return true;
-    },
-    error => {
-      console.error('Error editing Unit');
-      return throwError(error);
-    }
-  )
+      },
+      error => {
+        console.error('Error editing Unit');
+        return throwError(error);
+      }
+    )
   }
 
   // Saves input data on a new variable for deletion.

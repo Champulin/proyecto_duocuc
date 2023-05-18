@@ -71,7 +71,7 @@ export class GestionUsuariosComponent implements OnInit {
     this.saveUser();
     this._userDataService.create(this.newUser).subscribe(
      data => {
-        console.log('Data Sent: ' + data);
+        console.log('Data Sent: ' + JSON.stringify(data));
         console.log('Make User order executed')
         this.getUsers();
         return true;

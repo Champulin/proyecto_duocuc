@@ -31,20 +31,12 @@ export const navItems: INavData[] = [
   {
     name: 'Cuentas Presupuestarias',
     url: '/menu-cuentas',
-    iconComponent: { name: 'cil-pencil' },
-    badge: {
-      color: 'info',
-      text: 'WIP'
-    }
+    iconComponent: { name: 'cil-pencil' }
   },
   {
     name: 'Proveedores de Telefonía',
     url: '/menu-proveedores',
-    iconComponent: { name: 'cil-pencil' },
-    badge: {
-      color: 'info',
-      text: 'WIP'
-    }
+    iconComponent: { name: 'cil-pencil' }
   },
   {
     title: true,
