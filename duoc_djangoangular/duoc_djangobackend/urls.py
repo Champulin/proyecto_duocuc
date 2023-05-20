@@ -42,24 +42,43 @@ urlpatterns += [
     # Cuenta presupuestaria
     path("api/cuentapre/", cuentapre_collection.as_view(), name="cuentapre_collection"),
     path("api/cuentapre/<int:pk>", cuentapre_element.as_view(), name="cuentapre_element"),
+    # _________________________________________________________________________________
     # Unidad
     # This one is for List(get) and Create(post)
     path("api/unidad/", unidad_collection.as_view(), name="unidad_collection"),
     # This one is for Get, Put, Patch and Delete
     path("api/unidad/<int:pk>", unidad_element.as_view(), name="unidad_element"),
+    # _________________________________________________________________________________
     # Anexo
     path("api/anexo/", anexo_collection.as_view(), name="anexo_collection"),
     path("api/anexo/<int:pk>", anexo_element.as_view(), name="anexo_element"),
+    # _________________________________________________________________________________
     # Registro
     path("api/registro/", registro_collection.as_view(), name="registro_collection"),
-    path("api/registro/<int:pk>", registro_element.as_view(), name="registro_element"),
-    # Calculo mensual
-    path("api/calculo/", calculo_collection.as_view(), name="calculo_collection"),
-    path("api/calculo/<int:pk>", calculo_element.as_view(), name="calculo_element"),
+    # Consultar Registro por proveedor
+    path("api/registro/proveedor/<str:pk>", registroprov_collection.as_view(), name="registro_element"),
+    # Registro con id de mongo
+    path("api/registro/<str:pk>", registro_element.as_view(), name="registro_element"),
+    # _________________________________________________________________________________
+    # Calculo mensual unidad
+    path("api/calculo-unidad/", calculouni_collection.as_view(), name="calculo_collection"),
+    # Calculo mensual unidad con id de mongo
+    path("api/calculo-unidad/<str:pk>", calculouni_element.as_view(), name="calculo_element"),
+    # _________________________________________________________________________________
+    # Calculo mensual facultad
+    path("api/calculo-facultad/", calculofac_collection.as_view(), name="calculo_collection"),
+    # Calculo mensual facultad con id de mongo
+    path("api/calculo-facultad/<str:pk>", calculofac_element.as_view(), name="calculo_element"),
+    # _________________________________________________________________________________
     # Responsable Unidad
     path("api/responsable/", user_collection.as_view(), name="user_collection"),
-    #Admin
-    path("api/administrador/", admin_collection.as_view(), name="admin_collection")
+    # Responsable Unidad con id de mongo
+    path("api/responsable/<str:pk>", user_element.as_view(), name="user_collection"),
+    # _________________________________________________________________________________
+    #Admin (Nose si es necesario el collection debido a que trae todos nose si habra más que uno)
+    path("api/administrador/", admin_collection.as_view(), name="admin_collection"),
+    # Admin con id de mongo
+    path("api/administrador/<str:pk>", admin_element.as_view(), name="admin_collection")
 ]
 
 if settings.DEBUG:

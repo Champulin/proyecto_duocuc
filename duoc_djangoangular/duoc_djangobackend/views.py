@@ -8,6 +8,10 @@ from .models import *
 from django.views.decorators.csrf import csrf_exempt
 from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general
 
+# Import from pymongo bson.objectid para pasar los strings a ObjectId's
+from bson.objectid import ObjectId
+
+
 
 #  NORMAL GENERICS
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -102,6 +106,7 @@ def proveedor_element(request, pk):
         # Respuesta sin contenido
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# _________________ FIN PROVEEDORES ______________________
 
 # ___________________________ API GENERICS __________________________
 
@@ -121,6 +126,7 @@ class cuentapre_element(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "id_facultad"
     lookup_url_kwarg = "pk"
 
+# _________________ FIN CUENTAS PRESUPUESTARIAS ______________________
 
 # Unidad
 
@@ -135,6 +141,8 @@ class unidad_element(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UnidadSerializer
     lookup_field = "id_unidad"
     lookup_url_kwarg = "pk"
+    
+# _________________ FIN UNIDAD ______________________
 
 
 #ResponsableUnidad
@@ -143,12 +151,35 @@ class user_collection(generics.ListCreateAPIView):
     queryset = ResponsableUnidad.objects.all()
     serializer_class = ResponsableUnidadSerializer
 
+class user_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    def get_object(self):
+        pk = self.kwargs['pk']
+        queryset = ResponsableUnidad.objects.get(_id=ObjectId(pk))
+        
+        return queryset
+    
+    serializer_class = ResponsableUnidadSerializer
+
+# _________________ FIN RESPONSABLE DE UNIDAD ______________________
+
 #Administrador
 
 class admin_collection(generics.ListCreateAPIView):
     queryset = Administrator.objects.all()
     serializer_class = AdministratorSerializer
 
+class admin_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    def get_object(self):
+        pk = self.kwargs['pk']
+        queryset = Administrator.objects.get(_id=ObjectId(pk))
+        
+        return queryset
+    
+    serializer_class = AdministratorSerializer
+
+# _________________ FIN ADMINISTRADOR ______________________
 
 # Anexo
 
@@ -164,6 +195,7 @@ class anexo_element(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "id_anexo"
     lookup_url_kwarg = "pk"
 
+# _________________ FIN ANEXOS ______________________
 
 # Registro llamada
 
@@ -171,30 +203,72 @@ class anexo_element(generics.RetrieveUpdateDestroyAPIView):
 class registro_collection(generics.ListCreateAPIView):
     queryset = RegistroLlamada.objects.all()
     serializer_class = RegistroLlamadaSerializer
+    
+# Consultar registro de llamadas por proveedor de telefonia CU
 
+class registroprov_collection(generics.ListAPIView):
+    
+    def get_queryset(self):
+        
+        pk = self.kwargs['pk']
+        
+        queryset = RegistroLlamada.objects.filter(nombre_proveedor=str.capitalize(pk))
+        
+        return queryset
+    
+    serializer_class = RegistroLlamadaSerializer
 
 class registro_element(generics.RetrieveUpdateDestroyAPIView):
-    queryset = RegistroLlamada.objects.all()
+    
+    def get_object(self):
+        pk = self.kwargs['pk']
+        queryset = RegistroLlamada.objects.get(_id=ObjectId(pk))
+        
+        return queryset
+    
     serializer_class = RegistroLlamadaSerializer
-    lookup_field = "id_anexo"
-    lookup_url_kwarg = "pk"
+    
+# _________________ FIN REGISTRO DE LLAMADAS ______________________
 
 
-# Calculo mensual
+# Calculo mensual unidad
 
 
-class calculo_collection(generics.ListCreateAPIView):
+class calculouni_collection(generics.ListCreateAPIView):
     queryset = CalculoMensualUnidad.objects.all()
     serializer_class = CalculoMensualUnidadSerializer
 
 
-class calculo_element(generics.RetrieveUpdateDestroyAPIView):
+class calculouni_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    def get_object(self):
+        pk = self.kwargs['pk']
+        queryset = CalculoMensualUnidad.objects.get(_id=ObjectId(pk))
+        
+        return queryset
+    
+    serializer_class = CalculoMensualUnidadSerializer
+
+# _________________ FIN CALCULO MENSUAL UNIDAD ______________________
+
+# Calculo mensual Facultad
+
+class calculofac_collection(generics.ListCreateAPIView):
     queryset = CalculoMensualUnidad.objects.all()
     serializer_class = CalculoMensualUnidadSerializer
-    lookup_field = "id_facultad"
-    lookup_url_kwarg = "pk"
 
 
+class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    def get_object(self):
+        pk = self.kwargs['pk']
+        queryset = CalculoMensualFacultad.objects.get(_id=ObjectId(pk))
+        
+        return queryset
+    
+    serializer_class = CalculoMensualFacultadSerializer
+    
+# _________________ FIN CALCULO MENSUAL FACULTAD ______________________
 
 @api_view(["POST"])
 def insert_anexo(request):
