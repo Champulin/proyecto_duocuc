@@ -32,8 +32,17 @@ export class GestionUsuariosComponent implements OnInit {
     newUsername:string = '';
     newPass:string = '';
 
-    //TODO same for editing variables once you're ready for that
- 
+    //variables para editar 
+    public bodyUser : userData = {_id: '', name: '', last_name: '', email: '', 
+                                  id_unidad: 0, id_facultad: 0, username:'', password:''};
+    editName:string = '';
+    editLastName:string = '';
+    editMail:string = '';
+    editUnitNum:any;
+    editFacultyNum:any;
+    editUsername:string = '';
+    editPass:string = '';
+    
   onSelect(user: userData): void {
     this.selectedUser = user;
   }
@@ -59,7 +68,7 @@ export class GestionUsuariosComponent implements OnInit {
     this._userDataService.list().subscribe(
       data => {
         // If data retrieved exists log it in console for testing and assign it to the local variable that handles it.
-        // console.log('Data Received: ' + JSON.stringify(data));
+        console.log('Data Received: ' + JSON.stringify(data));
         this.users = data;
       },
       err => console.error(err),
@@ -83,6 +92,24 @@ export class GestionUsuariosComponent implements OnInit {
     )
   }
 
+  //Changes the information of the marked element on the database before reloading the list.
+  editUser() {
+    this.buildEdit();
+    // console.log('JSON format of the new body to send edits: '+JSON.stringify(this.bodyUnit))
+    this._userDataService.edit(this.bodyUser).subscribe(
+      data => {
+      console.log('Morph order Executed')
+      this.getUsers();
+      this.markedUser._id = null;
+      return true;
+      },
+      error => {
+        console.error('Error editing Unit');
+        return throwError(error);
+      }
+    )
+  }
+
   saveUser() {
     this.newUser.name = this.newName;
     this.newUser.last_name = this.newLastName;
@@ -93,6 +120,43 @@ export class GestionUsuariosComponent implements OnInit {
     this.newUser.password = this.newPass;
   }
 
+  //Builds the format for the body data that we're going to send to patch.
+  buildEdit() {
+    
+    this.bodyUser._id = this.markedUser._id;
+    this.bodyUser.username = this.markedUser.username;
+    this.bodyUser.password = this.markedUser.password;
+    
+    if(!!this.editName){
+      this.bodyUser.name = this.editName;
+    } else {
+      this.bodyUser.name = this.markedUser.name;
+    };
+
+    if(!!this.editLastName){
+      this.bodyUser.last_name = this.editLastName;
+    } else {
+      this.bodyUser.last_name = this.markedUser.last_name;
+    };
+  
+    if(!!this.editMail){
+      this.bodyUser.email = this.editMail;
+    } else {
+      this.bodyUser.email = this.markedUser.email;
+    };
+
+    if(!!this.editUnitNum){
+      this.bodyUser.id_unidad = this.editUnitNum;
+    } else {
+      this.bodyUser.id_unidad = this.markedUser.id_unidad;
+    };
+
+    if(!!this.editFacultyNum){
+      this.bodyUser.id_facultad = this.editFacultyNum;
+    } else {
+      this.bodyUser.id_facultad = this.markedUser.id_facultad;
+    };
+  }
 
   // Changes the visibility value of elements with a visibility toggle
   toggleCollapse(id: number): void {

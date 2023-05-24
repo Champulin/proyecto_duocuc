@@ -53,6 +53,12 @@ const routes: Routes = [
           canActivate:[AuthGuard, AdminGate]
       },
       {
+        path: 'menu-anexos',
+        loadChildren: () =>
+          import('./views/gestion-anexos/gestion-anexos.module').then((m) => m.GestionAnexosModule),
+          canActivate:[AuthGuard, AdminGate]
+      },
+      {
         path: 'theme',
         loadChildren: () =>
           import('./views/theme/theme.module').then((m) => m.ThemeModule)

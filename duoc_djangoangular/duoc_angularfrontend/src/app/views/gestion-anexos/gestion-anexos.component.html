@@ -1,0 +1,59 @@
+<!--List of Objects-->
+<h4>Anexos</h4>
+<table cTable class="listaAnexos">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">#Unidad</th>
+      <th scope="col">#Facultad</th>
+      <th scope="col">Fecha de Creacion</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let each of anexos">
+    <tr>
+      <th scope="row">{{ each.id_anexo }}</th>
+      <td>{{ each.nombre_anexo }}</td>
+      <td>{{ each.id_unidad }}</td>
+      <td>{{ each.id_facultad }}</td>
+      <td>{{ each.fecha_creacion }}</td>
+      <td>
+        <button
+          cButton
+          color="success"
+    
+        >
+          <svg cIcon name="cilPencil"></svg>
+        </button>
+        <button cButton 
+        color="danger"
+
+        >
+          <svg cIcon name="cilTrash"></svg>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br /><br />
+<h4>Subir Anexo</h4>
+<br />
+<c-row>
+    <c-col xs="auto">
+      <input type="number" aria-label="xID" cFormControl placeholder="ID de Anexo" />
+    </c-col>
+    <c-col xs="auto">
+      <input type="text" aria-label="xNombre" cFormControl placeholder="Asignación (Mes) (Facultad)" />
+    </c-col>
+    <c-col xs="auto">
+      <input type="number" aria-label="xFacultad" cFormControl placeholder="# Facultad" />
+    </c-col>
+    <c-col xs="auto">
+      <input  type="number" aria-label="xUnidad" cFormControl placeholder="# Unidad" />
+    </c-col>
+</c-row>
+<br />
+<div class="mb-3">
+    <input cFormControl id="formFile" type="file" />
+</div>

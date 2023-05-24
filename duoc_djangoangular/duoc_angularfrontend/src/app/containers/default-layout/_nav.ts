@@ -39,6 +39,11 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-pencil' }
   },
   {
+    name: 'Anexos',
+    url: '/menu-anexos',
+    iconComponent: { name: 'cil-pencil' }
+  },
+  {
     title: true,
     name: 'Theme'
   },

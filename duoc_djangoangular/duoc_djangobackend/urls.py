@@ -58,6 +58,7 @@ urlpatterns += [
     path("api/calculo/<int:pk>", calculo_element.as_view(), name="calculo_element"),
     # Responsable Unidad
     path("api/responsable/", user_collection.as_view(), name="user_collection"),
+    path("api/responsable/<str:pk>", user_element.as_view(), name="user_element"),
     #Admin
     path("api/administrador/", admin_collection.as_view(), name="admin_collection")
 ]

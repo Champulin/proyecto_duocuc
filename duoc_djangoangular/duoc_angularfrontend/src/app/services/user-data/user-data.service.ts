@@ -28,4 +28,17 @@ export class UserDataService {
     return this.http.post('http://localhost:8000/api/responsable/', JSON.stringify(newUser), httpOptions);
   }
 
+  edit(idToChange:userData) {
+    let httpOptions = {
+      headers: new HttpHeaders({
+       'Content-Type': 'application/json' ,
+      })
+    };
+    this.morphOrder = 'http://localhost:8000/api/responsable/'+ JSON.stringify(idToChange._id);
+    console.log('morphOrder after appending: '+ this.morphOrder);
+    console.log('your new flesh: '+JSON.stringify(idToChange));
+    return this.http.patch(this.morphOrder, JSON.stringify(idToChange), httpOptions);
+    
+  }
+
 }

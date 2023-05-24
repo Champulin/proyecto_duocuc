@@ -42,7 +42,41 @@
 <br />
 </div>
 
-<!--EDIT GOES HERE WHEN ITS READY-->
+<!-- Edit marked user -->
+<div *ngIf="markedUser._id">
+  <br />
+  <h4>Editar Cuenta de Usuario:</h4>
+  <c-row>
+    <c-col xs="auto">
+      <input [(ngModel)]="markedUser.username" type="text" aria-label="uID" disabled cFormControl placeholder="{{ markedUser.username }}" />
+    </c-col>
+    <c-col xs="auto">
+      <input [(ngModel)]="editName" aria-label="uNombre" cFormControl placeholder="{{ markedUser.name }}" />
+    </c-col>
+    <c-col xs="auto">
+      <input [(ngModel)]="editLastName" aria-label="uLast" cFormControl placeholder="{{ markedUser.last_name }}" />
+    </c-col>
+    <c-col xs="auto">
+      <input [(ngModel)]="editMail" aria-label="uMail" cFormControl placeholder="{{ markedUser.email }}" />
+    </c-col>
+    <c-col xs="auto">
+      <input [(ngModel)]="editUnitNum" aria-label="uUnit" cFormControl placeholder="{{ markedUser.id_unidad }}" />
+    </c-col>
+    <c-col xs="auto">
+      <input [(ngModel)]="editFacultyNum" aria-label="uFaculty" cFormControl placeholder="{{ markedUser.id_facultad }}" />
+    </c-col>
+    <c-col>
+      <button cButton 
+        (click)="editUser()"
+        color="info">
+        <svg cIcon name="cilSave"></svg>
+        &nbsp; Guardar
+      </button>
+    </c-col>
+  </c-row>
+  <br />
+  </div>
+
 
 <!--Search List-->
 <div [visible]="visible[1]" cCollapse>
