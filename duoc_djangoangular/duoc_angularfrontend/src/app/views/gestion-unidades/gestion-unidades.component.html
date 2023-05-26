@@ -1,13 +1,15 @@
 <!--Visibility Toggle Buttons-->
-<button (click)="toggleCollapse(0)" cButton class="me-1" color="primary">Agregar Unidad</button>
+<!-- <button (click)="toggleCollapse(0)" cButton class="me-1" color="primary">Agregar Unidad</button> -->
+<button [cModalToggle]="createNewUnitModal.id" color="primary" cButton>Nueva Unidad</button>
 <button (click)="toggleCollapse(1)" cButton class="me-1" color="primary">Buscar</button>
 
 <br />
 
-<div [visible]="visible[0]" cCollapse>
-<br />
+<!-- DEPRECATED: Moved to a Modal instance -->
+<!-- <div [visible]="visible[0]" cCollapse>
+<br /> -->
 <!--Create new entry-->
-<h4>Nueva Unidad</h4>
+<!-- <h4>Nueva Unidad</h4>
 <c-row>
   <c-col xs="auto">
     <input [(ngModel)]="newUID" type="text" aria-label="uID" cFormControl placeholder="ID" />
@@ -31,10 +33,10 @@
   </c-col>
 </c-row>
 <br />
-</div>
+</div> -->
 
-<!-- Edit marked unit -->
-<div *ngIf="markedUnit._id">
+<!-- Edit marked unit. DEPRECATED: Moved to a Modal window -->
+<!-- <div *ngIf="markedUnit._id">
   <br />
   <h4>Editar Unidad:</h4>
   <c-row>
@@ -60,7 +62,7 @@
     </c-col>
   </c-row>
   <br />
-  </div>
+  </div> -->
 
 <!--Search List-->
 <div [visible]="visible[1]" cCollapse>
@@ -107,21 +109,101 @@
       <td>{{ each.siglas_depto | uppercase }}</td>
       <td>{{ each.id_facultad }}</td>
       <td>
-        <button
-          cButton
-          color="success"
+        <button [cModalToggle]="editUnitModal.id" 
+          color="info" cButton
           (click)="onMarked(each)"
-          [class.selected]="each === markedUnit"
-        >
+          [class.selected]="each === markedUnit">
           <svg cIcon name="cilPencil"></svg>
         </button>
-        <button cButton 
+        <button [cModalToggle]="deleteUnitModal.id" 
+        cButton 
         color="danger"
-        (click)="deleteUnit(each)"
-        [class.selected]="each === selectedUnit">
+        (click)="onSelect(each)">
           <svg cIcon name="cilTrash"></svg>
         </button>
       </td>
     </tr>
   </tbody>
 </table>
+
+
+<c-modal #editUnitModal backdrop="static" id="editUnitModal">
+  <c-modal-header>
+    <h5 cModalTitle>Editar Unidad</h5>
+    <button [cModalToggle]="editUnitModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <c-row>
+      <c-col xs="auto">
+        <input [(ngModel)]="markedUnit.id_unidad" type="text" aria-label="uID" cFormControl disabled placeholder="{{ markedUnit.id_unidad }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editUNombre" aria-label="uNombre" cFormControl placeholder="{{ markedUnit.nombre_depto }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editUSigla" aria-label="uSigla" cFormControl placeholder="{{ markedUnit.siglas_depto }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editUFacultad" aria-label="uFacultad" cFormControl placeholder="{{ markedUnit.id_facultad }}" />
+      </c-col>
+    </c-row>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="editUnitModal.id" cButton color="secondary">
+      Close
+    </button>
+    <button [cModalToggle]="editUnitModal.id" cButton color="success" (click)="editUnit()"><svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar</button>
+  </c-modal-footer>
+</c-modal>
+
+<c-modal #createNewUnitModal backdrop="static" id="createNewUnitModal">
+  <c-modal-header>
+    <h5 cModalTitle>Crear Nueva Unidad</h5>
+    <button [cModalToggle]="createNewUnitModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <c-row>
+      <c-col xs="auto">
+        <input [(ngModel)]="newUID" type="text" aria-label="uID" cFormControl placeholder="ID" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="newUNombre" aria-label="uNombre" cFormControl placeholder="Nombre" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="newUSiglas" aria-label="uSigla" cFormControl placeholder="Sigla" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="newUFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" />
+      </c-col>
+    </c-row>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="createNewUnitModal.id" cButton color="secondary">
+      Close
+    </button>
+    <button [cModalToggle]="createNewUnitModal.id" cButton color="success" (click)="createUnit()"><svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar</button>
+  </c-modal-footer>
+</c-modal>
+
+<c-modal #deleteUnitModal backdrop="static" id="deleteUnitModal">
+  <c-modal-header>
+    <h5 cModalTitle>ELIMINAR UNIDAD</h5>
+    <button [cModalToggle]="deleteUnitModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <span> Desea eliminar la siguiente unidad de la base de datos? </span><br>
+    <span> ID: {{selectedUnit.id_unidad}} </span><br>
+    <span> Nombre: {{selectedUnit.nombre_depto}} </span><br>
+    <span> Sigla: {{selectedUnit.siglas_depto}} </span><br>
+    <span> # Facultad: {{selectedUnit.id_facultad}} </span><br>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="deleteUnitModal.id" cButton color="secondary">
+      Cancelar
+    </button>
+    <button [cModalToggle]="deleteUnitModal.id" cButton color="danger" (click)="deleteUnit(selectedUnit)"><svg cIcon name="cilSave"></svg>
+      &nbsp; ELIMINAR</button>
+  </c-modal-footer>
+</c-modal>

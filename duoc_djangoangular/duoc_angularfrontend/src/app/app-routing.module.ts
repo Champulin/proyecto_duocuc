@@ -59,6 +59,18 @@ const routes: Routes = [
           canActivate:[AuthGuard, AdminGate]
       },
       {
+        path: 'calculo-unidad',
+        loadChildren: () =>
+          import('./views/calculo-unidad/calculo-unidad.module').then((m) => m.CalculoUnidadModule),
+          canActivate:[AuthGuard, AdminGate]
+      },
+      {
+        path: 'consultas',
+        loadChildren: () =>
+          import('./views/consultas/consultas.module').then((m) => m.ConsultasModule),
+          canActivate:[AuthGuard]
+      },
+      {
         path: 'theme',
         loadChildren: () =>
           import('./views/theme/theme.module').then((m) => m.ThemeModule)

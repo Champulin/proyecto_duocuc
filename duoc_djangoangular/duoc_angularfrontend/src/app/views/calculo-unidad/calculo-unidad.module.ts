@@ -3,39 +3,30 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import {
-  AlertModule,
   AvatarModule,
-  BadgeModule,
   ButtonGroupModule,
   ButtonModule,
   CardModule,
   CollapseModule,
   FormModule,
   GridModule,
-  ModalModule,
   NavModule,
-  PopoverModule,
   ProgressModule,
-  SharedModule,
   TableModule,
   TabsModule,
-  ToastModule,
-  TooltipModule,
-  UtilitiesModule
+  ModalModule
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
 
-import { GestionUnidadesRoutingModule } from './gestion-unidades-routing.module';
-import { GestionUnidadesComponent } from './gestion-unidades.component';
+import { CalculoUnidadRoutingModule } from './calculo-unidad-routing.module';
+import { CalculoUnidadComponent } from './calculo-unidad.component';
 
 import { WidgetsModule } from '../widgets/widgets.module';
 
 @NgModule({
   imports: [
-    GestionUnidadesRoutingModule,
-    AlertModule,
-    BadgeModule,
+    CalculoUnidadRoutingModule,
     CardModule,
     CollapseModule,
     NavModule,
@@ -54,14 +45,9 @@ import { WidgetsModule } from '../widgets/widgets.module';
     AvatarModule,
     TableModule,
     WidgetsModule,
-    ModalModule,
-    PopoverModule,
-    SharedModule,
-    ToastModule,
-    TooltipModule,
-    UtilitiesModule
+    ModalModule
   ],
-  declarations: [GestionUnidadesComponent]
+  declarations: [CalculoUnidadComponent]
 })
-export class GestionUnidadesModule {
+export class CalculoUnidadModule {
 }

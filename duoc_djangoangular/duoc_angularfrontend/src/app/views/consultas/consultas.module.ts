@@ -23,19 +23,23 @@ import {
   TooltipModule,
   UtilitiesModule
 } from '@coreui/angular';
+
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
 
-import { GestionUnidadesRoutingModule } from './gestion-unidades-routing.module';
-import { GestionUnidadesComponent } from './gestion-unidades.component';
+import { ConsultasRoutingModule } from './consultas-routing.module';
+import { ConsultasComponent } from './consultas.component';
+
+import { DocsComponentsModule } from '@docs-components/docs-components.module';
 
 import { WidgetsModule } from '../widgets/widgets.module';
 
 @NgModule({
   imports: [
-    GestionUnidadesRoutingModule,
     AlertModule,
     BadgeModule,
+    ConsultasRoutingModule,
+    DocsComponentsModule,
     CardModule,
     CollapseModule,
     NavModule,
@@ -61,7 +65,7 @@ import { WidgetsModule } from '../widgets/widgets.module';
     TooltipModule,
     UtilitiesModule
   ],
-  declarations: [GestionUnidadesComponent]
+  declarations: [ConsultasComponent]
 })
-export class GestionUnidadesModule {
+export class ConsultasModule {
 }

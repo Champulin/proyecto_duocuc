@@ -58,6 +58,7 @@ import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { UnitDataService } from 'src/app/services/unit-data/unit-data.service';
 import { LoginService } from './services/login-service/login-service.service';
 import { AuthService } from './services/auth-service/auth-service.service';
+import { ReportService } from './services/report-service/report.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -120,6 +121,7 @@ const APP_CONTAINERS = [
     IconSetService,
     Title,
     UserDataService,
+    ReportService,
     UnitDataService,
     LoginService,
     AuthService,

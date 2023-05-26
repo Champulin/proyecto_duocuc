@@ -45,9 +45,22 @@ export const navItems: INavData[] = [
   },
   {
     title: true,
+    name: 'Tarificacion'
+  },
+  {
+    name: 'Calcular por Unidad',
+    url: '/calculo-unidad',
+    iconComponent: { name: 'cil-notes' }
+  },
+  {
+    name: 'Consulta de Reportes',
+    url: '/consultas',
+    iconComponent: { name: 'cil-notes' }
+  },
+  {
+    title: true,
     name: 'Theme'
   },
-
   {
     name: 'Colors',
     url: '/theme/colors',
@@ -282,6 +295,15 @@ export const navUser: INavData[] = [
       color: 'info',
       text: ''
     }
+  },
+  {
+    title: true,
+    name: 'Tarificacion'
+  },
+  {
+    name: 'Consulta de Reportes',
+    url: '/consultas',
+    iconComponent: { name: 'cil-notes' }
   },
   {
     title: true,

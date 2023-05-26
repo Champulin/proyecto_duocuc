@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general
 from bson.objectid import ObjectId
 
-# Import from pymongo bson.objectid para pasar los strings a ObjectId's
+# Import from py mongo bson.objectid para pasar los strings a ObjectId's
 from bson.objectid import ObjectId
 
 
@@ -161,6 +161,16 @@ class user_element(generics.RetrieveUpdateDestroyAPIView):
         return queryset
     
     serializer_class = ResponsableUnidadSerializer
+
+class user_element2(generics.RetrieveUpdateDestroyAPIView):
+    
+    def get_object(self):
+        pk = self.kwargs['pk']
+        queryset = ResponsableUnidad.objects.get(_id=ObjectId(pk))
+        
+        return queryset
+    
+    serializer_class = ResponsableUnidadPasswordSerializer
 
 # _________________ FIN RESPONSABLE DE UNIDAD ______________________
 

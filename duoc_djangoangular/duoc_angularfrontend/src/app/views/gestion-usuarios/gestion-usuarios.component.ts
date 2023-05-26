@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { userData } from '../../models/user-model';
 import { userNew } from '../../models/user-new';
+import { userPatch } from '../../models/user-edit';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
@@ -33,15 +34,13 @@ export class GestionUsuariosComponent implements OnInit {
     newPass:string = '';
 
     //variables para editar 
-    public bodyUser : userData = {_id: '', name: '', last_name: '', email: '', 
-                                  id_unidad: 0, id_facultad: 0, username:'', password:''};
+    public bodyUser : userPatch = {_id: '', name: '', last_name: '', email: '', 
+                                  id_unidad: 0, id_facultad: 0};
     editName:string = '';
     editLastName:string = '';
     editMail:string = '';
     editUnitNum:any;
     editFacultyNum:any;
-    editUsername:string = '';
-    editPass:string = '';
     
   onSelect(user: userData): void {
     this.selectedUser = user;
@@ -80,6 +79,7 @@ export class GestionUsuariosComponent implements OnInit {
     this.saveUser();
     this._userDataService.create(this.newUser).subscribe(
      data => {
+        this.toggleCollapse(0);
         console.log('Data Sent: ' + JSON.stringify(data));
         console.log('Make User order executed')
         this.getUsers();
@@ -92,6 +92,23 @@ export class GestionUsuariosComponent implements OnInit {
     )
   }
 
+  // Deletes the corresponding element from the list and the database
+  deleteUser(user:userData) {
+    // console.log('the argument in deleteUnit on the component: '+unit.id_unidad);
+    this._userDataService.delete(user._id).subscribe(
+      data => {
+        //  console.log('Data Sent: ' + data);
+         console.log('Kill order executed')
+         this.getUsers();
+         return true;
+       },
+       error => {
+         console.error('Error deleting User');
+         return throwError(error);
+       }
+     )
+  }
+
   //Changes the information of the marked element on the database before reloading the list.
   editUser() {
     this.buildEdit();
@@ -101,6 +118,7 @@ export class GestionUsuariosComponent implements OnInit {
       console.log('Morph order Executed')
       this.getUsers();
       this.markedUser._id = null;
+      this.cleanEdit();
       return true;
       },
       error => {
@@ -124,8 +142,6 @@ export class GestionUsuariosComponent implements OnInit {
   buildEdit() {
     
     this.bodyUser._id = this.markedUser._id;
-    this.bodyUser.username = this.markedUser.username;
-    this.bodyUser.password = this.markedUser.password;
     
     if(!!this.editName){
       this.bodyUser.name = this.editName;
@@ -156,6 +172,14 @@ export class GestionUsuariosComponent implements OnInit {
     } else {
       this.bodyUser.id_facultad = this.markedUser.id_facultad;
     };
+  }
+
+  cleanEdit() {
+    this.editName = '';
+    this.editLastName = '';
+    this.editMail = '';
+    this.editUnitNum = null;
+    this.editFacultyNum = null;
   }
 
   // Changes the visibility value of elements with a visibility toggle

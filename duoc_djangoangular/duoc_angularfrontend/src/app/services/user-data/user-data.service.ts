@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { userData } from 'src/app/models/user-model';
+import { userPatch } from 'src/app/models/user-edit';
 
 @Injectable({
   providedIn: 'root'
@@ -28,17 +29,22 @@ export class UserDataService {
     return this.http.post('http://localhost:8000/api/responsable/', JSON.stringify(newUser), httpOptions);
   }
 
-  edit(idToChange:userData) {
+  edit(idToChange:userPatch) {
     let httpOptions = {
       headers: new HttpHeaders({
        'Content-Type': 'application/json' ,
       })
     };
-    this.morphOrder = 'http://localhost:8000/api/responsable/'+ JSON.stringify(idToChange._id);
-    console.log('morphOrder after appending: '+ this.morphOrder);
+    this.morphOrder = 'http://localhost:8000/api/responsable-edit/'+ idToChange._id;
+    // console.log('morphOrder after appending: '+ this.morphOrder);
     console.log('your new flesh: '+JSON.stringify(idToChange));
     return this.http.patch(this.morphOrder, JSON.stringify(idToChange), httpOptions);
     
   }
 
+  delete(idToDelete:any) {
+    this.killOrder = 'http://localhost:8000/api/responsable/' + idToDelete;
+    console.log('killOrder after appending: '+ this.killOrder);
+    return this.http.delete(this.killOrder);
+  }
 }

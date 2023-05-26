@@ -1,82 +1,8 @@
 <!--Visibility Toggle Buttons-->
-<button (click)="toggleCollapse(0)" cButton class="me-1" color="primary">Agregar Usuario</button>
+<button [cModalToggle]="createNewUserModal.id" color="primary" cButton>Nuevo Usuario</button>
 <button (click)="toggleCollapse(1)" cButton class="me-1" color="primary">Buscar</button>
 
 <br />
-
-<div [visible]="visible[0]" cCollapse>
-<br />
-<!--Create new entry-->
-<h4>Nuevo Usuario</h4>
-<c-row>
-  <c-col xs="auto">
-    <input [(ngModel)]="newName" type="text" aria-label="uNom" cFormControl placeholder="Nombre" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newLastName" aria-label="uApe" cFormControl placeholder="Apellido" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newMail" aria-label="uMail" cFormControl placeholder="E-Mail" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newUnit" aria-label="uUnit" cFormControl placeholder="# Unidad" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newUsername" aria-label="uUsername" cFormControl placeholder="Nombre de Usuario" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newPass" aria-label="uPass" cFormControl placeholder="Password" />
-  </c-col>
-  <c-col>
-    <button cButton 
-    (click)="createUser()"
-    color="info">
-      <svg cIcon name="cilSave"></svg>
-      &nbsp; Guardar
-    </button>
-  </c-col>
-</c-row>
-<br />
-</div>
-
-<!-- Edit marked user -->
-<div *ngIf="markedUser._id">
-  <br />
-  <h4>Editar Cuenta de Usuario:</h4>
-  <c-row>
-    <c-col xs="auto">
-      <input [(ngModel)]="markedUser.username" type="text" aria-label="uID" disabled cFormControl placeholder="{{ markedUser.username }}" />
-    </c-col>
-    <c-col xs="auto">
-      <input [(ngModel)]="editName" aria-label="uNombre" cFormControl placeholder="{{ markedUser.name }}" />
-    </c-col>
-    <c-col xs="auto">
-      <input [(ngModel)]="editLastName" aria-label="uLast" cFormControl placeholder="{{ markedUser.last_name }}" />
-    </c-col>
-    <c-col xs="auto">
-      <input [(ngModel)]="editMail" aria-label="uMail" cFormControl placeholder="{{ markedUser.email }}" />
-    </c-col>
-    <c-col xs="auto">
-      <input [(ngModel)]="editUnitNum" aria-label="uUnit" cFormControl placeholder="{{ markedUser.id_unidad }}" />
-    </c-col>
-    <c-col xs="auto">
-      <input [(ngModel)]="editFacultyNum" aria-label="uFaculty" cFormControl placeholder="{{ markedUser.id_facultad }}" />
-    </c-col>
-    <c-col>
-      <button cButton 
-        (click)="editUser()"
-        color="info">
-        <svg cIcon name="cilSave"></svg>
-        &nbsp; Guardar
-      </button>
-    </c-col>
-  </c-row>
-  <br />
-  </div>
-
 
 <!--Search List-->
 <div [visible]="visible[1]" cCollapse>
@@ -125,19 +51,94 @@
       <td>{{ each.id_unidad }}</td>
       <td>{{ each.id_facultad }}</td>
       <td>
-        <button
-          cButton
-          color="success"
+        <button [cModalToggle]="editUserModal.id" 
+          color="info" cButton
           (click)="onMarked(each)"
-          [class.selected]="each === markedUser"
-        >
+          [class.selected]="each === markedUser">
           <svg cIcon name="cilPencil"></svg>
         </button>
         <button cButton 
-        color="danger">
+          color="danger"
+          (click)="deleteUser(each)"
+          [class.selected]="each === selectedUser">
           <svg cIcon name="cilTrash"></svg>
         </button>
       </td>
     </tr>
   </tbody>
 </table>
+
+<c-modal #editUserModal backdrop="static" id="editUserModal">
+  <c-modal-header>
+    <h5 cModalTitle>Editar Usuario</h5>
+    <button [cModalToggle]="editUserModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <c-row>
+      <c-col xs="auto">
+        <input [(ngModel)]="markedUser.username" type="text" aria-label="uID" disabled cFormControl placeholder="{{ markedUser.username }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editName" aria-label="uNombre" cFormControl placeholder="{{ markedUser.name }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editLastName" aria-label="uLast" cFormControl placeholder="{{ markedUser.last_name }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editMail" aria-label="uMail" cFormControl placeholder="{{ markedUser.email }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editUnitNum" aria-label="uUnit" cFormControl placeholder="{{ markedUser.id_unidad }}" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="editFacultyNum" aria-label="uFaculty" cFormControl placeholder="{{ markedUser.id_facultad }}" />
+      </c-col>
+    </c-row>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="editUserModal.id" cButton color="secondary">
+      Close
+    </button>
+    <button [cModalToggle]="editUserModal.id" cButton color="success" (click)="editUser()"><svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar</button>
+  </c-modal-footer>
+</c-modal>
+
+<c-modal #createNewUserModal backdrop="static" id="createNewUserModal">
+  <c-modal-header>
+    <h5 cModalTitle>Crear Nuevo Usuario</h5>
+    <button [cModalToggle]="createNewUserModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <c-row>
+      <c-col xs="auto">
+        <input [(ngModel)]="newName" type="text" aria-label="uNom" cFormControl placeholder="Nombre" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="newLastName" aria-label="uApe" cFormControl placeholder="Apellido" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="newMail" aria-label="uMail" cFormControl placeholder="E-Mail" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="newUnit" aria-label="uUnit" cFormControl placeholder="# Unidad" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="newFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="newUsername" aria-label="uUsername" cFormControl placeholder="Nombre de Usuario" />
+      </c-col>
+      <c-col xs="auto">
+        <input [(ngModel)]="newPass" aria-label="uPass" cFormControl placeholder="Password" />
+      </c-col>
+    </c-row>    
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="createNewUserModal.id" cButton color="secondary">
+      Close
+    </button>
+    <button [cModalToggle]="createNewUserModal.id" cButton color="success" (click)="createUser()"><svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar</button>
+  </c-modal-footer>
+</c-modal>

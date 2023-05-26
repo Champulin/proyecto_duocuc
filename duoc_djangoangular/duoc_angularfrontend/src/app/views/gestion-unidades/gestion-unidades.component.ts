@@ -17,7 +17,7 @@ export class GestionUnidadesComponent implements OnInit {
   
   visible = [false, false];
 
-  selectedUnit?: unitData;
+  selectedUnit: unitData = {_id: null, id_unidad: 0, nombre_depto: '', siglas_depto: '', id_facultad: 0};
   public markedUnit: unitData = {_id: null, id_unidad: 0, nombre_depto: '', siglas_depto: '', id_facultad: 0};
 
   //var para guardar lista desde DB
@@ -77,6 +77,7 @@ export class GestionUnidadesComponent implements OnInit {
         // console.log('Data Sent: ' + data);
         console.log('Make order executed')
         this.getUnits();
+        // this.toggleCollapse(0);
         return true;
       },
       error => {
@@ -84,7 +85,6 @@ export class GestionUnidadesComponent implements OnInit {
         return throwError(error);
       }
     )
-    this.toggleCollapse(0);
   }
 
   // Deletes the corresponding element from the list and the database

@@ -3,17 +3,25 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import {
+  AlertModule,
   AvatarModule,
+  BadgeModule,
   ButtonGroupModule,
   ButtonModule,
   CardModule,
   CollapseModule,
   FormModule,
   GridModule,
+  ModalModule,
   NavModule,
+  PopoverModule,
   ProgressModule,
+  SharedModule,
   TableModule,
-  TabsModule
+  TabsModule,
+  ToastModule,
+  TooltipModule,
+  UtilitiesModule
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
@@ -43,7 +51,15 @@ import { WidgetsModule } from '../widgets/widgets.module';
     ChartjsModule,
     AvatarModule,
     TableModule,
-    WidgetsModule
+    WidgetsModule,
+    AlertModule,
+    BadgeModule,
+    SharedModule,
+    ToastModule,
+    TooltipModule,
+    UtilitiesModule,
+    PopoverModule,
+    ModalModule
   ],
   declarations: [GestionUsuariosComponent]
 })

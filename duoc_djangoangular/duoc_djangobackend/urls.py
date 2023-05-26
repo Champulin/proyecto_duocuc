@@ -73,12 +73,14 @@ urlpatterns += [
     # Responsable Unidad
     path("api/responsable/", user_collection.as_view(), name="user_collection"),
     # Responsable Unidad con id de mongo
-    path("api/responsable/<str:pk>", user_element.as_view(), name="user_collection"),
+    path("api/responsable/<str:pk>", user_element.as_view(), name="user_element"),
+    # Responsable Unidad con id de mongo para edits only
+    path("api/responsable-edit/<str:pk>", user_element2.as_view(), name="user_element2"),
     # _________________________________________________________________________________
     #Admin (Nose si es necesario el collection debido a que trae todos nose si hay más que uno)
     path("api/administrador/", admin_collection.as_view(), name="admin_collection"),
     # Admin con id de mongo
-    path("api/administrador/<str:pk>", admin_element.as_view(), name="admin_collection")
+    path("api/administrador/<str:pk>", admin_element.as_view(), name="admin_element")
 ]
 
 if settings.DEBUG:

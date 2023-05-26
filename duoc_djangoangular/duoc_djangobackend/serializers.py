@@ -13,6 +13,11 @@ class ResponsableUnidadSerializer(serializers.ModelSerializer):
         model = ResponsableUnidad
         fields = "__all__"
 
+class ResponsableUnidadPasswordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResponsableUnidad
+        fields = "__all__"
+        extra_kwargs = {'password':{'write_only': False}}
 
 class ProveedoresTelefoniaSerializer(serializers.ModelSerializer):
     class Meta:
