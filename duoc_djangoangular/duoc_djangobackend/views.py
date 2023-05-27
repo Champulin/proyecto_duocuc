@@ -50,8 +50,9 @@ def login_view(request):
         elif isinstance(user, ResponsableUnidad):
             serializer = ResponsableUnidadSerializer(user)
             user_type = "ResponsableUnidad"
-            unidad_serializer = UnidadSerializer(user.id_unidad)
-            nombre_unidad = unidad_serializer.data["nombre_depto"]
+            nombre_unidad = Unidad.objects.get(
+                id_unidad=user.id_unidad
+            ).nombre_depto
         response_data = serializer.data
         response_data["user_type"] = user_type
         response_data["nombre_unidad"] = nombre_unidad
