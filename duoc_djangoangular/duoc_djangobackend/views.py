@@ -6,9 +6,10 @@ from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
-from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general,consultar_trafico_llamada,generate_report
+from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general,consultar_trafico_llamada,generar_reporte
 # Import from py mongo bson.objectid para pasar los strings a ObjectId's
 from bson.objectid import ObjectId
+import logging
 
 
 

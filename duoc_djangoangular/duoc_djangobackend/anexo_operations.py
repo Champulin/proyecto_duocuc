@@ -5,6 +5,10 @@ from datetime import datetime
 from typing import Dict
 from django.db.models import Sum
 from django.db.models.functions import ExtractMonth
+import logging
+from django.http import HttpResponse
+
+
 def create_calculo_name(nombre):
     """Función re-utilizable que crea el nombre del calculo mensual en español y lo retorna para que sea usable en el modelo
     Returns: nombre_calculo (str): Nombre del calculo mensual
@@ -33,19 +37,19 @@ def create_calculo_name(nombre):
     
     return nombre_calculo
 def generate_report_name(nombre:str, num:int):
-    month_names{
-    1: 'Enero',
-    2: 'Febrero',
-    3: 'Marzo',
-    4: 'Abril',
-    5: 'Mayo',
-    6: 'Junio',
-    7: 'Julio',
-    8: 'Agosto',
-    9: 'Septiembre',
-    10: 'Octubre',
-    11: 'Noviembre',
-    12: 'Diciembre'
+    month_names = {
+        1: 'Enero',
+        2: 'Febrero',
+        3: 'Marzo',
+        4: 'Abril',
+        5: 'Mayo',
+        6: 'Junio',
+        7: 'Julio',
+        8: 'Agosto',
+        9: 'Septiembre',
+        10: 'Octubre',
+        11: 'Noviembre',
+        12: 'Diciembre'
     }
     month_name = month_names[num]
     year = datetime.now().strftime("%Y")
@@ -284,8 +288,26 @@ def consultar_trafico_llamada(nombre_proveedor:str, mes:int):
 def generar_reporte_unidad(nombre,mes):
     mes_actual = mes
     calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
+    print('Calculo mensual: %s', calculo_mensual)
     if mes_actual == calculo_mensual.fecha_calculo.month:
-        df = pd.DataFrame(calculo_mensual)
+        #Crear dataframe con data de calculo_mensual
+        facultad = CuentaPresupuestaria.objects.get(id_facultad=calculo_mensual.id_facultad)
+        nombre_facultad = facultad.nombre_facultad
+        data = {
+            "nombre_facultad": [nombre_facultad],
+            "nombre_depto": [calculo_mensual.nombre_depto],
+            "fecha_calculo": [calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")],
+            "cantidad_segundos_total": [calculo_mensual.cant_segundos_total],
+            "cantidad_segundos_cel": [calculo_mensual.cant_segundos_cel],
+            "cantidad_segundos_ldi": [calculo_mensual.cant_segundos_ldi],
+            "cantidad_segundos_slm": [calculo_mensual.cant_segundos_slm],
+            "tarificacion_total": [calculo_mensual.tarificacion_general],
+            "tarificacion_cel": [calculo_mensual.tarificacion_cel],
+            "tarificacion_ldi": [calculo_mensual.tarificacion_ldi],
+            "tarificacion_slm": [calculo_mensual.tarificacion_slm],
+        }
+        df = pd.DataFrame(data)
+        print('Dataframe creado')
         response = HttpResponse(content_type='text/csv')
         nombre_archivo = generate_report_name(calculo_mensual.nombre_depto,mes)
         response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
@@ -307,11 +329,11 @@ def generar_reporte_facultad(nombre,mes):
         return response
     else:
         raise Exception("No existen registros para el mes seleccionado")
-def generar_reporte(tipo_reporte, nombre,mes):
+def generar_reporte(nombre, tipo_reporte,mes):
     if tipo_reporte == "unidad":
         response = generar_reporte_unidad(nombre,mes)
     elif tipo_reporte == "facultad":
         response = generar_reporte_facultad(nombre,mes)
-    else
+    else:
         raise Exception("Tipo de reporte no valido")
     return response
