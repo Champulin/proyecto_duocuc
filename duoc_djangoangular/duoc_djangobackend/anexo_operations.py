@@ -6,7 +6,8 @@ from typing import Dict
 from django.db.models import Sum
 from django.db.models.functions import ExtractMonth
 import logging
-from django.http import HttpResponse
+from rest_framework.response import Response
+import pdfkit
 
 
 def create_calculo_name(nombre):
@@ -36,7 +37,7 @@ def create_calculo_name(nombre):
     nombre_calculo = f"Calculo_{nombre}_{mes}_{year}"
     
     return nombre_calculo
-def generate_report_name(nombre:str, num:int):
+def month_number_to_name(num:int):
     month_names = {
         1: 'Enero',
         2: 'Febrero',
@@ -53,7 +54,12 @@ def generate_report_name(nombre:str, num:int):
     }
     month_name = month_names[num]
     year = datetime.now().strftime("%Y")
-    report_name = f"Reporte_{nombre}_{month_name}_{year}.csv"
+    date = f"{month_name}"
+    return date
+def generate_report_name(nombre:str, num:int):
+    month_name = month_number_to_name(num)
+    year = datetime.now().strftime("%Y")
+    report_name = f"Reporte_{nombre}_{month_name}_{year}"
     return report_name
 def process_anexo(id_facultad, id_unidad, id_anexo, file):
     """
@@ -285,55 +291,226 @@ def consultar_trafico_llamada(nombre_proveedor:str, mes:int):
     }
     return response_data
 
-def generar_reporte_unidad(nombre,mes):
-    mes_actual = mes
-    calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
-    print('Calculo mensual: %s', calculo_mensual)
-    if mes_actual == calculo_mensual.fecha_calculo.month:
-        #Crear dataframe con data de calculo_mensual
-        facultad = CuentaPresupuestaria.objects.get(id_facultad=calculo_mensual.id_facultad)
-        nombre_facultad = facultad.nombre_facultad
-        data = {
-            "nombre_facultad": [nombre_facultad],
-            "nombre_depto": [calculo_mensual.nombre_depto],
-            "fecha_calculo": [calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")],
-            "cantidad_segundos_total": [calculo_mensual.cant_segundos_total],
-            "cantidad_segundos_cel": [calculo_mensual.cant_segundos_cel],
-            "cantidad_segundos_ldi": [calculo_mensual.cant_segundos_ldi],
-            "cantidad_segundos_slm": [calculo_mensual.cant_segundos_slm],
-            "tarificacion_total": [calculo_mensual.tarificacion_general],
-            "tarificacion_cel": [calculo_mensual.tarificacion_cel],
-            "tarificacion_ldi": [calculo_mensual.tarificacion_ldi],
-            "tarificacion_slm": [calculo_mensual.tarificacion_slm],
-        }
-        df = pd.DataFrame(data)
-        print('Dataframe creado')
-        response = HttpResponse(content_type='text/csv')
-        nombre_archivo = generate_report_name(calculo_mensual.nombre_depto,mes)
-        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
-        #escribir el dataframe en el response
-        df.to_csv(path_or_buf=response,sep=';',index=False)
-        return response
-    else:
-        raise Exception("No existen registros para el mes seleccionado")
-def generar_reporte_facultad(nombre,mes):
-    mes_actual = mes
-    calculo_mensual = CalculoMensualFacultad.objects.get(nombre_facultad=nombre)
-    if mes_actual == calculo_mensual.fecha_calculo.month:
-        df = pd.DataFrame(calculo_mensual)
-        response = HttpResponse(content_type='text/csv')
-        nombre_archivo = generate_report_name(calculo_mensual.nombre_facultad,mes)
-        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
-        #escribir el dataframe en el response
-        df.to_csv(path_or_buf=response,sep=';',index=False)
-        return response
-    else:
-        raise Exception("No existen registros para el mes seleccionado")
-def generar_reporte(nombre, tipo_reporte,mes):
+# def generar_reporte_unidad_csv(nombre,mes):
+#     mes_actual = mes
+#     calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
+#     print('Calculo mensual: %s', calculo_mensual)
+#     if mes_actual == calculo_mensual.fecha_calculo.month:
+#         #Crear dataframe con data de calculo_mensual
+#         facultad = CuentaPresupuestaria.objects.get(id_facultad=calculo_mensual.id_facultad)
+#         nombre_facultad = facultad.nombre_facultad
+#         data = {
+#             "nombre_facultad": [nombre_facultad],
+#             "nombre_depto": [calculo_mensual.nombre_depto],
+#             "fecha_calculo": [calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")],
+#             "cantidad_segundos_total": [calculo_mensual.cant_segundos_total],
+#             "cantidad_segundos_cel": [calculo_mensual.cant_segundos_cel],
+#             "cantidad_segundos_ldi": [calculo_mensual.cant_segundos_ldi],
+#             "cantidad_segundos_slm": [calculo_mensual.cant_segundos_slm],
+#             "tarificacion_total": [calculo_mensual.tarificacion_general],
+#             "tarificacion_cel": [calculo_mensual.tarificacion_cel],
+#             "tarificacion_ldi": [calculo_mensual.tarificacion_ldi],
+#             "tarificacion_slm": [calculo_mensual.tarificacion_slm],
+#         }
+#         df = pd.DataFrame(data)
+#         print('Dataframe creado')
+#         response = Response(content_type='text/csv')
+#         nombre_archivo = generate_report_name(calculo_mensual.nombre_depto,mes)
+#         response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+#         #escribir el dataframe en el response
+#         df.to_csv(path_or_buf=response,sep=';',index=False)
+#         return response
+#     else:
+#         raise Exception("No existen registros para el mes seleccionado")
+def generate_csv(nombre,mes,tipo_reporte):
+    """Genera un archivo csv con el reporte solicitado
+    Args: nombre (str): Nombre de la facultad o departamento, mes (int): Mes del reporte, tipo_reporte (str): Tipo de reporte a generar
+    Returns: Response: Response con el archivo descargable
+    """
+    mes_actual = month_number_to_name(mes)
     if tipo_reporte == "unidad":
-        response = generar_reporte_unidad(nombre,mes)
+        calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
+        facultad = CuentaPresupuestaria.objects.get(id_facultad=calculo_mensual.id_facultad)
+        if mes == calculo_mensual.fecha_calculo.month:
+            #Crear dataframe con data de calculo_mensual
+            nombre_facultad = facultad.nombre_facultad
+            data = {
+                "nombre_facultad": [nombre_facultad],
+                "nombre_depto": [calculo_mensual.nombre_depto],
+                "fecha_calculo": [calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")],
+                "cantidad_segundos_total": [calculo_mensual.cant_segundos_total],
+                "cantidad_segundos_cel": [calculo_mensual.cant_segundos_cel],
+                "cantidad_segundos_ldi": [calculo_mensual.cant_segundos_ldi],
+                "cantidad_segundos_slm": [calculo_mensual.cant_segundos_slm],
+                "tarificacion_total": [calculo_mensual.tarificacion_general],
+                "tarificacion_cel": [calculo_mensual.tarificacion_cel],
+                "tarificacion_ldi": [calculo_mensual.tarificacion_ldi],
+                "tarificacion_slm": [calculo_mensual.tarificacion_slm],
+            }
+            df = pd.DataFrame(data)
+            response = Response(content_type='text/csv')
+            nombre_archivo = generate_report_name(calculo_mensual.nombre_depto,mes)
+            response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}.csv"'
+            #escribir el dataframe en el response
+            df.to_csv(path_or_buf=response,sep=';',index=False)
+            return response
+        else:
+            raise Exception("No existen registros para el mes seleccionado")
     elif tipo_reporte == "facultad":
-        response = generar_reporte_facultad(nombre,mes)
+        calculo_mensual = CalculoMensualFacultad.objects.get(nombre_facultad=nombre)
+        if mes == calculo_mensual.fecha_calculo.month:
+            #Crear dataframe con data de calculo_mensual
+            data = {
+                "nombre_facultad": [calculo_mensual.nombre_facultad],
+                "fecha_calculo": [calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")],
+                "cantidad_segundos_total": [calculo_mensual.cant_segundos_total],
+                "cantidad_segundos_cel": [calculo_mensual.cant_segundos_cel],
+                "cantidad_segundos_ldi": [calculo_mensual.cant_segundos_ldi],
+                "cantidad_segundos_slm": [calculo_mensual.cant_segundos_slm],
+                "tarificacion_total": [calculo_mensual.tarificacion_general],
+                "tarificacion_cel": [calculo_mensual.tarificacion_cel],
+                "tarificacion_ldi": [calculo_mensual.tarificacion_ldi],
+                "tarificacion_slm": [calculo_mensual.tarificacion_slm],
+            }
+            df = pd.DataFrame(data)
+            response = Response(content_type='text/csv')
+            nombre_archivo = generate_report_name(calculo_mensual.nombre_facultad,mes)
+            response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}.csv"'
+            #escribir el dataframe en el response
+            df.to_csv(path_or_buf=response,sep=';',index=False)
+            return response
+        else:
+            raise Exception("No existen registros para el mes seleccionado")
     else:
-        raise Exception("Tipo de reporte no valido")
+        raise Exception("El request no corresponde a unidad o facultad")
+def generar_reporte(nombre, tipo_reporte,mes,formato):
+    """Genera un reporte descargable tipo csv o pdf dependiendo del request
+    Args: nombre (str): Nombre de la facultad o departamento, tipo_reporte (str): Tipo de reporte a generar, mes (int): Mes del reporte, formato (str): Formato del reporte
+    Returns: Response: Response con el archivo descargable
+    """
+    if formato == "csv":
+        response = generate_csv(nombre,mes,tipo_reporte)
+    elif formato == "pdf":
+        response = generate_pdf(nombre,mes,tipo_reporte)
+    else:
+        raise Exception("Tipo de formato no corresponde a csv o pdf")
     return response
+def generate_pdf(nombre,mes,tipo_reporte):
+    mes_actual = month_number_to_name(mes)
+    if tipo_reporte == "unidad":
+        calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
+        facultad = CuentaPresupuestaria.objects.get(id_facultad=calculo_mensual.id_facultad)
+        if mes == calculo_mensual.fecha_calculo.month:
+            nombre_facultad = facultad.nombre_facultad
+            nombre = calculo_mensual.nombre_depto
+            fecha_calculo = calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")
+            cantidad_segundos_total = calculo_mensual.cant_segundos_total
+            cantidad_segundos_cel = calculo_mensual.cant_segundos_cel
+            cantidad_segundos_ldi = calculo_mensual.cant_segundos_ldi
+            cantidad_segundos_slm = calculo_mensual.cant_segundos_slm
+            tarificacion_total = calculo_mensual.tarificacion_general
+            tarificacion_cel = calculo_mensual.tarificacion_cel
+            tarificacion_ldi = calculo_mensual.tarificacion_ldi
+            tarificacion_slm = calculo_mensual.tarificacion_slm
+            html = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Reporte {nombre} - {mes_actual}</title>
+            </head>
+            <body>
+                <h1>Reporte de tarificacion {tipo_reporte} - {nombre} - {mes_actual}</h1>
+                <table style="width:100%">
+                    <tr>
+                        <th>Nombre de la facultad</th>
+                        <th>Nombre del departamento</th>
+                        <th>Fecha de calculo</th>
+                        <th>Cantidad de segundos total</th>
+                        <th>Cantidad de segundos cel</th>
+                        <th>Cantidad de segundos ldi</th>
+                        <th>Cantidad de segundos slm</th>
+                        <th>Tarificacion total</th>
+                        <th>Tarificacion cel</th>
+                        <th>Tarificacion ldi</th>
+                        <th>Tarificacion slm</th>
+                    </tr>
+                    <tr>
+                        <td>{nombre_facultad}</td>
+                        <td>{nombre}</td>
+                        <td>{fecha_calculo}</td>
+                        <td>{cantidad_segundos_total}</td>
+                        <td>{cantidad_segundos_cel}</td>
+                        <td>{cantidad_segundos_ldi}</td>
+                        <td>{cantidad_segundos_slm}</td>
+                        <td>{tarificacion_total}</td>
+                        <td>{tarificacion_cel}</td>
+                        <td>{tarificacion_ldi}</td>
+                        <td>{tarificacion_slm}</td>
+                    </tr>
+                </table>
+            </body>
+            </html>"""
+        else:
+            raise Exception("No existen registros para el mes seleccionado")
+    elif tipo_reporte == "facultad":
+        calculo_mensual = CalculoMensualFacultad.objects.get(nombre_facultad=nombre)
+        nombre_facultad = calculo_mensual.nombre_facultad
+        if mes == calculo_mensual.fecha_calculo.month:
+            fecha_calculo = calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")
+            cantidad_segundos_total = calculo_mensual.cant_segundos_total
+            cantidad_segundos_cel = calculo_mensual.cant_segundos_cel
+            cantidad_segundos_ldi = calculo_mensual.cant_segundos_ldi
+            cantidad_segundos_slm = calculo_mensual.cant_segundos_slm
+            tarificacion_total = calculo_mensual.tarificacion_general
+            tarificacion_cel = calculo_mensual.tarificacion_cel
+            tarificacion_ldi = calculo_mensual.tarificacion_ldi
+            tarificacion_slm = calculo_mensual.tarificacion_slm
+            html = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Reporte {nombre_facultad} - {mes}</title>
+            </head>
+            <body>
+                <h1>Reporte de tarificacion {tipo_reporte} - {nombre_facultad} - {mes_actual}</h1>
+                <table style="width:100%">
+                    <tr>
+                        <th>Nombre de la facultad</th>
+                        <th>Fecha de calculo</th>
+                        <th>Cantidad de segundos total</th>
+                        <th>Cantidad de segundos cel</th>
+                        <th>Cantidad de segundos ldi</th>
+                        <th>Cantidad de segundos slm</th>
+                        <th>Tarificacion total</th>
+                        <th>Tarificacion cel</th>
+                        <th>Tarificacion ldi</th>
+                        <th>Tarificacion slm</th>
+                    </tr>
+                    <tr>
+                        <td>{nombre_facultad}</td>
+                        <td>{fecha_calculo}</td>
+                        <td>{cantidad_segundos_total}</td>
+                        <td>{cantidad_segundos_cel}</td>
+                        <td>{cantidad_segundos_ldi}</td>
+                        <td>{cantidad_segundos_slm}</td>
+                        <td>{tarificacion_total}</td>
+                        <td>{tarificacion_cel}</td>
+                        <td>{tarificacion_ldi}</td>
+                        <td>{tarificacion_slm}</td>
+                    </tr>
+                </table>
+            </body>
+            </html>"""
+        else:
+            raise Exception("No existen registros para el mes seleccionado")
+    # crear pdf a partir de html
+    pdf = pdfkit.from_string(html, False)
+    # crear response
+    nombre_reporte = generate_report_name(nombre,mes)
+    response = Response(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="reporte_{tipo_reporte}_{nombre_reporte}.pdf"'
+    return response
+
+

@@ -306,8 +306,9 @@ def generate_report(request):
     tipo_reporte = request.data.get("tipo_reporte")
     nombre = request.data.get("nombre")
     mes = request.data.get("mes")
+    formato = request.data.get("formato")
     try:
-        response = generar_reporte(nombre, tipo_reporte, mes)
+        response = generar_reporte(nombre, tipo_reporte, mes,formato)
         return response
     except Exception as e:
         error_message = f'Error en generate_report: {e}'
