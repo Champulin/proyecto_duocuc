@@ -98,6 +98,10 @@ def calculo_mensual_unidad (id_anexo):
     costo_total_cel = 0
     costo_total_ldi = 0
     costo_total_slm = 0
+    duracion_total_cel = 0
+    duracion_total_ldi = 0
+    duracion_total_slm = 0
+    duracion_total_general = 0
     #obtener nombre de proveedor del documento
     nombre_proveedor = registros[0].nombre_proveedor
     #consultar precio por segundo de cada tipo de llamada en base al proveedor
@@ -113,10 +117,16 @@ def calculo_mensual_unidad (id_anexo):
         #calcular precio y agregarlo al total en base al tipo de llamada
         if tipo_llamada == "CEL":
             costo_total_cel += duracion_llamada * costo_seg_cel
+            duracion_total_cel += duracion_llamada
+            duracion_total_general += duracion_llamada
         elif tipo_llamada == "LDI":
             costo_total_ldi += duracion_llamada * costo_seg_ldi
+            duracion_total_ldi += duracion_llamada
+            duracion_total_general += duracion_llamada
         elif tipo_llamada == "SLM":
             costo_total_slm += duracion_llamada * costo_seg_slm
+            duracion_total_slm += duracion_llamada
+            duracion_total_general += duracion_llamada
     #Obtener id_facultad y id_unidad desde el RegistroLlamada
     id_facultad = registros[0].id_facultad
     id_unidad = registros[0].id_unidad
@@ -128,12 +138,17 @@ def calculo_mensual_unidad (id_anexo):
     #Crear nuevo calculo_mensual
     calculo_mensual = CalculoMensualUnidad(
         id_facultad = id_facultad,
+        id_unidad = id_unidad,
         nombre_calculo = calculo_nombre,
         nombre_depto = nombre_depto,
         tarificacion_general = costo_total_cel + costo_total_ldi + costo_total_slm,
         tarificacion_slm = costo_total_slm,
         tarificacion_cel = costo_total_cel,
         tarificacion_ldi = costo_total_ldi,
+        cant_segundos_total = duracion_total_general,
+        cant_segundos_slm = duracion_total_cel,
+        cant_segundos_ldi = duracion_total_ldi,
+        cant_segundos_cel = duracion_total_slm,
     )
     #Guardar calculo_mensual en la base de datos
     calculo_mensual.save()
@@ -152,6 +167,10 @@ def calculo_mensual_general(mes:int, id_facultad:int) -> None:
     costo_total_cel = 0
     costo_total_ldi = 0
     costo_total_slm = 0
+    duracion_total_general = 0
+    duracion_total_cel = 0
+    duracion_total_ldi = 0
+    duracion_total_slm = 0
     #iteracion de calculos
     for calculo in calculos:
         #extraer el mes actual del registro en formato int
@@ -162,6 +181,10 @@ def calculo_mensual_general(mes:int, id_facultad:int) -> None:
             costo_total_cel += calculo.tarificacion_cel
             costo_total_ldi += calculo.tarificacion_ldi
             costo_total_slm += calculo.tarificacion_slm
+            duracion_total_general += calculo.cant_segundos_total
+            duracion_total_cel += calculo.cant_segundos_cel
+            duracion_total_ldi += calculo.cant_segundos_ldi
+            duracion_total_slm += calculo.cant_segundos_slm
         else:
             continue
     #Obtener nombre_facultad desde CuentaPresupuestaria
@@ -174,6 +197,10 @@ def calculo_mensual_general(mes:int, id_facultad:int) -> None:
         id_facultad = id_facultad,
         nombre_calculo = calculo_nombre,
         nombre_facultad = nombre_facultad,
+        cant_segundos_total = duracion_total_general,
+        cant_segundos_slm = duracion_total_cel,
+        cant_segundos_ldi = duracion_total_ldi,
+        cant_segundos_cel = duracion_total_slm,
         tarificacion_general = costo_total_general,
         tarificacion_slm = costo_total_slm,
         tarificacion_cel = costo_total_cel,
@@ -181,3 +208,56 @@ def calculo_mensual_general(mes:int, id_facultad:int) -> None:
     )
     #Guardar calculo_mensual_general en la base de datos
     calculo_mensual_general.save()
+
+def consultar_trafico_llamada(nombre_proveedor:str, mes:int):
+    """
+        Consulta el trafico de llamadas de un proveedor en la base de datos.
+        Args: nombre_proveedor (String): Nombre del proveedor a consultar, mes (int): Mes de consulta.
+        returns: trafico_llamadas (dict): Diccionario con el trafico de llamadas del proveedor.
+    """
+    #Consulta la BD por instancias de RegistroLlamada donde coincida el nombre del proveedor
+    registros = RegistroLlamada.objects.filter(nombre_proveedor=nombre_proveedor)
+    #inicializar costo_total y duracion_total
+    costo_total_general = 0
+    costo_total_cel = 0
+    costo_total_ldi = 0
+    costo_total_slm = 0
+    duracion_total_general = 0
+    duracion_total_cel = 0
+    duracion_total_ldi = 0
+    duracion_total_slm = 0
+    mes_actual = mes
+    #iteracion de registros
+    for registro in registros:
+        #extraer el tipo_llamada y duracion_llamada del registro
+        tipo_llamada = registro.tipo_llamada
+        duracion_llamada = registro.duracion_llamada
+        if mes_actual == registro.fecha_llamada.month:
+            #si el tipo_llamada coincide con el tipo de llamada se agregan los valores si no se procede al siguiente registro
+            if tipo_llamada == "CEL":
+                costo_total_cel += duracion_llamada * costo_seg_cel
+                duracion_total_cel += duracion_llamada
+                duracion_total_general += duracion_llamada
+            elif tipo_llamada == "LDI":
+                costo_total_ldi += duracion_llamada * costo_seg_ldi
+                duracion_total_ldi += duracion_llamada
+                duracion_total_general += duracion_llamada
+            elif tipo_llamada == "SLM":
+                costo_total_slm += duracion_llamada * costo_seg_slm
+                duracion_total_slm += duracion_llamada
+                duracion_total_general += duracion_llamada
+            else:
+                continue
+        else:
+            continue
+    response_data = {
+        "costo_total_general": costo_total_general,
+        "costo_total_cel": costo_total_cel,
+        "costo_total_ldi": costo_total_ldi,
+        "costo_total_slm": costo_total_slm,
+        "duracion_total_general": duracion_total_general,
+        "duracion_total_cel": duracion_total_cel,
+        "duracion_total_ldi": duracion_total_ldi,
+        "duracion_total_slm": duracion_total_slm,
+    }
+    return response_data

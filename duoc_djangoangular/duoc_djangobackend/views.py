@@ -6,9 +6,7 @@ from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
-from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general
-from bson.objectid import ObjectId
-
+from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general,consultar_trafico_llamada
 # Import from py mongo bson.objectid para pasar los strings a ObjectId's
 from bson.objectid import ObjectId
 
@@ -45,14 +43,18 @@ def login_view(request):
     if user is not None and check_password(password, user.password):
         # Login successful
         request.session["_auth_user_id"] = str(user.pk)
+        nombre_unidad = ""
         if isinstance(user, Administrator):
             serializer = AdministratorSerializer(user)
             user_type = "Administrator"
         elif isinstance(user, ResponsableUnidad):
             serializer = ResponsableUnidadSerializer(user)
             user_type = "ResponsableUnidad"
+            unidad_serializer = UnidadSerializer(user.id_unidad)
+            nombre_unidad = unidad_serializer.data["nombre_depto"]
         response_data = serializer.data
         response_data["user_type"] = user_type
+        response_data["nombre_unidad"] = nombre_unidad
         return Response(response_data)
     else:
         # Login failed
@@ -280,6 +282,18 @@ class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CalculoMensualFacultadSerializer
     
 # _________________ FIN CALCULO MENSUAL FACULTAD ______________________
+@api_view(["POST"])
+def consultar_trafico(request):
+    """Recive un nombre_proveedor y un mes y devuelve el trafico de llamadas de ese mes."""
+    nombre_proveedor = request.data.get("nombre_proveedor")
+    mes = request.data.get("mes")
+    try:
+        trafico = consultar_trafico_llamada(nombre_proveedor, mes)
+        return Response({"trafico": trafico}, status=status.HTTP_200_OK)
+    except Exception as e:
+        error_message = f'Error en consultar_trafico: {e}'
+        logging.error(error_message)
+        return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 def insert_anexo(request):
@@ -327,8 +341,8 @@ def calculo_general(request):
     Args: request (HttpRequest): Request que contiene los datos del anexo.
     Returns: HttpResponse: Respuesta de la petición.
     """
-    id_facultad = request.POST.get("id_facultad")
-    mes = request.POST.get("mes")
+    id_facultad = request.data.get("id_facultad")
+    mes = request.data.get("mes")
     try:
         calculo_mensual_general(mes, id_facultad)
     except Exception as e:
