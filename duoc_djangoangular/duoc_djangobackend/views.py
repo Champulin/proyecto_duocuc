@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
-from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general,consultar_trafico_llamada
+from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general,consultar_trafico_llamada,generate_report
 # Import from py mongo bson.objectid para pasar los strings a ObjectId's
 from bson.objectid import ObjectId
 
@@ -293,6 +293,23 @@ def consultar_trafico(request):
         return Response({"trafico": trafico}, status=status.HTTP_200_OK)
     except Exception as e:
         error_message = f'Error en consultar_trafico: {e}'
+        logging.error(error_message)
+        return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(["POST"])
+def generate_report(request):
+    """
+        recive una unidad o facultad para generar un reporte con el mes actual
+        Args: request (HttpRequest): Request que contiene los datos de la unidad o facultad en formato string y un tipo_reporte. 
+        Returns: HttpResponse: Respuesta de la petición.
+    """
+    tipo_reporte = request.data.get("tipo_reporte")
+    nombre = request.data.get("nombre")
+    mes = request.data.get("mes")
+    try:
+        response = generar_reporte(nombre, tipo_reporte, mes)
+        return response
+    except Exception as e:
+        error_message = f'Error en generate_report: {e}'
         logging.error(error_message)
         return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -32,6 +32,25 @@ def create_calculo_name(nombre):
     nombre_calculo = f"Calculo_{nombre}_{mes}_{year}"
     
     return nombre_calculo
+def generate_report_name(nombre:str, num:int):
+    month_names{
+    1: 'Enero',
+    2: 'Febrero',
+    3: 'Marzo',
+    4: 'Abril',
+    5: 'Mayo',
+    6: 'Junio',
+    7: 'Julio',
+    8: 'Agosto',
+    9: 'Septiembre',
+    10: 'Octubre',
+    11: 'Noviembre',
+    12: 'Diciembre'
+    }
+    month_name = month_names[num]
+    year = datetime.now().strftime("%Y")
+    report_name = f"Reporte_{nombre}_{month_name}_{year}.csv"
+    return report_name
 def process_anexo(id_facultad, id_unidad, id_anexo, file):
     """
     Función que procesa Anexo insertado por el usuario
@@ -261,3 +280,38 @@ def consultar_trafico_llamada(nombre_proveedor:str, mes:int):
         "duracion_total_slm": duracion_total_slm,
     }
     return response_data
+
+def generar_reporte_unidad(nombre,mes):
+    mes_actual = mes
+    calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
+    if mes_actual == calculo_mensual.fecha_calculo.month:
+        df = pd.DataFrame(calculo_mensual)
+        response = HttpResponse(content_type='text/csv')
+        nombre_archivo = generate_report_name(calculo_mensual.nombre_depto,mes)
+        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+        #escribir el dataframe en el response
+        df.to_csv(path_or_buf=response,sep=';',index=False)
+        return response
+    else:
+        raise Exception("No existen registros para el mes seleccionado")
+def generar_reporte_facultad(nombre,mes):
+    mes_actual = mes
+    calculo_mensual = CalculoMensualFacultad.objects.get(nombre_facultad=nombre)
+    if mes_actual == calculo_mensual.fecha_calculo.month:
+        df = pd.DataFrame(calculo_mensual)
+        response = HttpResponse(content_type='text/csv')
+        nombre_archivo = generate_report_name(calculo_mensual.nombre_facultad,mes)
+        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+        #escribir el dataframe en el response
+        df.to_csv(path_or_buf=response,sep=';',index=False)
+        return response
+    else:
+        raise Exception("No existen registros para el mes seleccionado")
+def generar_reporte(tipo_reporte, nombre,mes):
+    if tipo_reporte == "unidad":
+        response = generar_reporte_unidad(nombre,mes)
+    elif tipo_reporte == "facultad":
+        response = generar_reporte_facultad(nombre,mes)
+    else
+        raise Exception("Tipo de reporte no valido")
+    return response

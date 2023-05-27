@@ -29,6 +29,7 @@ urlpatterns = [
     path("correct_anexo/", corregir_anexo),
     path("calculo_unidad/", calculo_unidad),
     path('calculo_general/', calculo_general),
+    path('generar_reporte/'generate_report),
     path('trafico_llamadas/', consultar_trafico),
 ]
 # URLS API
