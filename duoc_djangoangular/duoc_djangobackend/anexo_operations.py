@@ -7,9 +7,15 @@ from django.db.models import Sum
 from django.db.models.functions import ExtractMonth
 import logging
 from rest_framework.response import Response
-import pdfkit
+from weasyprint import HTML
 
-
+def is_valid_utf8(text):
+    try:
+        text.encode('utf-8')
+        print(f'El texto {text} es valido')
+        return True
+    except UnicodeEncodeError:
+        return False
 def create_calculo_name(nombre):
     """Función re-utilizable que crea el nombre del calculo mensual en español y lo retorna para que sea usable en el modelo
     Returns: nombre_calculo (str): Nombre del calculo mensual
@@ -397,6 +403,7 @@ def generar_reporte(nombre, tipo_reporte,mes,formato):
     return response
 def generate_pdf(nombre,mes,tipo_reporte):
     mes_actual = month_number_to_name(mes)
+    print('entre a generar pdf')
     if tipo_reporte == "unidad":
         calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
         facultad = CuentaPresupuestaria.objects.get(id_facultad=calculo_mensual.id_facultad)
@@ -416,39 +423,24 @@ def generate_pdf(nombre,mes,tipo_reporte):
             <!DOCTYPE html>
             <html>
             <head>
-                <meta charset="utf-8">
                 <title>Reporte {nombre} - {mes_actual}</title>
             </head>
-            <body>
-                <h1>Reporte de tarificacion {tipo_reporte} - {nombre} - {mes_actual}</h1>
-                <table style="width:100%">
-                    <tr>
-                        <th>Nombre de la facultad</th>
-                        <th>Nombre del departamento</th>
-                        <th>Fecha de calculo</th>
-                        <th>Cantidad de segundos total</th>
-                        <th>Cantidad de segundos cel</th>
-                        <th>Cantidad de segundos ldi</th>
-                        <th>Cantidad de segundos slm</th>
-                        <th>Tarificacion total</th>
-                        <th>Tarificacion cel</th>
-                        <th>Tarificacion ldi</th>
-                        <th>Tarificacion slm</th>
-                    </tr>
-                    <tr>
-                        <td>{nombre_facultad}</td>
-                        <td>{nombre}</td>
-                        <td>{fecha_calculo}</td>
-                        <td>{cantidad_segundos_total}</td>
-                        <td>{cantidad_segundos_cel}</td>
-                        <td>{cantidad_segundos_ldi}</td>
-                        <td>{cantidad_segundos_slm}</td>
-                        <td>{tarificacion_total}</td>
-                        <td>{tarificacion_cel}</td>
-                        <td>{tarificacion_ldi}</td>
-                        <td>{tarificacion_slm}</td>
-                    </tr>
-                </table>
+            <body style="font-family: 'Nunito', sans-serif">
+                <h1>Reporte de tarificacion {mes_actual}</h1>
+                <br>
+                <p>Nombre de la facultad: {nombre_facultad}</p>
+                <p>Nombre del departamento: {nombre}</p>
+                <p>Fecha de calculo: {fecha_calculo}</p>
+                <br>
+                <p>Cantidad de segundos total: {cantidad_segundos_total}</p>
+                <p>Cantidad de segundos cel: {cantidad_segundos_cel}</p>
+                <p>Cantidad de segundos ldi: {cantidad_segundos_ldi}</p>
+                <p>Cantidad de segundos slm: {cantidad_segundos_slm}</p>
+                <br>
+                <p>Tarificacion cel: ${tarificacion_cel} CLP</p>
+                <p>Tarificacion ldi: ${tarificacion_ldi} CLP</p>
+                <p>Tarificacion slm: ${tarificacion_slm} CLP</p>    
+                <p>Tarificacion total: ${tarificacion_total} CLP</p>
             </body>
             </html>"""
         else:
@@ -470,47 +462,54 @@ def generate_pdf(nombre,mes,tipo_reporte):
             <!DOCTYPE html>
             <html>
             <head>
-                <meta charset="utf-8">
-                <title>Reporte {nombre_facultad} - {mes}</title>
+                <title>Reporte {nombre} - {mes_actual}</title>
             </head>
-            <body>
-                <h1>Reporte de tarificacion {tipo_reporte} - {nombre_facultad} - {mes_actual}</h1>
-                <table style="width:100%">
-                    <tr>
-                        <th>Nombre de la facultad</th>
-                        <th>Fecha de calculo</th>
-                        <th>Cantidad de segundos total</th>
-                        <th>Cantidad de segundos cel</th>
-                        <th>Cantidad de segundos ldi</th>
-                        <th>Cantidad de segundos slm</th>
-                        <th>Tarificacion total</th>
-                        <th>Tarificacion cel</th>
-                        <th>Tarificacion ldi</th>
-                        <th>Tarificacion slm</th>
-                    </tr>
-                    <tr>
-                        <td>{nombre_facultad}</td>
-                        <td>{fecha_calculo}</td>
-                        <td>{cantidad_segundos_total}</td>
-                        <td>{cantidad_segundos_cel}</td>
-                        <td>{cantidad_segundos_ldi}</td>
-                        <td>{cantidad_segundos_slm}</td>
-                        <td>{tarificacion_total}</td>
-                        <td>{tarificacion_cel}</td>
-                        <td>{tarificacion_ldi}</td>
-                        <td>{tarificacion_slm}</td>
-                    </tr>
-                </table>
+            <body style="font-family: 'Nunito', sans-serif">
+                <h1>Reporte de tarificacion {mes_actual}</h1>
+                <br>
+                <p>Nombre de la facultad: {nombre_facultad}</p>
+                <p>Fecha de calculo: {fecha_calculo}</p>
+                <br>
+                <p>Cantidad de segundos total: {cantidad_segundos_total}</p>
+                <p>Cantidad de segundos cel: {cantidad_segundos_cel}</p>
+                <p>Cantidad de segundos ldi: {cantidad_segundos_ldi}</p>
+                <p>Cantidad de segundos slm: {cantidad_segundos_slm}</p>
+                <br>
+                <p>Tarificacion cel: ${tarificacion_cel} CLP</p>
+                <p>Tarificacion ldi: ${tarificacion_ldi} CLP</p>
+                <p>Tarificacion slm: ${tarificacion_slm} CLP</p>    
+                <p>Tarificacion total: ${tarificacion_total} CLP</p>
             </body>
             </html>"""
         else:
             raise Exception("No existen registros para el mes seleccionado")
     # crear pdf a partir de html
-    pdf = pdfkit.from_string(html, False)
+    print('cree un pdf')
+    print(html)
+    variables = [nombre_facultad, nombre, fecha_calculo, cantidad_segundos_total,
+             cantidad_segundos_cel, cantidad_segundos_ldi, cantidad_segundos_slm,
+             tarificacion_total, tarificacion_cel, tarificacion_ldi, tarificacion_slm]
+
+    for var in variables:
+        if not is_valid_utf8(str(var)):
+            print(f'The variable "{var}" contains non-UTF-8 characters.')
+
+
     # crear response
     nombre_reporte = generate_report_name(nombre,mes)
-    response = Response(pdf, content_type='application/pdf')
+    pdf = HTML(string=html).write_pdf()
+    # Save PDF to file
+    with open(f'duoc_djangobackend/media/reportes/{nombre_reporte}.pdf', 'wb') as f:
+        #select write location
+        f.write(pdf)
+
+    # Read PDF from file
+    with open(f'duoc_djangobackend/media/reportes/{nombre_reporte}.pdf', 'rb') as f:
+        pdf_data = f.read()
+
+    response = Response(pdf_data, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="reporte_{tipo_reporte}_{nombre_reporte}.pdf"'
     return response
+
 
 
