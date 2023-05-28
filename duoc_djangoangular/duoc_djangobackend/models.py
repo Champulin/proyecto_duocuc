@@ -147,3 +147,15 @@ class CalculoMensualFacultad(models.Model):
         db_table = "CalculoMensualFacultad"
         verbose_name = "Calculo Mensual"
         verbose_name_plural = "Calculos Mensuales"
+
+class notificar(models.Model):
+    
+    _id = models.ObjectIdField()
+    id_unidad = models.IntegerField()
+    estado = models.BooleanField()
+    descripcion = models.CharField(max_length=100)
+    
+    class Meta:
+        db_table = "notificar"
+        verbose_name = "notificar"
+        verbose_name_plural = "notificaciones"
