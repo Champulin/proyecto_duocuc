@@ -8,14 +8,11 @@ from django.db.models.functions import ExtractMonth
 import logging
 from rest_framework.response import Response
 from weasyprint import HTML
+from django.http import FileResponse
+import os
+import tempfile
 
-def is_valid_utf8(text):
-    try:
-        text.encode('utf-8')
-        print(f'El texto {text} es valido')
-        return True
-    except UnicodeEncodeError:
-        return False
+
 def create_calculo_name(nombre):
     """Función re-utilizable que crea el nombre del calculo mensual en español y lo retorna para que sea usable en el modelo
     Returns: nombre_calculo (str): Nombre del calculo mensual
@@ -389,6 +386,7 @@ def generate_csv(nombre,mes,tipo_reporte):
             raise Exception("No existen registros para el mes seleccionado")
     else:
         raise Exception("El request no corresponde a unidad o facultad")
+
 def generar_reporte(nombre, tipo_reporte,mes,formato):
     """Genera un reporte descargable tipo csv o pdf dependiendo del request
     Args: nombre (str): Nombre de la facultad o departamento, tipo_reporte (str): Tipo de reporte a generar, mes (int): Mes del reporte, formato (str): Formato del reporte
@@ -483,33 +481,20 @@ def generate_pdf(nombre,mes,tipo_reporte):
             </html>"""
         else:
             raise Exception("No existen registros para el mes seleccionado")
-    # crear pdf a partir de html
-    print('cree un pdf')
-    print(html)
-    variables = [nombre_facultad, nombre, fecha_calculo, cantidad_segundos_total,
-             cantidad_segundos_cel, cantidad_segundos_ldi, cantidad_segundos_slm,
-             tarificacion_total, tarificacion_cel, tarificacion_ldi, tarificacion_slm]
-
-    for var in variables:
-        if not is_valid_utf8(str(var)):
-            print(f'The variable "{var}" contains non-UTF-8 characters.')
-
-
     # crear response
     nombre_reporte = generate_report_name(nombre,mes)
     pdf = HTML(string=html).write_pdf()
     # Save PDF to file
-    with open(f'duoc_djangobackend/media/reportes/{nombre_reporte}.pdf', 'wb') as f:
-        #select write location
-        f.write(pdf)
-
-    # Read PDF from file
-    with open(f'duoc_djangobackend/media/reportes/{nombre_reporte}.pdf', 'rb') as f:
-        pdf_data = f.read()
-
-    response = Response(pdf_data, content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="reporte_{tipo_reporte}_{nombre_reporte}.pdf"'
+    with tempfile.NamedTemporaryFile(dir='duoc_djangobackend/media/reportes', suffix='.pdf', delete=False) as temp_file:
+        # Write the PDF data to the temporary file
+        temp_file.write(pdf)
+        temp_file_path = temp_file.name
+    # Return PDF as a response
+    response = FileResponse(open(temp_file_path, 'rb'), content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{nombre_reporte}.pdf"'
     return response
-
-
+def delete_all_files(file_path):
+    import glob
+    for file_path in glob.glob(f'{file_path}/*'):
+        os.remove(file_path)
 

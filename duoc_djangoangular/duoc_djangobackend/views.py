@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
-from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general,consultar_trafico_llamada,generar_reporte
+from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general,consultar_trafico_llamada,generar_reporte, delete_all_files
 # Import from py mongo bson.objectid para pasar los strings a ObjectId's
 from bson.objectid import ObjectId
 import logging
@@ -435,3 +435,16 @@ def crear_usuario(request):
 
     return Response({"message": "Usuario creado"})
 
+@api_view(["POST"])
+def clear_folder(request):
+    """Function que limpia la carpeta de archivos temporales
+    Args: request (HttpRequest): Request que contiene los datos del usuario a crear.
+    Returns: HttpResponse: Respuesta de la petición.
+    """
+    try:
+        delete_all_files('duoc_djangobackend/media/reportes')
+    except Exception as e:
+        response_data = {"message": f"Error al limpiar carpeta: {e}"}
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({"message": "Carpeta limpiada"})

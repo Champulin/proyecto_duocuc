@@ -31,6 +31,7 @@ urlpatterns = [
     path('calculo_general/', calculo_general),
     path('generar_reporte/',generate_report),
     path('trafico_llamadas/', consultar_trafico),
+    path('generar_reporte/borrar/', clear_folder),
 ]
 # URLS API
 
