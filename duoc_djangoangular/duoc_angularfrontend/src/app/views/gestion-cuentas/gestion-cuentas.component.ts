@@ -17,7 +17,7 @@ export class GestionCuentasComponent implements OnInit{
 
   visible = [false, false];
 
-  selectedAccount?: accountData;
+  selectedAccount: accountData = {_id: null, id_proveedor: 0, id_facultad: 0, nombre_facultad:'', siglas_facultad: ''};
   public markedAccount: accountData = {_id: null, id_proveedor: 0, id_facultad: 0, nombre_facultad:'', siglas_facultad: ''};
 
   //var para guardar lista desde DB
@@ -85,7 +85,6 @@ export class GestionCuentasComponent implements OnInit{
         return throwError(error);
       }
     )
-    this.toggleCollapse(0);
   }
 
   // Deletes the corresponding element from the list and the database
@@ -114,6 +113,7 @@ export class GestionCuentasComponent implements OnInit{
       console.log('Morph order Executed')
       this.getAccounts();
       this.markedAccount._id = null;
+      this.cleanEdit();
       return true;
       },
       error => {
@@ -153,6 +153,12 @@ export class GestionCuentasComponent implements OnInit{
     } else {
       this.bodyAccount.id_proveedor = this.markedAccount.id_proveedor;
     };
+  }
+
+  cleanEdit() {
+    this.editAPro = null;
+    this.editAName = '';
+    this.editASigla = '';
   }
 
   // Changes the visibility value of elements with a visibility toggle

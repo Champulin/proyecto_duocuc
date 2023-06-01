@@ -3,18 +3,25 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import {
+  AlertModule,
   AvatarModule,
+  BadgeModule,
   ButtonGroupModule,
   ButtonModule,
   CardModule,
   CollapseModule,
   FormModule,
   GridModule,
+  ModalModule,
   NavModule,
+  PopoverModule,
   ProgressModule,
+  SharedModule,
   TableModule,
   TabsModule,
-  ModalModule
+  ToastModule,
+  TooltipModule,
+  UtilitiesModule
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
@@ -27,6 +34,8 @@ import { WidgetsModule } from '../widgets/widgets.module';
 @NgModule({
   imports: [
     GestionCuentasRoutingModule,
+    AlertModule,
+    BadgeModule,
     CardModule,
     CollapseModule,
     NavModule,
@@ -45,7 +54,12 @@ import { WidgetsModule } from '../widgets/widgets.module';
     AvatarModule,
     TableModule,
     WidgetsModule,
-    ModalModule
+    ModalModule,
+    PopoverModule,
+    SharedModule,
+    ToastModule,
+    TooltipModule,
+    UtilitiesModule
   ],
   declarations: [GestionCuentasComponent]
 })

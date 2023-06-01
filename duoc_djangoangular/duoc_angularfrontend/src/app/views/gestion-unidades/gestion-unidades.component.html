@@ -116,9 +116,9 @@
           <svg cIcon name="cilPencil"></svg>
         </button>
         <button [cModalToggle]="deleteUnitModal.id" 
-        cButton 
-        color="danger"
-        (click)="onSelect(each)">
+          cButton 
+          color="danger"
+          (click)="onSelect(each)">
           <svg cIcon name="cilTrash"></svg>
         </button>
       </td>
@@ -127,26 +127,30 @@
 </table>
 
 
-<c-modal #editUnitModal backdrop="static" id="editUnitModal">
+<c-modal #editUnitModal backdrop="static" id="editUnitModal" alignment="center" size="lg">
   <c-modal-header>
     <h5 cModalTitle>Editar Unidad</h5>
     <button [cModalToggle]="editUnitModal.id" cButtonClose></button>
   </c-modal-header>
   <c-modal-body>
-    <c-row>
-      <c-col xs="auto">
-        <input [(ngModel)]="markedUnit.id_unidad" type="text" aria-label="uID" cFormControl disabled placeholder="{{ markedUnit.id_unidad }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editUNombre" aria-label="uNombre" cFormControl placeholder="{{ markedUnit.nombre_depto }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editUSigla" aria-label="uSigla" cFormControl placeholder="{{ markedUnit.siglas_depto }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editUFacultad" aria-label="uFacultad" cFormControl placeholder="{{ markedUnit.id_facultad }}" />
-      </c-col>
-    </c-row>
+    <table cTable class="editarUnidadTabla">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Sigla</th>
+          <th scope="col">#Facultad</th>
+        </tr>
+      </thead>
+        <tbody>
+          <tr>
+            <th scope="row"><input [(ngModel)]="markedUnit.id_unidad" type="text" aria-label="uID" cFormControl disabled placeholder="{{ markedUnit.id_unidad }}" /></th>
+            <td><input [(ngModel)]="editUNombre" aria-label="uNombre" cFormControl placeholder="{{ markedUnit.nombre_depto }}" /></td>
+            <td><input [(ngModel)]="editUSigla" aria-label="uSigla" cFormControl placeholder="{{ markedUnit.siglas_depto }}" /></td>
+            <td><input [(ngModel)]="editUFacultad" aria-label="uFacultad" cFormControl placeholder="{{ markedUnit.id_facultad }}" /></td>
+          </tr>
+        </tbody>
+    </table>
   </c-modal-body>
   <c-modal-footer>
     <button [cModalToggle]="editUnitModal.id" cButton color="secondary">
@@ -157,7 +161,7 @@
   </c-modal-footer>
 </c-modal>
 
-<c-modal #createNewUnitModal backdrop="static" id="createNewUnitModal">
+<c-modal #createNewUnitModal backdrop="static" id="createNewUnitModal" alignment="center" size="lg">
   <c-modal-header>
     <h5 cModalTitle>Crear Nueva Unidad</h5>
     <button [cModalToggle]="createNewUnitModal.id" cButtonClose></button>
@@ -203,7 +207,7 @@
     <button [cModalToggle]="deleteUnitModal.id" cButton color="secondary">
       Cancelar
     </button>
-    <button [cModalToggle]="deleteUnitModal.id" cButton color="danger" (click)="deleteUnit(selectedUnit)"><svg cIcon name="cilSave"></svg>
+    <button [cModalToggle]="deleteUnitModal.id" cButton color="danger" (click)="deleteUnit(selectedUnit)"><svg cIcon name="cilTrash"></svg>
       &nbsp; ELIMINAR</button>
   </c-modal-footer>
 </c-modal>

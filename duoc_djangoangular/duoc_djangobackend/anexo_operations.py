@@ -7,7 +7,7 @@ from django.db.models import Sum
 from django.db.models.functions import ExtractMonth
 import logging
 from rest_framework.response import Response
-from weasyprint import HTML
+# from weasyprint import HTML
 from django.http import FileResponse
 import os
 import tempfile
@@ -262,7 +262,7 @@ def consultar_trafico_llamada(nombre_proveedor:str, mes:int):
     #iteracion de registros
     for registro in registros:
         #extraer el tipo_llamada y duracion_llamada del registro
-        tipo_llamada = registro.tipo_llamada
+        tipo_llamada = registro.tipo_llamada_siglas
         duracion_llamada = registro.duracion_llamada
         if mes_actual == registro.fecha_llamada.month:
             #si el tipo_llamada coincide con el tipo de llamada se agregan los valores si no se procede al siguiente registro
@@ -328,7 +328,7 @@ def consultar_trafico_llamada(nombre_proveedor:str, mes:int):
 def generate_csv(nombre,mes,tipo_reporte):
     """Genera un archivo csv con el reporte solicitado
     Args: nombre (str): Nombre de la facultad o departamento, mes (int): Mes del reporte, tipo_reporte (str): Tipo de reporte a generar
-    Returns: Response: Response con el archivo descargable
+    Returns: Response: Response con el archivo a descargar
     """
     mes_actual = month_number_to_name(mes)
     if tipo_reporte == "unidad":
@@ -388,111 +388,113 @@ def generate_csv(nombre,mes,tipo_reporte):
         raise Exception("El request no corresponde a unidad o facultad")
 
 def generar_reporte(nombre, tipo_reporte,mes,formato):
-    """Genera un reporte descargable tipo csv o pdf dependiendo del request
+    """Genera un reporte a descargar tipo csv o pdf dependiendo del request
     Args: nombre (str): Nombre de la facultad o departamento, tipo_reporte (str): Tipo de reporte a generar, mes (int): Mes del reporte, formato (str): Formato del reporte
-    Returns: Response: Response con el archivo descargable
+    Returns: Response: Response con el archivo a descargar
     """
     if formato == "csv":
         response = generate_csv(nombre,mes,tipo_reporte)
-    elif formato == "pdf":
-        response = generate_pdf(nombre,mes,tipo_reporte)
+    # elif formato == "pdf":
+    #     response = generate_pdf(nombre,mes,tipo_reporte)
     else:
         raise Exception("Tipo de formato no corresponde a csv o pdf")
     return response
-def generate_pdf(nombre,mes,tipo_reporte):
-    mes_actual = month_number_to_name(mes)
-    print('entre a generar pdf')
-    if tipo_reporte == "unidad":
-        calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
-        facultad = CuentaPresupuestaria.objects.get(id_facultad=calculo_mensual.id_facultad)
-        if mes == calculo_mensual.fecha_calculo.month:
-            nombre_facultad = facultad.nombre_facultad
-            nombre = calculo_mensual.nombre_depto
-            fecha_calculo = calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")
-            cantidad_segundos_total = calculo_mensual.cant_segundos_total
-            cantidad_segundos_cel = calculo_mensual.cant_segundos_cel
-            cantidad_segundos_ldi = calculo_mensual.cant_segundos_ldi
-            cantidad_segundos_slm = calculo_mensual.cant_segundos_slm
-            tarificacion_total = calculo_mensual.tarificacion_general
-            tarificacion_cel = calculo_mensual.tarificacion_cel
-            tarificacion_ldi = calculo_mensual.tarificacion_ldi
-            tarificacion_slm = calculo_mensual.tarificacion_slm
-            html = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Reporte {nombre} - {mes_actual}</title>
-            </head>
-            <body style="font-family: 'Nunito', sans-serif">
-                <h1>Reporte de tarificacion {mes_actual}</h1>
-                <br>
-                <p>Nombre de la facultad: {nombre_facultad}</p>
-                <p>Nombre del departamento: {nombre}</p>
-                <p>Fecha de calculo: {fecha_calculo}</p>
-                <br>
-                <p>Cantidad de segundos total: {cantidad_segundos_total}</p>
-                <p>Cantidad de segundos cel: {cantidad_segundos_cel}</p>
-                <p>Cantidad de segundos ldi: {cantidad_segundos_ldi}</p>
-                <p>Cantidad de segundos slm: {cantidad_segundos_slm}</p>
-                <br>
-                <p>Tarificacion cel: ${tarificacion_cel} CLP</p>
-                <p>Tarificacion ldi: ${tarificacion_ldi} CLP</p>
-                <p>Tarificacion slm: ${tarificacion_slm} CLP</p>    
-                <p>Tarificacion total: ${tarificacion_total} CLP</p>
-            </body>
-            </html>"""
-        else:
-            raise Exception("No existen registros para el mes seleccionado")
-    elif tipo_reporte == "facultad":
-        calculo_mensual = CalculoMensualFacultad.objects.get(nombre_facultad=nombre)
-        nombre_facultad = calculo_mensual.nombre_facultad
-        if mes == calculo_mensual.fecha_calculo.month:
-            fecha_calculo = calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")
-            cantidad_segundos_total = calculo_mensual.cant_segundos_total
-            cantidad_segundos_cel = calculo_mensual.cant_segundos_cel
-            cantidad_segundos_ldi = calculo_mensual.cant_segundos_ldi
-            cantidad_segundos_slm = calculo_mensual.cant_segundos_slm
-            tarificacion_total = calculo_mensual.tarificacion_general
-            tarificacion_cel = calculo_mensual.tarificacion_cel
-            tarificacion_ldi = calculo_mensual.tarificacion_ldi
-            tarificacion_slm = calculo_mensual.tarificacion_slm
-            html = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Reporte {nombre} - {mes_actual}</title>
-            </head>
-            <body style="font-family: 'Nunito', sans-serif">
-                <h1>Reporte de tarificacion {mes_actual}</h1>
-                <br>
-                <p>Nombre de la facultad: {nombre_facultad}</p>
-                <p>Fecha de calculo: {fecha_calculo}</p>
-                <br>
-                <p>Cantidad de segundos total: {cantidad_segundos_total}</p>
-                <p>Cantidad de segundos cel: {cantidad_segundos_cel}</p>
-                <p>Cantidad de segundos ldi: {cantidad_segundos_ldi}</p>
-                <p>Cantidad de segundos slm: {cantidad_segundos_slm}</p>
-                <br>
-                <p>Tarificacion cel: ${tarificacion_cel} CLP</p>
-                <p>Tarificacion ldi: ${tarificacion_ldi} CLP</p>
-                <p>Tarificacion slm: ${tarificacion_slm} CLP</p>    
-                <p>Tarificacion total: ${tarificacion_total} CLP</p>
-            </body>
-            </html>"""
-        else:
-            raise Exception("No existen registros para el mes seleccionado")
-    # crear response
-    nombre_reporte = generate_report_name(nombre,mes)
-    pdf = HTML(string=html).write_pdf()
-    # Save PDF to file
-    with tempfile.NamedTemporaryFile(dir='duoc_djangobackend/media/reportes', suffix='.pdf', delete=False) as temp_file:
-        # Write the PDF data to the temporary file
-        temp_file.write(pdf)
-        temp_file_path = temp_file.name
-    # Return PDF as a response
-    response = FileResponse(open(temp_file_path, 'rb'), content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="{nombre_reporte}.pdf"'
-    return response
+
+# def generate_pdf(nombre,mes,tipo_reporte):
+#     mes_actual = month_number_to_name(mes)
+#     print('entre a generar pdf')
+#     if tipo_reporte == "unidad":
+#         calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
+#         facultad = CuentaPresupuestaria.objects.get(id_facultad=calculo_mensual.id_facultad)
+#         if mes == calculo_mensual.fecha_calculo.month:
+#             nombre_facultad = facultad.nombre_facultad
+#             nombre = calculo_mensual.nombre_depto
+#             fecha_calculo = calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")
+#             cantidad_segundos_total = calculo_mensual.cant_segundos_total
+#             cantidad_segundos_cel = calculo_mensual.cant_segundos_cel
+#             cantidad_segundos_ldi = calculo_mensual.cant_segundos_ldi
+#             cantidad_segundos_slm = calculo_mensual.cant_segundos_slm
+#             tarificacion_total = calculo_mensual.tarificacion_general
+#             tarificacion_cel = calculo_mensual.tarificacion_cel
+#             tarificacion_ldi = calculo_mensual.tarificacion_ldi
+#             tarificacion_slm = calculo_mensual.tarificacion_slm
+#             html = f"""
+#             <!DOCTYPE html>
+#             <html>
+#             <head>
+#                 <title>Reporte {nombre} - {mes_actual}</title>
+#             </head>
+#             <body style="font-family: 'Nunito', sans-serif">
+#                 <h1>Reporte de tarificacion {mes_actual}</h1>
+#                 <br>
+#                 <p>Nombre de la facultad: {nombre_facultad}</p>
+#                 <p>Nombre del departamento: {nombre}</p>
+#                 <p>Fecha de calculo: {fecha_calculo}</p>
+#                 <br>
+#                 <p>Cantidad de segundos total: {cantidad_segundos_total}</p>
+#                 <p>Cantidad de segundos cel: {cantidad_segundos_cel}</p>
+#                 <p>Cantidad de segundos ldi: {cantidad_segundos_ldi}</p>
+#                 <p>Cantidad de segundos slm: {cantidad_segundos_slm}</p>
+#                 <br>
+#                 <p>Tarificacion cel: ${tarificacion_cel} CLP</p>
+#                 <p>Tarificacion ldi: ${tarificacion_ldi} CLP</p>
+#                 <p>Tarificacion slm: ${tarificacion_slm} CLP</p>    
+#                 <p>Tarificacion total: ${tarificacion_total} CLP</p>
+#             </body>
+#             </html>"""
+#         else:
+#             raise Exception("No existen registros para el mes seleccionado")
+#     elif tipo_reporte == "facultad":
+#         calculo_mensual = CalculoMensualFacultad.objects.get(nombre_facultad=nombre)
+#         nombre_facultad = calculo_mensual.nombre_facultad
+#         if mes == calculo_mensual.fecha_calculo.month:
+#             fecha_calculo = calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")
+#             cantidad_segundos_total = calculo_mensual.cant_segundos_total
+#             cantidad_segundos_cel = calculo_mensual.cant_segundos_cel
+#             cantidad_segundos_ldi = calculo_mensual.cant_segundos_ldi
+#             cantidad_segundos_slm = calculo_mensual.cant_segundos_slm
+#             tarificacion_total = calculo_mensual.tarificacion_general
+#             tarificacion_cel = calculo_mensual.tarificacion_cel
+#             tarificacion_ldi = calculo_mensual.tarificacion_ldi
+#             tarificacion_slm = calculo_mensual.tarificacion_slm
+#             html = f"""
+#             <!DOCTYPE html>
+#             <html>
+#             <head>
+#                 <title>Reporte {nombre} - {mes_actual}</title>
+#             </head>
+#             <body style="font-family: 'Nunito', sans-serif">
+#                 <h1>Reporte de tarificacion {mes_actual}</h1>
+#                 <br>
+#                 <p>Nombre de la facultad: {nombre_facultad}</p>
+#                 <p>Fecha de calculo: {fecha_calculo}</p>
+#                 <br>
+#                 <p>Cantidad de segundos total: {cantidad_segundos_total}</p>
+#                 <p>Cantidad de segundos cel: {cantidad_segundos_cel}</p>
+#                 <p>Cantidad de segundos ldi: {cantidad_segundos_ldi}</p>
+#                 <p>Cantidad de segundos slm: {cantidad_segundos_slm}</p>
+#                 <br>
+#                 <p>Tarificacion cel: ${tarificacion_cel} CLP</p>
+#                 <p>Tarificacion ldi: ${tarificacion_ldi} CLP</p>
+#                 <p>Tarificacion slm: ${tarificacion_slm} CLP</p>    
+#                 <p>Tarificacion total: ${tarificacion_total} CLP</p>
+#             </body>
+#             </html>"""
+#         else:
+#             raise Exception("No existen registros para el mes seleccionado")
+#     # crear response
+#     nombre_reporte = generate_report_name(nombre,mes)
+#     # pdf = HTML(string=html).write_pdf()
+#     # Save PDF to file
+#     with tempfile.NamedTemporaryFile(dir='duoc_djangobackend/media/reportes', suffix='.pdf', delete=False) as temp_file:
+#         # Write the PDF data to the temporary file
+#         # temp_file.write(pdf)
+#         temp_file_path = temp_file.name
+#     # Return PDF as a response
+#     response = FileResponse(open(temp_file_path, 'rb'), content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="{nombre_reporte}.pdf"'
+#     return response
+
 def delete_all_files(file_path):
     import glob
     for file_path in glob.glob(f'{file_path}/*'):

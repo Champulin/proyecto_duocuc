@@ -69,9 +69,9 @@ urlpatterns += [
     path("api/calculo-unidad/<str:pk>", calculouni_element.as_view(), name="calculo_element"),
     # _________________________________________________________________________________
     # Calculo mensual facultad
-    path("api/calculo-facultad/", calculofac_collection.as_view(), name="calculo_collection"),
+    path("api/calculo-facultad/", calculofac_collection.as_view(), name="calculofac_collection"),
     # Calculo mensual facultad con id de mongo
-    path("api/calculo-facultad/<str:pk>", calculofac_element.as_view(), name="calculo_element"),
+    path("api/calculo-facultad/<str:pk>", calculofac_element.as_view(), name="calculofac_element"),
     # _________________________________________________________________________________
     # Responsable Unidad
     path("api/responsable/", user_collection.as_view(), name="user_collection"),

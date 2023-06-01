@@ -39,8 +39,8 @@
       <th scope="col">Nombre</th>
       <th scope="col">Apellido</th>
       <th scope="col">E-Mail</th>
-      <th scope="col">Unidad</th>
-      <th scope="col">Username</th>
+      <th scope="col">#Unidad</th>
+      <th scope="col">#Facultad</th>
     </tr>
   </thead>
   <tbody *ngFor="let each of users">
@@ -57,10 +57,10 @@
           [class.selected]="each === markedUser">
           <svg cIcon name="cilPencil"></svg>
         </button>
-        <button cButton 
+        <button [cModalToggle]="deleteUserModal.id" 
+          cButton 
           color="danger"
-          (click)="deleteUser(each)"
-          [class.selected]="each === selectedUser">
+          (click)="onSelect(each)">
           <svg cIcon name="cilTrash"></svg>
         </button>
       </td>
@@ -68,32 +68,43 @@
   </tbody>
 </table>
 
-<c-modal #editUserModal backdrop="static" id="editUserModal">
+<!-- Modals for the page -->
+
+<!-- Edit User Modal -->
+<c-modal #editUserModal backdrop="static" id="editUserModal" alignment="center" size="xl">
   <c-modal-header>
     <h5 cModalTitle>Editar Usuario</h5>
     <button [cModalToggle]="editUserModal.id" cButtonClose></button>
   </c-modal-header>
   <c-modal-body>
-    <c-row>
-      <c-col xs="auto">
-        <input [(ngModel)]="markedUser.username" type="text" aria-label="uID" disabled cFormControl placeholder="{{ markedUser.username }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editName" aria-label="uNombre" cFormControl placeholder="{{ markedUser.name }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editLastName" aria-label="uLast" cFormControl placeholder="{{ markedUser.last_name }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editMail" aria-label="uMail" cFormControl placeholder="{{ markedUser.email }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editUnitNum" aria-label="uUnit" cFormControl placeholder="{{ markedUser.id_unidad }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editFacultyNum" aria-label="uFaculty" cFormControl placeholder="{{ markedUser.id_facultad }}" />
-      </c-col>
-    </c-row>
+    <table cTable class="editUserTable">
+      <thead>
+        <tr>
+          <th scope="col">Username</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">E-Mail</th>
+          <th scope="col">#Unidad</th>
+          <th scope="col">#Facultad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input [(ngModel)]="markedUser.username" type="text" aria-label="uID" disabled 
+            cFormControl placeholder="{{ markedUser.username }}" /></td>
+          <td><input [(ngModel)]="editName" aria-label="uNombre" 
+            cFormControl placeholder="{{ markedUser.name }}" /></td>
+          <td><input [(ngModel)]="editLastName" aria-label="uLast" 
+            cFormControl placeholder="{{ markedUser.last_name }}" /></td>
+          <td><input [(ngModel)]="editMail" aria-label="uMail" 
+            cFormControl placeholder="{{ markedUser.email }}" /></td>
+          <td><input [(ngModel)]="editUnitNum" aria-label="uUnit" 
+            cFormControl placeholder="{{ markedUser.id_unidad }}" /></td>
+          <td><input [(ngModel)]="editFacultyNum" aria-label="uFaculty" 
+            cFormControl placeholder="{{ markedUser.id_facultad }}" /></td>
+        </tr>
+      </tbody>
+    </table>
   </c-modal-body>
   <c-modal-footer>
     <button [cModalToggle]="editUserModal.id" cButton color="secondary">
@@ -104,35 +115,37 @@
   </c-modal-footer>
 </c-modal>
 
-<c-modal #createNewUserModal backdrop="static" id="createNewUserModal">
+<!-- New User Modal -->
+<c-modal #createNewUserModal backdrop="static" id="createNewUserModal" alignment="center" size="xl">
   <c-modal-header>
     <h5 cModalTitle>Crear Nuevo Usuario</h5>
     <button [cModalToggle]="createNewUserModal.id" cButtonClose></button>
   </c-modal-header>
   <c-modal-body>
-    <c-row>
-      <c-col xs="auto">
-        <input [(ngModel)]="newName" type="text" aria-label="uNom" cFormControl placeholder="Nombre" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="newLastName" aria-label="uApe" cFormControl placeholder="Apellido" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="newMail" aria-label="uMail" cFormControl placeholder="E-Mail" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="newUnit" aria-label="uUnit" cFormControl placeholder="# Unidad" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="newFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="newUsername" aria-label="uUsername" cFormControl placeholder="Nombre de Usuario" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="newPass" aria-label="uPass" cFormControl placeholder="Password" />
-      </c-col>
-    </c-row>    
+    <table cTable class="editUserTable">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">E-Mail</th>
+          <th scope="col">#Unidad</th>
+          <th scope="col">#Facultad</th>
+          <th scope="col">Username</th>
+          <th scope="col">Password</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input [(ngModel)]="newName" type="text" aria-label="uNom" cFormControl placeholder="Nombre" /></td>
+          <td><input [(ngModel)]="newLastName" aria-label="uApe" cFormControl placeholder="Apellido" /></td>
+          <td><input [(ngModel)]="newMail" aria-label="uMail" cFormControl placeholder="E-Mail" /></td>
+          <td><input [(ngModel)]="newUnit" aria-label="uUnit" cFormControl placeholder="# Unidad" /></td>
+          <td><input [(ngModel)]="newFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" /></td>
+          <td><input [(ngModel)]="newUsername" aria-label="uUsername" cFormControl placeholder="Nombre de Usuario" /></td>
+          <td><input [(ngModel)]="newPass" aria-label="uPass" cFormControl placeholder="Password" /></td>
+        </tr>
+      </tbody>
+    </table>  
   </c-modal-body>
   <c-modal-footer>
     <button [cModalToggle]="createNewUserModal.id" cButton color="secondary">
@@ -140,5 +153,28 @@
     </button>
     <button [cModalToggle]="createNewUserModal.id" cButton color="success" (click)="createUser()"><svg cIcon name="cilSave"></svg>
       &nbsp; Guardar</button>
+  </c-modal-footer>
+</c-modal>
+
+<!-- Delete User Modal -->
+<c-modal #deleteUserModal backdrop="static" id="deleteUserModal">
+  <c-modal-header>
+    <h5 cModalTitle>ELIMINAR USUARIO</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <span> Desea eliminar el siguiente Usuario de la base de datos? <br> (La cuenta de usuario asociada sera eliminada, y el usuario ya no tendrá acceso al sistema de tarificacion.) </span><br>
+    <span> Nombre: {{selectedUser.name}}  </span><br>
+    <span> Apellido: {{selectedUser.last_name}} </span><br>
+    <span> Nombre de Usuario: {{selectedUser.username}} </span><br>
+    <span> E-Mail: {{selectedUser.email}} </span><br>
+    <span> # Unidad: {{selectedUser.id_unidad}} </span><br>
+    <span> # Facultad: {{selectedUser.id_facultad}} </span><br>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="deleteUserModal.id" cButton color="secondary">
+      Cancelar
+    </button>
+    <button [cModalToggle]="deleteUserModal.id" cButton color="danger" (click)="deleteUser(selectedUser)"><svg cIcon name="cilTrash"></svg>
+      &nbsp; ELIMINAR</button>
   </c-modal-footer>
 </c-modal>
