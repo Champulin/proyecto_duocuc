@@ -263,19 +263,20 @@ def consultar_trafico_llamada(nombre_proveedor:str, mes:int):
     for registro in registros:
         #extraer el tipo_llamada y duracion_llamada del registro
         tipo_llamada = registro.tipo_llamada_siglas
+        proveedor_telefonia = ProveedoresTelefonia.objects.filter(nombre_proveedor=registro.nombre_proveedor)
         duracion_llamada = registro.duracion_llamada
         if mes_actual == registro.fecha_llamada.month:
             #si el tipo_llamada coincide con el tipo de llamada se agregan los valores si no se procede al siguiente registro
             if tipo_llamada == "CEL":
-                costo_total_cel += duracion_llamada * costo_seg_cel
+                costo_total_cel += duracion_llamada * proveedor_telefonia.costo_seg_cel
                 duracion_total_cel += duracion_llamada
                 duracion_total_general += duracion_llamada
             elif tipo_llamada == "LDI":
-                costo_total_ldi += duracion_llamada * costo_seg_ldi
+                costo_total_ldi += duracion_llamada * proveedor_telefonia.costo_seg_ldi
                 duracion_total_ldi += duracion_llamada
                 duracion_total_general += duracion_llamada
             elif tipo_llamada == "SLM":
-                costo_total_slm += duracion_llamada * costo_seg_slm
+                costo_total_slm += duracion_llamada * proveedor_telefonia.costo_seg_slm
                 duracion_total_slm += duracion_llamada
                 duracion_total_general += duracion_llamada
             else:
