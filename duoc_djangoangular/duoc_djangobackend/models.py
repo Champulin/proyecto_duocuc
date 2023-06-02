@@ -16,10 +16,11 @@ class Administrator(models.Model):
         verbose_name_plural = "Administrators"
 
     def save(self, *args, **kwargs):
-        self.password = make_password(self.password)
-        super(Administrator, self).save(*args, **kwargs)
-
-
+        if self._id == None:
+            self.password = make_password(self.password)
+            super(Administrator, self).save(*args, **kwargs)
+        else: 
+            return self.password
 class ResponsableUnidad(models.Model):
     _id = models.ObjectIdField()
     name = models.CharField(max_length=50, null=True)
@@ -36,8 +37,11 @@ class ResponsableUnidad(models.Model):
         verbose_name_plural = "Responsables de unidad"
 
     def save(self, *args, **kwargs):
-        self.password = make_password(self.password)
-        super(ResponsableUnidad, self).save(*args, **kwargs)
+        if self._id == None:
+            self.password = make_password(self.password)
+            super(ResponsableUnidad, self).save(*args, **kwargs)
+        else:
+            return self.password
 
 
 class ProveedoresTelefonia(models.Model):
