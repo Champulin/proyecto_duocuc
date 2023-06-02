@@ -298,10 +298,10 @@ class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
 def consultar_trafico(request):
     """Recibe un nombre_proveedor y un mes y devuelve el trafico de llamadas de ese mes."""
     nombre_proveedor = request.data.get("nombre_proveedor")
-    mes = request.data.get("mes")
+    mes = int(request.data.get("mes"))
     try:
         trafico = consultar_trafico_llamada(nombre_proveedor, mes)
-        return Response({"trafico": trafico}, status=status.HTTP_200_OK)
+        return Response(trafico, status=status.HTTP_200_OK)
     except Exception as e:
         error_message = f'Error en consultar_trafico: {e}'
         logging.error(error_message)

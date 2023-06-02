@@ -1,0 +1,69 @@
+<!-- TODO: Aplicar un Pipe para cargar los nombres de proveedores de manera natural-->
+<div>
+    <h4>Seleccionar Proveedor de Telefonia y Mes.</h4>
+    <c-row>
+      <c-col xs="auto">
+        <select [(ngModel)]="request.nombre_proveedor" aria-label="nameRequest" cSelect>
+          <option value="Movistar">Movistar</option>
+          <option value="Entel">Entel</option>
+          <option value="Claro">Claro</option>
+        </select>
+      </c-col>
+      <c-col xs="auto">
+        <select [(ngModel)]="request.mes" aria-label="monthRequest" cSelect>
+            <option value=1>Enero</option>
+            <option value=2>Febrero</option>
+            <option value=3>Marzo</option>
+            <option value=4>Abril</option>
+            <option value=5>Mayo</option>
+            <option value=6>Junio</option>
+            <option value=7>Julio</option>
+            <option value=8>Agosto</option>
+            <option value=9>Septiembre</option>
+            <option value=10>Octubre</option>
+            <option value=11>Noviembre</option>
+            <option value=12>Diciembre</option>
+          </select>
+      </c-col>
+      <c-col xs="auto">
+        <button cButton color="info" (click)="getTrafico(request)"><svg cIcon name="cilSearch"></svg>
+          &nbsp; Buscar</button>
+      </c-col>
+    </c-row>
+  </div>
+
+   <!--List of Objects-->
+<div *ngIf="reqDone">
+<h4>{{reqDone.nombre_proveedor}}</h4>
+<table cTable class="TraficoLlamadas">
+  <thead>
+    <tr>
+      <th scope="col">Tipo de Llamada</th>
+      <th scope="col">Tiempo (s)</th>
+      <th scope="col">Total ($)</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let each of traficoList">
+    <tr>
+      <td>Local</td>
+      <td>{{ each.duracion_total_slm }}</td>
+      <td>$ {{ each.costo_total_slm }}</td>
+    </tr>
+    <tr>
+      <td>Celular</td>
+      <td>{{ each.duracion_total_cel }}</td>
+      <td>$ {{ each.costo_total_cel }}</td>
+    </tr>
+    <tr>
+      <td>Larga Distancia</td>
+      <td>{{ each.duracion_total_ldi }}</td>
+      <td>$ {{ each.costo_total_ldi }}</td>
+    </tr>
+    <tr>
+      <td>Total</td>
+      <td>{{ each.duracion_total_general }}</td>
+      <td>$ {{ each.costo_total_general }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>

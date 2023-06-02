@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { userData } from '../../models/user-model';
-import { userNew } from '../../models/user-new';
-import { userPatch } from '../../models/user-edit';
+import { userData, userNew, userPatch } from '../../models/user-model';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
 
 import { throwError } from 'rxjs';

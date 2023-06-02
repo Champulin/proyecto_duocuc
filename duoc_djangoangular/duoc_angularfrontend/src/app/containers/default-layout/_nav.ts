@@ -45,16 +45,16 @@ export const navItems: INavData[] = [
   },
   {
     title: true,
-    name: 'Tarificacion'
+    name: 'Consultas'
   },
-  {
-    name: 'Calcular por Unidad',
-    url: '/calculo-unidad',
+    {
+    name: 'Consulta de Reportes',
+    url: '/consultas',
     iconComponent: { name: 'cil-notes' }
   },
   {
-    name: 'Consulta de Reportes',
-    url: '/consultas',
+    name: 'Consulta de Trafico',
+    url: '/trafico',
     iconComponent: { name: 'cil-notes' }
   },
   {

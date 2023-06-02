@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { consultaFacultad, consultaUnidad } from '../../models/consultor-model';
+import { consultaFacultad, consultaUnidad, requestData, requestTrafico, traficoData } from '../../models/consultor-model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,4 +23,17 @@ export class ConsultorService {
     console.log('Fetch Order: ' + this.fetchOrder)
     return this.http.get<consultaFacultad[]>(this.fetchOrder);
   }
+
+  getTrafico(requestBody:requestTrafico): Observable<traficoData[]> {
+    let httpOptions = {
+      headers: new HttpHeaders({
+       'Content-Type': 'application/json' ,
+      })
+    };
+    this.fetchOrder = 'http://localhost:8000/trafico_llamadas/';
+    console.log('request:'+ JSON.stringify(requestBody))
+    return this.http.post<traficoData[]>(this.fetchOrder, JSON.stringify(requestBody), httpOptions);
+  }
 }
+
+  

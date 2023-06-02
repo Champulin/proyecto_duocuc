@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { accountData } from '../../models/account-model';
-import { accountNew } from '../../models/account-new';
+import { accountData, accountNew } from '../../models/account-model';
 import { AccountDataService } from 'src/app/services/account-data/account-data.service';
 
 import { throwError } from 'rxjs';
