@@ -1,67 +1,8 @@
 <!--Visibility Toggle Buttons-->
-<button (click)="toggleCollapse(0)" cButton class="me-1" color="primary">Agregar Cuenta Presupuestaria</button>
-<button (click)="toggleCollapse(1)" cButton class="me-1" color="primary">Buscar</button>
+<button [cModalToggle]="newAccountModal.id" color="primary" cButton>Nueva Cuenta Presupuestaria</button>
+<!-- <button (click)="toggleCollapse(1)" cButton class="me-1" color="primary">Buscar</button> -->
 
 <br />
-
-<div [visible]="visible[0]" cCollapse>
-<br />
-<!--Create new entry-->
-<h4>Nueva Cuenta Presupuestaria</h4>
-<c-row>
-  <c-col xs="auto">
-    <input [(ngModel)]="newAFac" type="text" aria-label="aID" cFormControl placeholder="ID Cuenta" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newAName" aria-label="aName" cFormControl placeholder="Nombre de Facultad" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newASigla" aria-label="aSigla" cFormControl placeholder="Sigla de Facultad" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newAPro" aria-label="aProvider" cFormControl placeholder="# Proveedor" />
-  </c-col>
-  <c-col>
-    <button cButton 
-    (click)="createAccount()"
-    color="info">
-      <svg cIcon name="cilSave"></svg>
-      &nbsp; Guardar
-    </button>
-  </c-col>
-</c-row>
-<br />
-</div>
-
-<!-- Edit marked account -->
-<div *ngIf="markedAccount._id">
-  <br />
-  <h4>Editar Cuenta Presupuestaria:</h4>
-  <c-row>
-    <c-col xs="auto">
-      <input [(ngModel)]="markedAccount.id_facultad" type="text" aria-label="aID" 
-      cFormControl disabled placeholder="{{ markedAccount.id_facultad }}" />
-    </c-col>
-    <c-col xs="auto">
-      <input [(ngModel)]="editAName" aria-label="aName" cFormControl placeholder="{{ markedAccount.nombre_facultad }}" />
-    </c-col>
-    <c-col xs="auto">
-      <input [(ngModel)]="editASigla" aria-label="aSigla" cFormControl placeholder="{{ markedAccount.siglas_facultad }}" />
-    </c-col>
-    <c-col xs="auto">
-      <input [(ngModel)]="editAPro" aria-label="aProvider" cFormControl placeholder="{{ markedAccount.id_proveedor }}" />
-    </c-col>
-    <c-col>
-      <button cButton 
-        (click)="editAccount()"
-        color="info">
-        <svg cIcon name="cilSave"></svg>
-        &nbsp; Guardar
-      </button>
-    </c-col>
-  </c-row>
-  <br />
-  </div>
 
 <!--Search List-->
 <div [visible]="visible[1]" cCollapse>
@@ -108,21 +49,114 @@
       <td>{{ each.siglas_facultad | uppercase }}</td>
       <td>{{ each.id_proveedor }}</td>
       <td>
-        <button
-          cButton
-          color="success"
+        <button [cModalToggle]="editAccountModal.id" 
+          cButton color="info"
           (click)="onMarked(each)"
           [class.selected]="each === markedAccount">
           <svg cIcon name="cilPencil"></svg>
         </button>
-        <button cButton 
-        color="danger"
-        (click)="deleteAccount(each)"
-        [class.selected]="each === selectedAccount">
+        <button [cModalToggle]="deleteAccountModal.id" 
+          cButton 
+          color="danger"
+          (click)="onSelect(each)">
           <svg cIcon name="cilTrash"></svg>
         </button>
-        
       </td>
     </tr>
   </tbody>
 </table>
+
+<!-- New Account Modal -->
+<c-modal #newAccountModal backdrop="static" id="newAccountModal" alignment="center" size="lg">
+  <c-modal-header>
+    <h5 cModalTitle>Crear Nueva Cuenta Presupuestaria</h5>
+    <button [cModalToggle]="newAccountModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <table cTable class="newAccountTable">
+      <thead>
+        <tr>
+          <th scope="col"># ID</th>
+          <th scope="col">Facultad</th>
+          <th scope="col">Sigla</th>
+          <th scope="col"># Proveedor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input [(ngModel)]="newAFac" type="text" aria-label="aID" cFormControl placeholder="ID Cuenta" /></td>
+          <td><input [(ngModel)]="newAName" aria-label="aName" cFormControl placeholder="Nombre de Facultad" /></td>
+          <td><input [(ngModel)]="newASigla" aria-label="aSigla" cFormControl placeholder="Sigla de Facultad" /></td>
+          <td><input [(ngModel)]="newAPro" aria-label="aProvider" cFormControl placeholder="# Proveedor" /></td>
+        </tr>
+      </tbody>
+    </table>  
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="newAccountModal.id" cButton color="secondary">
+      Close
+    </button>
+    <button [cModalToggle]="newAccountModal.id" cButton color="success" (click)="createAccount()"><svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar</button>
+  </c-modal-footer>
+</c-modal>
+
+<!-- Edit Account Modal -->
+<c-modal #editAccountModal backdrop="static" id="editAccountModal" alignment="center" size="lg">
+  <c-modal-header>
+    <h5 cModalTitle>Editar Cuenta Presupuestaria</h5>
+    <button [cModalToggle]="editAccountModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <table cTable class="editAccountTable">
+      <thead>
+        <tr>
+          <th scope="col"># ID</th>
+          <th scope="col">Facultad</th>
+          <th scope="col">Sigla</th>
+          <th scope="col"># Proveedor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input [(ngModel)]="markedAccount.id_facultad" type="text" aria-label="aID" 
+            cFormControl disabled placeholder="{{ markedAccount.id_facultad }}" /></td>
+          <td><input [(ngModel)]="editAName" aria-label="aName" cFormControl 
+            placeholder="{{ markedAccount.nombre_facultad }}" /></td>
+          <td><input [(ngModel)]="editASigla" aria-label="aSigla" cFormControl 
+            placeholder="{{ markedAccount.siglas_facultad }}" /></td>
+          <td><input [(ngModel)]="editAPro" aria-label="aProvider" cFormControl 
+            placeholder="{{ markedAccount.id_proveedor }}" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="editAccountModal.id" cButton color="secondary">
+      Close
+    </button>
+    <button [cModalToggle]="editAccountModal.id" cButton color="success" (click)="editAccount()"><svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar</button>
+  </c-modal-footer>
+</c-modal>
+
+<!-- Delete Account Modal -->
+<c-modal #deleteAccountModal backdrop="static" id="deleteAccountModal">
+  <c-modal-header>
+    <h5 cModalTitle>ELIMINAR CUENTA PRESUPUESTARIA</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <span> Desea eliminar el siguiente Usuario de la base de datos? </span><br>
+    <span> ID: {{selectedAccount.id_facultad}}  </span><br>
+    <span> Facultad: {{selectedAccount.nombre_facultad}} </span><br>
+    <span> Sigla: {{selectedAccount.siglas_facultad}} </span><br>
+    <span> # Proveedor: {{selectedAccount.id_proveedor}} </span><br>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="deleteAccountModal.id" cButton color="secondary">
+      Cancelar
+    </button>
+    <button [cModalToggle]="deleteAccountModal.id" cButton color="danger" (click)="deleteAccount(selectedAccount)"><svg cIcon name="cilTrash"></svg>
+      &nbsp; ELIMINAR</button>
+  </c-modal-footer>
+</c-modal>

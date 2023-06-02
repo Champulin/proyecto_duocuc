@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+
 import { userData } from '../../models/user-model';
 import { userNew } from '../../models/user-new';
 import { userPatch } from '../../models/user-edit';
 import { UserDataService } from 'src/app/services/user-data/user-data.service';
+
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -16,7 +18,7 @@ export class GestionUsuariosComponent implements OnInit {
 
   visible = [false, false];
 
-  selectedUser?: userData;
+  selectedUser: userData = { _id: null, name:"", last_name:"", email:"", id_unidad:0, id_facultad:0, username:"", password:"" };
   public markedUser: userData = { _id: null, name:"", last_name:"", email:"", id_unidad:0, id_facultad:0, username:"", password:"" };
 
     //var para guardar list de usuarios desde DB
@@ -79,7 +81,6 @@ export class GestionUsuariosComponent implements OnInit {
     this.saveUser();
     this._userDataService.create(this.newUser).subscribe(
      data => {
-        this.toggleCollapse(0);
         console.log('Data Sent: ' + JSON.stringify(data));
         console.log('Make User order executed')
         this.getUsers();

@@ -59,6 +59,7 @@ import { UnitDataService } from 'src/app/services/unit-data/unit-data.service';
 import { LoginService } from './services/login-service/login-service.service';
 import { AuthService } from './services/auth-service/auth-service.service';
 import { ReportService } from './services/report-service/report.service';
+import { ConsultorService } from './services/consultor-service/consultor.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -127,7 +128,8 @@ const APP_CONTAINERS = [
     AuthService,
     AccountDataService,
     ProveedorDataService,
-    AnexoDataService
+    AnexoDataService,
+    ConsultorService
   ],
   bootstrap: [AppComponent],
 })

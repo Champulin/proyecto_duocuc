@@ -262,26 +262,28 @@ def consultar_trafico_llamada(nombre_proveedor:str, mes:int):
     #iteracion de registros
     for registro in registros:
         #extraer el tipo_llamada y duracion_llamada del registro
-        tipo_llamada = registro.tipo_llamada
+        tipo_llamada = registro.tipo_llamada_siglas
+        proveedor_telefonia = ProveedoresTelefonia.objects.get(nombre_proveedor=registro.nombre_proveedor)
         duracion_llamada = registro.duracion_llamada
         if mes_actual == registro.fecha_llamada.month:
             #si el tipo_llamada coincide con el tipo de llamada se agregan los valores si no se procede al siguiente registro
             if tipo_llamada == "CEL":
-                costo_total_cel += duracion_llamada * costo_seg_cel
+                costo_total_cel += duracion_llamada * proveedor_telefonia.costo_seg_cel
                 duracion_total_cel += duracion_llamada
                 duracion_total_general += duracion_llamada
             elif tipo_llamada == "LDI":
-                costo_total_ldi += duracion_llamada * costo_seg_ldi
+                costo_total_ldi += duracion_llamada * proveedor_telefonia.costo_seg_ldi
                 duracion_total_ldi += duracion_llamada
                 duracion_total_general += duracion_llamada
             elif tipo_llamada == "SLM":
-                costo_total_slm += duracion_llamada * costo_seg_slm
+                costo_total_slm += duracion_llamada * proveedor_telefonia.costo_seg_slm
                 duracion_total_slm += duracion_llamada
                 duracion_total_general += duracion_llamada
             else:
                 continue
         else:
             continue
+    costo_total_general = costo_total_cel+costo_total_ldi+costo_total_slm
     response_data = {
         "costo_total_general": costo_total_general,
         "costo_total_cel": costo_total_cel,
@@ -294,41 +296,10 @@ def consultar_trafico_llamada(nombre_proveedor:str, mes:int):
     }
     return response_data
 
-# def generar_reporte_unidad_csv(nombre,mes):
-#     mes_actual = mes
-#     calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
-#     print('Calculo mensual: %s', calculo_mensual)
-#     if mes_actual == calculo_mensual.fecha_calculo.month:
-#         #Crear dataframe con data de calculo_mensual
-#         facultad = CuentaPresupuestaria.objects.get(id_facultad=calculo_mensual.id_facultad)
-#         nombre_facultad = facultad.nombre_facultad
-#         data = {
-#             "nombre_facultad": [nombre_facultad],
-#             "nombre_depto": [calculo_mensual.nombre_depto],
-#             "fecha_calculo": [calculo_mensual.fecha_calculo.strftime("%d/%m/%Y")],
-#             "cantidad_segundos_total": [calculo_mensual.cant_segundos_total],
-#             "cantidad_segundos_cel": [calculo_mensual.cant_segundos_cel],
-#             "cantidad_segundos_ldi": [calculo_mensual.cant_segundos_ldi],
-#             "cantidad_segundos_slm": [calculo_mensual.cant_segundos_slm],
-#             "tarificacion_total": [calculo_mensual.tarificacion_general],
-#             "tarificacion_cel": [calculo_mensual.tarificacion_cel],
-#             "tarificacion_ldi": [calculo_mensual.tarificacion_ldi],
-#             "tarificacion_slm": [calculo_mensual.tarificacion_slm],
-#         }
-#         df = pd.DataFrame(data)
-#         print('Dataframe creado')
-#         response = Response(content_type='text/csv')
-#         nombre_archivo = generate_report_name(calculo_mensual.nombre_depto,mes)
-#         response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
-#         #escribir el dataframe en el response
-#         df.to_csv(path_or_buf=response,sep=';',index=False)
-#         return response
-#     else:
-#         raise Exception("No existen registros para el mes seleccionado")
 def generate_csv(nombre,mes,tipo_reporte):
     """Genera un archivo csv con el reporte solicitado
     Args: nombre (str): Nombre de la facultad o departamento, mes (int): Mes del reporte, tipo_reporte (str): Tipo de reporte a generar
-    Returns: Response: Response con el archivo descargable
+    Returns: Response: Response con el archivo a descargar
     """
     mes_actual = month_number_to_name(mes)
     if tipo_reporte == "unidad":
@@ -388,9 +359,9 @@ def generate_csv(nombre,mes,tipo_reporte):
         raise Exception("El request no corresponde a unidad o facultad")
 
 def generar_reporte(nombre, tipo_reporte,mes,formato):
-    """Genera un reporte descargable tipo csv o pdf dependiendo del request
+    """Genera un reporte a descargar tipo csv o pdf dependiendo del request
     Args: nombre (str): Nombre de la facultad o departamento, tipo_reporte (str): Tipo de reporte a generar, mes (int): Mes del reporte, formato (str): Formato del reporte
-    Returns: Response: Response con el archivo descargable
+    Returns: Response: Response con el archivo a descargar
     """
     if formato == "csv":
         response = generate_csv(nombre,mes,tipo_reporte)
@@ -399,6 +370,7 @@ def generar_reporte(nombre, tipo_reporte,mes,formato):
     else:
         raise Exception("Tipo de formato no corresponde a csv o pdf")
     return response
+
 def generate_pdf(nombre,mes,tipo_reporte):
     mes_actual = month_number_to_name(mes)
     print('entre a generar pdf')
@@ -483,16 +455,17 @@ def generate_pdf(nombre,mes,tipo_reporte):
             raise Exception("No existen registros para el mes seleccionado")
     # crear response
     nombre_reporte = generate_report_name(nombre,mes)
-    pdf = HTML(string=html).write_pdf()
+    # pdf = HTML(string=html).write_pdf()
     # Save PDF to file
     with tempfile.NamedTemporaryFile(dir='duoc_djangobackend/media/reportes', suffix='.pdf', delete=False) as temp_file:
         # Write the PDF data to the temporary file
-        temp_file.write(pdf)
+        # temp_file.write(pdf)
         temp_file_path = temp_file.name
     # Return PDF as a response
     response = FileResponse(open(temp_file_path, 'rb'), content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{nombre_reporte}.pdf"'
     return response
+
 def delete_all_files(file_path):
     import glob
     for file_path in glob.glob(f'{file_path}/*'):

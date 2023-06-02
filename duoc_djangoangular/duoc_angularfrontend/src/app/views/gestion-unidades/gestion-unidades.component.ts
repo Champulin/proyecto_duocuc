@@ -77,7 +77,6 @@ export class GestionUnidadesComponent implements OnInit {
         // console.log('Data Sent: ' + data);
         console.log('Make order executed')
         this.getUnits();
-        // this.toggleCollapse(0);
         return true;
       },
       error => {
@@ -113,6 +112,7 @@ export class GestionUnidadesComponent implements OnInit {
       console.log('Morph order Executed')
       this.getUnits();
       this.markedUnit._id = null;
+      this.cleanEdit();
       return true;
       },
       error => {
@@ -151,6 +151,12 @@ export class GestionUnidadesComponent implements OnInit {
     } else {
       this.bodyUnit.id_facultad = this.markedUnit.id_facultad;
     };
+  }
+
+  cleanEdit() {
+    this.editUNombre = '';
+    this.editUSigla = '';
+    this.editUFacultad = null;
   }
 
   //DEPRECATED Function reloads the route of the element after making changes to the page.

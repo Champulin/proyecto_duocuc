@@ -256,13 +256,18 @@ class calculouni_collection(generics.ListCreateAPIView):
 
 class calculouni_element(generics.RetrieveUpdateDestroyAPIView):
     
-    def get_object(self):
-        pk = self.kwargs['pk']
-        queryset = CalculoMensualUnidad.objects.get(_id=ObjectId(pk))
-        
-        return queryset
-    
+    queryset = CalculoMensualUnidad.objects.all()
     serializer_class = CalculoMensualUnidadSerializer
+    lookup_field = "id_unidad"
+    lookup_url_kwarg = "pk"
+
+    # def get_object(self):
+    #     pk = self.kwargs['pk']
+    #     queryset = CalculoMensualUnidad.objects.get(_id=ObjectId(pk))
+        
+    #     return queryset
+    
+    # serializer_class = CalculoMensualUnidadSerializer
 
 # _________________ FIN CALCULO MENSUAL UNIDAD ______________________
 
@@ -275,18 +280,23 @@ class calculofac_collection(generics.ListCreateAPIView):
 
 class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
     
-    def get_object(self):
-        pk = self.kwargs['pk']
-        queryset = CalculoMensualFacultad.objects.get(_id=ObjectId(pk))
-        
-        return queryset
-    
+    queryset = CalculoMensualFacultad.objects.all()
     serializer_class = CalculoMensualFacultadSerializer
+    lookup_field = "id_facultad"
+    lookup_url_kwarg = "pk"
+    
+    # def get_object(self):
+    #     pk = self.kwargs['pk']
+    #     queryset = CalculoMensualFacultad.objects.get(_id=ObjectId(pk))
+        
+    #     return queryset
+    
+    # serializer_class = CalculoMensualFacultadSerializer
     
 # _________________ FIN CALCULO MENSUAL FACULTAD ______________________
 @api_view(["POST"])
 def consultar_trafico(request):
-    """Recive un nombre_proveedor y un mes y devuelve el trafico de llamadas de ese mes."""
+    """Recibe un nombre_proveedor y un mes y devuelve el trafico de llamadas de ese mes."""
     nombre_proveedor = request.data.get("nombre_proveedor")
     mes = request.data.get("mes")
     try:
@@ -299,7 +309,7 @@ def consultar_trafico(request):
 @api_view(["POST"])
 def generate_report(request):
     """
-        recive una unidad o facultad para generar un reporte con el mes actual
+        Recibe una unidad o facultad para generar un reporte con el mes actual
         Args: request (HttpRequest): Request que contiene los datos de la unidad o facultad en formato string y un tipo_reporte. 
         Returns: HttpResponse: Respuesta de la petición.
     """
