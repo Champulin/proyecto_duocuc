@@ -19,8 +19,10 @@ class Administrator(models.Model):
         if self._id == None:
             self.password = make_password(self.password)
             super(Administrator, self).save(*args, **kwargs)
-        else: 
+        else:
             return self.password
+
+
 class ResponsableUnidad(models.Model):
     _id = models.ObjectIdField()
     name = models.CharField(max_length=50, null=True)
@@ -141,6 +143,8 @@ class CalculoMensualUnidad(models.Model):
         db_table = "CalculoMensualUnidad"
         verbose_name = "Calculo Mensual"
         verbose_name_plural = "Calculos Mensuales"
+
+
 class CalculoMensualFacultad(models.Model):
     _id = models.ObjectIdField()
     id_facultad = models.IntegerField()
@@ -160,14 +164,16 @@ class CalculoMensualFacultad(models.Model):
         db_table = "CalculoMensualFacultad"
         verbose_name = "Calculo Mensual"
         verbose_name_plural = "Calculos Mensuales"
-# class Reportes(models.Model):
-#     _id = models.ObjectIdField()
-#     id_unidad = models.IntegerField(null=True)
-#     id_facultad = models.IntegerField()
-#     nombre_reporte = models.CharField(max_length=50)
-#     reporte_file = models.FileField(upload_to="reportes/", null=True)
-    
-#     class Meta:
-#         db_table = "Reportes"
-#         verbose_name = "Reporte"
-#         verbose_name_plural = "Reportes"
+
+
+class Reportes(models.Model):
+    _id = models.ObjectIdField()
+    id_unidad = models.IntegerField(null=True)
+    id_facultad = models.IntegerField()
+    nombre_reporte = models.CharField(max_length=50)
+    reporte_file = models.FileField(upload_to="reportes/", null=True)
+
+    class Meta:
+        db_table = "Reportes"
+        verbose_name = "Reporte"
+        verbose_name_plural = "Reportes"

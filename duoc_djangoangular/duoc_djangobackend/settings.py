@@ -28,11 +28,10 @@ SECRET_KEY = "django-insecure-c^m$zww6bas*o$j)+v6_gi78_mf4xjpb_qq&bbrw+bh_kb7%ke
 DEBUG = True
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
-    #"django.contrib.admin",
+    # "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -50,7 +49,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    #"django.contrib.auth.middleware.AuthenticationMiddleware",
+    # "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -131,30 +130,25 @@ STATIC_URL = "static/"
 
 # List of origins that are allowed to make cross-origin requests
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',  
-    'http://localhost:8000',# Angular origin, always run in port 4200
+    "http://localhost:4200",
+    "http://localhost:8000",  # Angular origin, always run in port 4200
 ]
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'http://127.0.0.1:8000/'
-]
-
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "http://127.0.0.1:8000/"]
 
 
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:4200',
-    'http://localhost:8000',
+    "http://localhost:4200",
+    "http://localhost:8000",
 ]
 
 CORS_ALLOWED_METHODS = [
-    'POST',
-    'GET',
-    'PUT',
-    'PATCH',
-    'DELETE',
-    'OPTIONS',
+    "POST",
+    "GET",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
     # Add other allowed methods here
 ]
 
