@@ -77,6 +77,12 @@ const routes: Routes = [
           canActivate:[AuthGuard]
       },
       {
+        path: 'proceso',
+        loadChildren: () =>
+          import('./views/proceso-anexos/proceso-anexos.module').then((m) => m.ProcesoAnexosModule),
+          canActivate:[AuthGuard]
+      },
+      {
         path: 'theme',
         loadChildren: () =>
           import('./views/theme/theme.module').then((m) => m.ThemeModule)

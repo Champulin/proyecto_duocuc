@@ -60,6 +60,9 @@ import { LoginService } from './services/login-service/login-service.service';
 import { AuthService } from './services/auth-service/auth-service.service';
 import { ReportService } from './services/report-service/report.service';
 import { ConsultorService } from './services/consultor-service/consultor.service';
+import { UnitListPipe} from './unit-list.pipe';
+import { FacultyListPipe } from './faculty-list.pipe';
+import { ProviderListPipe } from './provider-list.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -72,7 +75,7 @@ const APP_CONTAINERS = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, ...APP_CONTAINERS],
+  declarations: [AppComponent, ...APP_CONTAINERS, UnitListPipe, FacultyListPipe, ProviderListPipe],
   imports: [
     FormModule,
     BrowserModule,

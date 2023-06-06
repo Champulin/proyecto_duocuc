@@ -6,22 +6,24 @@ from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
-from .anexo_operations import process_anexo, calculo_mensual_unidad,reprocess_anexo, calculo_mensual_general,consultar_trafico_llamada,generar_reporte, delete_all_files
+from .anexo_operations import (
+    process_anexo,
+    calculo_mensual_unidad,
+    reprocess_anexo,
+    calculo_mensual_general,
+    consultar_trafico_llamada,
+    generar_reporte,
+    delete_all_files,
+)
+
 # Import from py mongo bson.objectid para pasar los strings a ObjectId's
 from bson.objectid import ObjectId
 import logging
 
-
-
-#  NORMAL GENERICS
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-
 # GENERICS API
-
 from rest_framework import generics
 
 # Conversiones a json
-
 from rest_framework.parsers import JSONParser
 
 
@@ -51,9 +53,7 @@ def login_view(request):
         elif isinstance(user, ResponsableUnidad):
             serializer = ResponsableUnidadSerializer(user)
             user_type = "ResponsableUnidad"
-            nombre_unidad = Unidad.objects.get(
-                id_unidad=user.id_unidad
-            ).nombre_depto
+            nombre_unidad = Unidad.objects.get(id_unidad=user.id_unidad).nombre_depto
         response_data = serializer.data
         response_data["user_type"] = user_type
         response_data["nombre_unidad"] = nombre_unidad
@@ -111,6 +111,7 @@ def proveedor_element(request, pk):
         # Respuesta sin contenido
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 # _________________ FIN PROVEEDORES ______________________
 
 # ___________________________ API GENERICS __________________________
@@ -131,6 +132,7 @@ class cuentapre_element(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "id_facultad"
     lookup_url_kwarg = "pk"
 
+
 # _________________ FIN CUENTAS PRESUPUESTARIAS ______________________
 
 # Unidad
@@ -146,53 +148,53 @@ class unidad_element(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UnidadSerializer
     lookup_field = "id_unidad"
     lookup_url_kwarg = "pk"
-    
+
+
 # _________________ FIN UNIDAD ______________________
 
-
-#ResponsableUnidad
 
 class user_collection(generics.ListCreateAPIView):
     queryset = ResponsableUnidad.objects.all()
     serializer_class = ResponsableUnidadSerializer
 
+
 class user_element(generics.RetrieveUpdateDestroyAPIView):
-    
     def get_object(self):
-        pk = self.kwargs['pk']
+        pk = self.kwargs["pk"]
         queryset = ResponsableUnidad.objects.get(_id=ObjectId(pk))
-        
         return queryset
-    
+
     serializer_class = ResponsableUnidadSerializer
 
+
 class user_element2(generics.RetrieveUpdateDestroyAPIView):
-    
     def get_object(self):
-        pk = self.kwargs['pk']
+        pk = self.kwargs["pk"]
         queryset = ResponsableUnidad.objects.get(_id=ObjectId(pk))
-        
         return queryset
-    
+
     serializer_class = ResponsableUnidadPasswordSerializer
+
 
 # _________________ FIN RESPONSABLE DE UNIDAD ______________________
 
-#Administrador
+# Administrador
+
 
 class admin_collection(generics.ListCreateAPIView):
     queryset = Administrator.objects.all()
     serializer_class = AdministratorSerializer
 
+
 class admin_element(generics.RetrieveUpdateDestroyAPIView):
-    
     def get_object(self):
-        pk = self.kwargs['pk']
+        pk = self.kwargs["pk"]
         queryset = Administrator.objects.get(_id=ObjectId(pk))
-        
+
         return queryset
-    
+
     serializer_class = AdministratorSerializer
+
 
 # _________________ FIN ADMINISTRADOR ______________________
 
@@ -210,6 +212,7 @@ class anexo_element(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "id_anexo"
     lookup_url_kwarg = "pk"
 
+
 # _________________ FIN ANEXOS ______________________
 
 # Registro llamada
@@ -218,31 +221,32 @@ class anexo_element(generics.RetrieveUpdateDestroyAPIView):
 class registro_collection(generics.ListCreateAPIView):
     queryset = RegistroLlamada.objects.all()
     serializer_class = RegistroLlamadaSerializer
-    
+
+
 # Consultar registro de llamadas por proveedor de telefonia CU
 
+
 class registroprov_collection(generics.ListAPIView):
-    
     def get_queryset(self):
-        
-        pk = self.kwargs['pk']
-        
+        pk = self.kwargs["pk"]
+
         queryset = RegistroLlamada.objects.filter(nombre_proveedor=str.capitalize(pk))
-        
+
         return queryset
-    
+
     serializer_class = RegistroLlamadaSerializer
 
+
 class registro_element(generics.RetrieveUpdateDestroyAPIView):
-    
     def get_object(self):
-        pk = self.kwargs['pk']
+        pk = self.kwargs["pk"]
         queryset = RegistroLlamada.objects.get(_id=ObjectId(pk))
-        
+
         return queryset
-    
+
     serializer_class = RegistroLlamadaSerializer
-    
+
+
 # _________________ FIN REGISTRO DE LLAMADAS ______________________
 
 
@@ -255,7 +259,6 @@ class calculouni_collection(generics.ListCreateAPIView):
 
 
 class calculouni_element(generics.RetrieveUpdateDestroyAPIView):
-    
     queryset = CalculoMensualUnidad.objects.all()
     serializer_class = CalculoMensualUnidadSerializer
     lookup_field = "id_unidad"
@@ -264,14 +267,16 @@ class calculouni_element(generics.RetrieveUpdateDestroyAPIView):
     # def get_object(self):
     #     pk = self.kwargs['pk']
     #     queryset = CalculoMensualUnidad.objects.get(_id=ObjectId(pk))
-        
+
     #     return queryset
-    
+
     # serializer_class = CalculoMensualUnidadSerializer
+
 
 # _________________ FIN CALCULO MENSUAL UNIDAD ______________________
 
 # Calculo mensual Facultad
+
 
 class calculofac_collection(generics.ListCreateAPIView):
     queryset = CalculoMensualUnidad.objects.all()
@@ -279,20 +284,20 @@ class calculofac_collection(generics.ListCreateAPIView):
 
 
 class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
-    
     queryset = CalculoMensualFacultad.objects.all()
     serializer_class = CalculoMensualFacultadSerializer
     lookup_field = "id_facultad"
     lookup_url_kwarg = "pk"
-    
+
     # def get_object(self):
     #     pk = self.kwargs['pk']
     #     queryset = CalculoMensualFacultad.objects.get(_id=ObjectId(pk))
-        
+
     #     return queryset
-    
+
     # serializer_class = CalculoMensualFacultadSerializer
-    
+
+
 # _________________ FIN CALCULO MENSUAL FACULTAD ______________________
 @api_view(["POST"])
 def consultar_trafico(request):
@@ -303,27 +308,30 @@ def consultar_trafico(request):
         trafico = consultar_trafico_llamada(nombre_proveedor, mes)
         return Response(trafico, status=status.HTTP_200_OK)
     except Exception as e:
-        error_message = f'Error en consultar_trafico: {e}'
+        error_message = f"Error en consultar_trafico: {e}"
         logging.error(error_message)
         return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(["POST"])
 def generate_report(request):
     """
-        Recibe una unidad o facultad para generar un reporte con el mes actual
-        Args: request (HttpRequest): Request que contiene los datos de la unidad o facultad en formato string y un tipo_reporte. 
-        Returns: HttpResponse: Respuesta de la petición.
+    Recibe una unidad o facultad para generar un reporte con el mes actual
+    Args: request (HttpRequest): Request que contiene los datos de la unidad o facultad en formato string y un tipo_reporte.
+    Returns: HttpResponse: Respuesta de la petición.
     """
     tipo_reporte = request.data.get("tipo_reporte")
     nombre = request.data.get("nombre")
     mes = request.data.get("mes")
     formato = request.data.get("formato")
     try:
-        response = generar_reporte(nombre, tipo_reporte, mes,formato)
+        response = generar_reporte(nombre, tipo_reporte, mes, formato)
         return response
     except Exception as e:
-        error_message = f'Error en generate_report: {e}'
+        error_message = f"Error en generate_report: {e}"
         logging.error(error_message)
         return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["POST"])
 def insert_anexo(request):
@@ -331,13 +339,13 @@ def insert_anexo(request):
     Args: request (HttpRequest): Request que contiene los datos del anexo.
     Returns: HttpResponse: Respuesta de la petición.
     """
-    print('llego el request')
+    print("llego el request")
     id_anexo = request.POST.get("id_anexo")
     id_facultad = request.POST.get("id_facultad")
     id_unidad = request.POST.get("id_unidad")
     nombre_anexo = request.POST.get("nombre_anexo")
     file = request.FILES.get("file")
-    print('llegue al Try')
+    print("llegue al Try")
     try:
         Anexo.objects.create(
             id_anexo=id_anexo,
@@ -352,6 +360,8 @@ def insert_anexo(request):
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"message": "Insertion terminada"})
+
+
 @api_view(["POST"])
 def corregir_anexo(request):
     """Corrige la data de un anexo y vuelve a procesar sus datos
@@ -364,6 +374,7 @@ def corregir_anexo(request):
     except Exception as e:
         response_data = {"message": f"Error {e}"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["POST"])
 def calculo_general(request):
@@ -397,6 +408,7 @@ def calculo_unidad(request):
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"message": "Calculo mensual terminado"})
+
 
 @csrf_exempt
 @api_view(["POST"])
@@ -445,6 +457,7 @@ def crear_usuario(request):
 
     return Response({"message": "Usuario creado"})
 
+
 @api_view(["POST"])
 def clear_folder(request):
     """Function que limpia la carpeta de archivos temporales
@@ -452,7 +465,7 @@ def clear_folder(request):
     Returns: HttpResponse: Respuesta de la petición.
     """
     try:
-        delete_all_files('duoc_djangobackend/media/reportes')
+        delete_all_files("duoc_djangobackend/media/reportes")
     except Exception as e:
         response_data = {"message": f"Error al limpiar carpeta: {e}"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
