@@ -171,4 +171,18 @@ class Migration(migrations.Migration):
                 'db_table': 'Unidad',
             },
         ),
+        migrations.CreateModel(
+            name='Notificaciones',
+            fields=[
+                ('_id', djongo.models.fields.ObjectIdField(auto_created=True, primary_key=True, serialize=False)),
+                ('id_unidad', models.IntegerField()),
+                ('cuerpo', models.CharField(max_length=100)),
+                ('titulo', models.CharField(max_length=50)),
+            ],
+            options={
+                'verbose_name': 'Notificacion',
+                'verbose_name_plural': 'Notifcaciones',
+                'db_table': 'Notificaciones',
+            },
+        ),
     ]

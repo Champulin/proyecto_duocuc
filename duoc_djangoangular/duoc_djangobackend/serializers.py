@@ -57,3 +57,10 @@ class CalculoMensualFacultadSerializer(serializers.ModelSerializer):
     class Meta:
         model = CalculoMensualFacultad
         fields = "__all__"
+        
+class NotificacionesSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        
+        model = Notificaciones
+        fields  = "__all__"

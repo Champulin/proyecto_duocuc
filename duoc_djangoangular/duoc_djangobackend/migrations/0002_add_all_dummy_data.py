@@ -15,6 +15,7 @@ def add_data(apps, schema_editor):
     Facultad = apps.get_model('duoc_djangobackend', 'CuentaPresupuestaria')
     Proveedor = apps.get_model('duoc_djangobackend', 'ProveedoresTelefonia')
     Anexo = apps.get_model('duoc_djangobackend', 'Anexo')
+    Notificaciones = apps.get_model('duoc_djangobackend', 'Notificaciones')
     # Crear un Administrador
     admin = Administrator(name='Vicente', last_name='Zurita', email='vice.zurita@duocuc.cl',
                           username='admin', password=make_password('password'))
@@ -62,6 +63,11 @@ def add_data(apps, schema_editor):
     proveedor2.save()
     proveedor3 = Proveedor(id_proveedor=3, nombre_proveedor='Claro', costo_seg_cel = 5, costo_seg_ldi = 4, costo_seg_slm = 8)
     proveedor3.save()
+    # Crear notificaciones
+    notificacion1 = Notificaciones(id_unidad=1, titulo="Aviso de nuevos reportes tarificación", cuerpo="Ya se encuentran disponibles los nuevos reportes de tarificación.")
+    notificacion1.save()
+    
+
 
 
 class Migration(migrations.Migration):

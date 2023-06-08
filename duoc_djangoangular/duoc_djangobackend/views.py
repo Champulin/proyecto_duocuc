@@ -299,6 +299,22 @@ class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
 
 
 # _________________ FIN CALCULO MENSUAL FACULTAD ______________________
+
+# Notificaciones
+
+class notificaciones_collection(generics.ListCreateAPIView):
+    queryset = Notificaciones.objects.all()
+    serializer_class = NotificacionesSerializer
+    
+class notificaciones_element(generics.RetrieveUpdateDestroyAPIView):
+    
+    queryset = Notificaciones.objects.all()
+    serializer_class = NotificacionesSerializer
+    
+    lookup_field = 'id_unidad'
+    lookup_url_kwarg = 'pk'
+
+# _________________ FIN NOTIFICACIONES ______________________
 @api_view(["POST"])
 def consultar_trafico(request):
     """Recibe un nombre_proveedor y un mes y devuelve el trafico de llamadas de ese mes."""

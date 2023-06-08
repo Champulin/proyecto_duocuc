@@ -83,7 +83,12 @@ urlpatterns += [
     #Admin (Nose si es necesario el collection debido a que trae todos nose si hay más que uno)
     path("api/administrador/", admin_collection.as_view(), name="admin_collection"),
     # Admin con id de mongo
-    path("api/administrador/<str:pk>", admin_element.as_view(), name="admin_element")
+    path("api/administrador/<str:pk>", admin_element.as_view(), name="admin_element"),
+    # _________________________________________________________________________________
+    # Notificaciones
+    path("api/notificaciones/", notificaciones_collection.as_view(), name="notificar_collection"),
+    # Notificacion con id_unidad
+    path("api/notificaciones/pk", notificaciones_element.as_view(), name="notificar_element")
 ]
 
 if settings.DEBUG:
