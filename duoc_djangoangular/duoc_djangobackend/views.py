@@ -326,7 +326,7 @@ def generate_report(request):
     mes = request.data.get("mes")
     object_id = request.data.get("object_id")
     try:
-        response = generate_csv(nombre, tipo_reporte, mes, object_id)
+        response = generate_csv(nombre, mes, tipo_reporte, object_id)
         return response
     except Exception as e:
         error_message = f"Error en generate_report: {e}"

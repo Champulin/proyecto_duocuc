@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from django.http import FileResponse
 import os
 import tempfile
-
+from bson.objectid import ObjectId
 
 def create_calculo_name(nombre):
     """Función re-utilizable que crea el nombre del calculo mensual en español y lo retorna para que sea usable en el modelo
@@ -312,7 +312,11 @@ def generate_csv(nombre, mes, tipo_reporte,object_id):
     Returns: Response: Response con el archivo a descargar
     """
     if tipo_reporte == "unidad":
-        calculo_mensual = CalculoMensualUnidad.objects.get(_id=object_id)
+        print('entre al tipo reporte')
+        calculo_mensual = CalculoMensualUnidad.objects.get(_id=ObjectId(object_id))
+#        calculo_mensual = CalculoMensualUnidad.objects.get(_id=object_id)
+        print('obtuve el calculo mensual')
+        print(calculo_mensual)
         facultad = CuentaPresupuestaria.objects.get(
             id_facultad=calculo_mensual.id_facultad
         )
@@ -363,7 +367,7 @@ def generate_csv(nombre, mes, tipo_reporte,object_id):
         dir="duoc_djangobackend/media/reportes", suffix=".csv", delete=False
     ) as temp_file:
         #Escribir la data del CSV a un temp file
-        df.to_csv(path_or_buf=temp_file, sep=";")
+        df.to_csv(path_or_buf=temp_file, sep=";",index=False)
         temp_file_path = temp_file.name
     #Retornar el CSV como un response
     response = FileResponse(open(temp_file_path, "rb"), content_type="text/csv")

@@ -20,7 +20,7 @@ export class ConsultasComponent implements OnInit {
   public sessionData:any;
   public adminRequest:requestData = {type: 1, id: 1};
   public markedReport: any;
-  private downloadBody = {tipo_reporte:"", nombre:"", mes:0, formato:"csv", object_id: null };
+  private downloadBody = {tipo_reporte:"", nombre:"", mes:0, object_id: null };
 
   visible = [false, false];
 
@@ -112,7 +112,6 @@ export class ConsultasComponent implements OnInit {
     Mes = new Date(Mes);
     this.downloadBody.mes = Mes.getMonth()+1;
     this.downloadBody.tipo_reporte = 'unidad';
-    this.downloadBody.formato = 'csv';
     this.downloadBody.nombre = report.nombre_depto;
     this.downloadBody.object_id = report._id ;
     console.log(JSON.stringify(this.downloadBody))
@@ -146,7 +145,7 @@ export class ConsultasComponent implements OnInit {
 
     
     this.downloadBody.object_id = report._id ;
-    this.downloadBody.formato = 'csv';
+    console.log('id: '+JSON.stringify(report._id))
 
     console.log(JSON.stringify(this.downloadBody))
     this.downloadCSV();
