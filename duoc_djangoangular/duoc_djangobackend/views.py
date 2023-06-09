@@ -12,7 +12,7 @@ from .anexo_operations import (
     reprocess_anexo,
     calculo_mensual_general,
     consultar_trafico_llamada,
-    generar_reporte,
+    generate_csv,
     delete_all_files,
 )
 
@@ -323,9 +323,9 @@ def generate_report(request):
     tipo_reporte = request.data.get("tipo_reporte")
     nombre = request.data.get("nombre")
     mes = request.data.get("mes")
-    formato = request.data.get("formato")
+    object_id = request.data.get("object_id")
     try:
-        response = generar_reporte(nombre, tipo_reporte, mes, formato)
+        response = generate_csv(nombre, tipo_reporte, mes, object_id)
         return response
     except Exception as e:
         error_message = f"Error en generate_report: {e}"
