@@ -12,14 +12,14 @@ export class ConsultorService {
 
   private fetchOrder: string = '';
 
-  getConUnidad(unit:number): Observable<consultaUnidad[]>{
-    this.fetchOrder = 'http://localhost:8000/api/calculo-unidad/' + unit;
+  getConUnidad(): Observable<consultaUnidad[]>{
+    this.fetchOrder = 'http://localhost:8000/api/calculo-unidad/';
     console.log('Fetch Order: ' + this.fetchOrder)
     return this.http.get<consultaUnidad[]>(this.fetchOrder);
   }
 
-  getConFacultad(faculty:number): Observable<consultaFacultad[]>{
-    this.fetchOrder = 'http://localhost:8000/api/calculo-facultad/' + faculty;
+  getConFacultad(): Observable<consultaFacultad[]>{
+    this.fetchOrder = 'http://localhost:8000/api/calculo-facultad/';
     console.log('Fetch Order: ' + this.fetchOrder)
     return this.http.get<consultaFacultad[]>(this.fetchOrder);
   }
@@ -33,6 +33,23 @@ export class ConsultorService {
     this.fetchOrder = 'http://localhost:8000/trafico_llamadas/';
     console.log('request:'+ JSON.stringify(requestBody))
     return this.http.post<traficoData[]>(this.fetchOrder, JSON.stringify(requestBody), httpOptions);
+  }
+
+  getReport(body:any): Observable<any>{
+    // let httpOptions = {
+    //   headers: new HttpHeaders({
+    //    'Content-Type': 'application/json' ,
+    //    'responseType': 'blob' 
+    //   })
+    // };
+    this.fetchOrder = 'http://localhost:8000/generar_reporte/';
+    return this.http.post(this.fetchOrder, body);
+  }
+
+  emptyFolder(){
+    let killOrder = 'http://localhost:8000/generar_reporte/borrar/';
+    let body:any = '';
+    return this.http.post(killOrder, body);
   }
 }
 

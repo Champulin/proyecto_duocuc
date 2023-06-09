@@ -277,10 +277,11 @@ class calculouni_element(generics.RetrieveUpdateDestroyAPIView):
 
 # Calculo mensual Facultad
 
-
+# En el futuro asegurarse que cuando hagan un generic para dos tablas con nombres similares
+# que por favor cambien el nombre tras copiar y pegar, que esto estaba como CalculoMensualUnidad
 class calculofac_collection(generics.ListCreateAPIView):
-    queryset = CalculoMensualUnidad.objects.all()
-    serializer_class = CalculoMensualUnidadSerializer
+    queryset = CalculoMensualFacultad.objects.all()
+    serializer_class = CalculoMensualFacultadSerializer
 
 
 class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
@@ -400,7 +401,7 @@ def calculo_unidad(request):
     Args: request (HttpRequest): Request que contiene los datos del mes a calcular, id_unidad, id_facultad, id_anexo.
     Returns: HttpResponse: Respuesta de la petición.
     """
-    id_anexo = request.data.get("id_anexo")
+    id_anexo = int(request.data.get("id_anexo"))
     try:
         calculo_mensual_unidad(id_anexo)
     except Exception as e:

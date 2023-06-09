@@ -78,9 +78,9 @@ def process_anexo(id_facultad, id_unidad, id_anexo, file):
     # Iteración de filas del dataframe.
     try:
         for index, row in df.iterrows():
-            # Performar Upsert
+            # Perform Upsert
             registro, created = RegistroLlamada.objects.update_or_create(
-                # Filtros de busqueda
+                # Filtros de Search
                 id_anexo=id_anexo,
                 nombre_proveedor=row["nombre_proveedor"],
                 numero_telefono=row["numero_telefono"],
@@ -312,6 +312,7 @@ def generate_csv(nombre, mes, tipo_reporte):
     Returns: Response: Response con el archivo a descargar
     """
     if tipo_reporte == "unidad":
+        # I BELIEVE THE PROBLEM IS HERE, THIS FUNCTION IS RETURNING MULTIPLE REPORTS BECAUSE ITS SEARCHING FOR FACULTY NAME
         calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
         facultad = CuentaPresupuestaria.objects.get(
             id_facultad=calculo_mensual.id_facultad

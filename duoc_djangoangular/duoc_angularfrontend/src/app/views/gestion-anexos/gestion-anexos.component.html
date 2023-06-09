@@ -8,6 +8,8 @@
       <th scope="col">#Unidad</th>
       <th scope="col">#Facultad</th>
       <th scope="col">Fecha de Creacion</th>
+      <th scope="col">Corregir</th>
+      <th scope="col">Procesar</th>
     </tr>
   </thead>
   <tbody *ngFor="let each of anexos">
@@ -21,15 +23,16 @@
         <button
           cButton
           color="success"
-    
-        >
-          <svg cIcon name="cilPencil"></svg>
-        </button>
-        <button cButton 
-        color="danger"
 
         >
-          <svg cIcon name="cilTrash"></svg>
+          <svg cIcon name="cilFile"></svg>
+        </button>
+      </td>
+      <td>
+        <button cButton 
+        color="info"
+        >
+          <svg cIcon name="cilCheck"></svg>
         </button>
       </td>
     </tr>
@@ -37,6 +40,7 @@
 </table>
 
 <br /><br />
+
 <h4>Subir Anexo</h4>
 <br />
 <c-row>
