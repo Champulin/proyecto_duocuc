@@ -20,7 +20,7 @@ export class ConsultasComponent implements OnInit {
   public sessionData:any;
   public adminRequest:requestData = {type: 1, id: 1};
   public markedReport: any;
-  private downloadBody = {tipo_reporte:"", nombre:"", mes:0, formato:"csv" };
+  private downloadBody = {tipo_reporte:"", nombre:"", mes:0, formato:"csv", object_id: null };
 
   visible = [false, false];
 
@@ -114,6 +114,7 @@ export class ConsultasComponent implements OnInit {
     this.downloadBody.tipo_reporte = 'unidad';
     this.downloadBody.formato = 'csv';
     this.downloadBody.nombre = report.nombre_depto;
+    this.downloadBody.object_id = report._id ;
     console.log(JSON.stringify(this.downloadBody))
 
     //Service Request, Currently Non Functional
@@ -143,6 +144,8 @@ export class ConsultasComponent implements OnInit {
       console.log('You ve met with a terrible fate, haven t you?')
     }
 
+    
+    this.downloadBody.object_id = report._id ;
     this.downloadBody.formato = 'csv';
 
     console.log(JSON.stringify(this.downloadBody))
@@ -159,7 +162,7 @@ export class ConsultasComponent implements OnInit {
 
       const anchor = this.renderer.createElement('a');
       this.renderer.setAttribute(anchor, 'href', downloadUrl);
-      this.renderer.setAttribute(anchor, 'download', 'Reporte.csv');
+      //this.renderer.setAttribute(anchor, 'download', 'Reporte.csv');
       this.renderer.setStyle(anchor, 'display', 'none');
       this.renderer.appendChild(document.body, anchor);
 

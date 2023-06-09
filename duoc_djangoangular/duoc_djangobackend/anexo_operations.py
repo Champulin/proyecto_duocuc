@@ -306,14 +306,13 @@ def consultar_trafico_llamada(nombre_proveedor: str, mes: int):
     return response_data
 
 
-def generate_csv(nombre, mes, tipo_reporte):
+def generate_csv(nombre, mes, tipo_reporte,object_id):
     """Genera un archivo csv con el reporte solicitado
     Args: nombre (str): Nombre de la facultad o departamento, mes (int): Mes del reporte, tipo_reporte (str): Tipo de reporte a generar
     Returns: Response: Response con el archivo a descargar
     """
     if tipo_reporte == "unidad":
-        # I BELIEVE THE PROBLEM IS HERE, THIS FUNCTION IS RETURNING MULTIPLE REPORTS BECAUSE ITS SEARCHING FOR FACULTY NAME
-        calculo_mensual = CalculoMensualUnidad.objects.get(nombre_depto=nombre)
+        calculo_mensual = CalculoMensualUnidad.objects.get(_id=object_id)
         facultad = CuentaPresupuestaria.objects.get(
             id_facultad=calculo_mensual.id_facultad
         )
@@ -334,14 +333,7 @@ def generate_csv(nombre, mes, tipo_reporte):
                 "tarificacion_slm": [calculo_mensual.tarificacion_slm],
             }
             df = pd.DataFrame(data)
-            response = Response(content_type="text/csv")
             nombre_archivo = generate_report_name(calculo_mensual.nombre_depto, mes)
-            response[
-                "Content-Disposition"
-            ] = f'attachment; filename="{nombre_archivo}.csv"'
-            # escribir el dataframe en el response
-            df.to_csv(path_or_buf=response, sep=";", index=False)
-            return response
         else:
             raise Exception("No existen registros para el mes seleccionado")
     elif tipo_reporte == "facultad":
@@ -361,32 +353,25 @@ def generate_csv(nombre, mes, tipo_reporte):
                 "tarificacion_slm": [calculo_mensual.tarificacion_slm],
             }
             df = pd.DataFrame(data)
-            response = Response(content_type="text/csv")
             nombre_archivo = generate_report_name(calculo_mensual.nombre_facultad, mes)
-            response[
-                "Content-Disposition"
-            ] = f'attachment; filename="{nombre_archivo}.csv"'
-            # escribir el dataframe en el response
-            df.to_csv(path_or_buf=response, sep=";", index=False)
-            return response
         else:
             raise Exception("No existen registros para el mes seleccionado")
     else:
         raise Exception("El request no corresponde a unidad o facultad")
-
-
-def generar_reporte(nombre, tipo_reporte, mes, formato):
-    """Genera un reporte a descargar tipo csv o pdf dependiendo del request
-    Args: nombre (str): Nombre de la facultad o departamento, tipo_reporte (str): Tipo de reporte a generar, mes (int): Mes del reporte, formato (str): Formato del reporte
-    Returns: Response: Response con el archivo a descargar
-    """
-    if formato == "csv":
-        response = generate_csv(nombre, mes, tipo_reporte)
-    # elif formato == "pdf":
-    #     response = generate_pdf(nombre, mes, tipo_reporte)
-    else:
-        raise Exception("Tipo de formato no corresponde a csv o pdf")
+    #Guardar Excel a file
+    with tempfile.NamedTemporaryFile(
+        dir="duoc_djangobackend/media/reportes", suffix=".csv", delete=False
+    ) as temp_file:
+        #Escribir la data del CSV a un temp file
+        df.to_csv(path_or_buf=temp_file, sep=";")
+        temp_file_path = temp_file.name
+    #Retornar el CSV como un response
+    response = FileResponse(open(temp_file_path, "rb"), content_type="text/csv")
+    response[
+        "Content-Disposition"
+    ] = f'attachment; filename="{nombre_archivo}.csv"'
     return response
+
 
 
 # def generate_pdf(nombre, mes, tipo_reporte):
@@ -445,16 +430,14 @@ def generar_reporte(nombre, tipo_reporte, mes, formato):
 #             cantidad_segundos_ldi = calculo_mensual.cant_segundos_ldi
 #             cantidad_segundos_slm = calculo_mensual.cant_segundos_slm
 #             tarificacion_total = calculo_mensual.tarificacion_general
-#             tarificacion_cel = calculo_mensual.tarificacion_cel
+#             tarificacin_cel = calculo_mensual.tarificacion_cel
 #             tarificacion_ldi = calculo_mensual.tarificacion_ldi
 #             tarificacion_slm = calculo_mensual.tarificacion_slm
 #             html = f"""
 #             <!DOCTYPE html>
 #             <html>
 #             <head>
-#                 <title>Reporte {nombre} - {mes_actual}</title>
-#             </head>
-#             <body style="font-family: 'Nunito', sans-serif">
+#                 <title>Reporte mily: 'Nunito', sans-serif">
 #                 <h1>Reporte de tarificacion {mes_actual}</h1>
 #                 <br>
 #                 <p>Nombre de la facultad: {nombre_facultad}</p>
@@ -465,28 +448,8 @@ def generar_reporte(nombre, tipo_reporte, mes, formato):
 #                 <p>Cantidad de segundos ldi: {cantidad_segundos_ldi}</p>
 #                 <p>Cantidad de segundos slm: {cantidad_segundos_slm}</p>
 #                 <br>
-#                 <p>Tarificacion cel: ${tarificacion_cel} CLP</p>
-#                 <p>Tarificacion ldi: ${tarificacion_ldi} CLP</p>
-#                 <p>Tarificacion slm: ${tarificacion_slm} CLP</p>
-#                 <p>Tarificacion total: ${tarificacion_total} CLP</p>
-#             </body>
-#             </html>"""
-#         else:
-#             raise Exception("No existen registros para el mes seleccionado")
-#     # crear response
-#     nombre_reporte = generate_report_name(nombre, mes)
-#     pdf = HTML(string=html).write_pdf()
-#     # Save PDF to file
-#     with tempfile.NamedTemporaryFile(
-#         dir="duoc_djangobackend/media/reportes", suffix=".pdf", delete=False
-#     ) as temp_file:
-#         # Write the PDF data to the temporary file
-#         temp_file.write(pdf)
-#         temp_file_path = temp_file.name
-#     # Return PDF as a response
-#     response = FileResponse(open(temp_file_path, "rb"), content_type="application/pdf")
-#     response["Content-Disposition"] = f'attachment; filename="{nombre_reporte}.pdf"'
-#     return response
+#                 <p>Trificacion cel:
+
 
 
 def delete_all_files(file_path):
