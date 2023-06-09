@@ -12,7 +12,7 @@ from .anexo_operations import (
     reprocess_anexo,
     calculo_mensual_general,
     consultar_trafico_llamada,
-    generar_reporte,
+    generate_csv,
     delete_all_files,
 )
 
@@ -277,10 +277,11 @@ class calculouni_element(generics.RetrieveUpdateDestroyAPIView):
 
 # Calculo mensual Facultad
 
-
+# En el futuro asegurarse que cuando hagan un generic para dos tablas con nombres similares
+# que por favor cambien el nombre tras copiar y pegar, que esto estaba como CalculoMensualUnidad
 class calculofac_collection(generics.ListCreateAPIView):
-    queryset = CalculoMensualUnidad.objects.all()
-    serializer_class = CalculoMensualUnidadSerializer
+    queryset = CalculoMensualFacultad.objects.all()
+    serializer_class = CalculoMensualFacultadSerializer
 
 
 class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
@@ -319,10 +320,10 @@ class notificaciones_element(generics.RetrieveUpdateDestroyAPIView):
 def consultar_trafico(request):
     """Recibe un nombre_proveedor y un mes y devuelve el trafico de llamadas de ese mes."""
     nombre_proveedor = request.data.get("nombre_proveedor")
-    mes = request.data.get("mes")
+    mes = int(request.data.get("mes"))
     try:
         trafico = consultar_trafico_llamada(nombre_proveedor, mes)
-        return Response({"trafico": trafico}, status=status.HTTP_200_OK)
+        return Response(trafico, status=status.HTTP_200_OK)
     except Exception as e:
         error_message = f"Error en consultar_trafico: {e}"
         logging.error(error_message)
@@ -339,9 +340,9 @@ def generate_report(request):
     tipo_reporte = request.data.get("tipo_reporte")
     nombre = request.data.get("nombre")
     mes = request.data.get("mes")
-    formato = request.data.get("formato")
+    object_id = request.data.get("object_id")
     try:
-        response = generar_reporte(nombre, tipo_reporte, mes, formato)
+        response = generate_csv(nombre, mes, tipo_reporte, object_id)
         return response
     except Exception as e:
         error_message = f"Error en generate_report: {e}"
@@ -416,7 +417,7 @@ def calculo_unidad(request):
     Args: request (HttpRequest): Request que contiene los datos del mes a calcular, id_unidad, id_facultad, id_anexo.
     Returns: HttpResponse: Respuesta de la petición.
     """
-    id_anexo = request.data.get("id_anexo")
+    id_anexo = int(request.data.get("id_anexo"))
     try:
         calculo_mensual_unidad(id_anexo)
     except Exception as e:

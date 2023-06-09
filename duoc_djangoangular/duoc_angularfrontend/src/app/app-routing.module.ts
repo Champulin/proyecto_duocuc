@@ -65,9 +65,21 @@ const routes: Routes = [
           canActivate:[AuthGuard, AdminGate]
       },
       {
-        path: 'consultas',
+        path: 'consultas', 
         loadChildren: () =>
           import('./views/consultas/consultas.module').then((m) => m.ConsultasModule),
+          canActivate:[AuthGuard]
+      },
+      {
+        path: 'trafico',
+        loadChildren: () =>
+          import('./views/trafico-llamadas/trafico-llamadas.module').then((m) => m.TraficoLlamadasModule),
+          canActivate:[AuthGuard]
+      },
+      {
+        path: 'proceso',
+        loadChildren: () =>
+          import('./views/proceso-anexos/proceso-anexos.module').then((m) => m.ProcesoAnexosModule),
           canActivate:[AuthGuard]
       },
       {

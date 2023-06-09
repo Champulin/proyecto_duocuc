@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { anexoData } from 'src/app/models/anexo-model';
 import { AnexoDataService } from 'src/app/services/anexo-data/anexo-data.service';
@@ -15,11 +16,28 @@ export class GestionAnexosComponent implements OnInit {
 
   //var para guardar lista desde DB
   public anexos: any;
+  public axeID: any;
+  public axeName: any;
+  public axeFaculty: any;
+  public axeUnit: any;
 
   constructor(private _anexoDataService: AnexoDataService, private router:Router) { }
 
   public ngOnInit(): void {
     this.getAnexos();
+  }
+
+  onFileSelected(event: any) {
+    const file:File = event.target.files[0];
+    const formData:FormData = new FormData();
+    formData.append('id_anexo', this.axeID);
+    formData.append('id_facultad', this.axeFaculty); 
+    formData.append('id_unidad', this.axeUnit);
+    formData.append('nombre_anexo', this.axeName );
+    formData.append('file', file);
+
+    this.postAnexos(formData);
+    
   }
 
   getAnexos() {
@@ -35,4 +53,17 @@ export class GestionAnexosComponent implements OnInit {
     );
   }
 
+  postAnexos(form:any) {
+    this._anexoDataService.uploadAnexo(form).subscribe(
+      data => {
+        console.log(data)
+        console.log('We got a response so thats something')
+        this.getAnexos();
+      },
+      err => {
+        console.error(err)
+        console.log('Error uploading the file, fuck')
+      }  
+    )
+  }
 }

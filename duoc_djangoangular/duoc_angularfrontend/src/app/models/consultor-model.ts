@@ -35,3 +35,19 @@ export interface requestData {
     type: number;
     id: number;
 }
+
+export interface requestTrafico{
+    nombre_proveedor: string;
+    mes: number;
+}
+
+export interface traficoData{
+    costo_total_general: number;
+    costo_total_cel: number;
+    costo_total_ldi: number;
+    costo_total_slm: number;
+    duracion_total_general: number;
+    duracion_total_cel: number;
+    duracion_total_ldi: number;
+    duracion_total_slm: number;
+}

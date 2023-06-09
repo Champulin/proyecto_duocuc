@@ -33,7 +33,7 @@
       <th scope="col">Total ($)</th>
     </tr>
   </thead>
-  <tbody *ngFor="let each of consultaList">
+  <tbody *ngFor="let each of filterList">
     <tr>
       <td>{{ each.fecha_calculo }}</td>
       <td>Local</td>
@@ -41,7 +41,16 @@
       <td>$ {{ each.tarificacion_slm }}</td>
     </tr>
     <tr>
-      <td></td>
+      <td>
+        <button cButton 
+        color="info"
+        (click)="onMarked(each)"
+        [class.selected]="each === markedReport"
+        [cModalToggle]="downloadModal.id"
+        >
+          <svg cIcon name="cilCloudDownload"></svg>
+        </button>
+      </td>
       <td>Celular</td>
       <td>{{ each.cant_segundos_cel }}</td>
       <td>$ {{ each.tarificacion_cel }}</td>
@@ -60,3 +69,22 @@
     </tr>
   </tbody>
 </table>
+
+<c-modal #downloadModal backdrop="static" id="downloadModal">
+  <c-modal-header>
+    <h5 cModalTitle>Descarga de Reporte</h5>
+    <button [cModalToggle]="downloadModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <span> Opciones de Descarga </span><br>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="downloadModal.id" cButton color="secondary">
+      Cancelar
+    </button>
+    <button [cModalToggle]="downloadModal.id" cButton color="success" (click)="downloadReport(markedReport)"><svg cIcon name="cilCloudDownload"></svg>
+      &nbsp; CVS</button>
+      <button [cModalToggle]="downloadModal.id" cButton color="success"><svg cIcon name="cilCloudDownload"></svg>
+        &nbsp; PDF</button>
+  </c-modal-footer>
+</c-modal>

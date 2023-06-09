@@ -20,7 +20,7 @@ class Administrator(models.Model):
             self.password = make_password(self.password)
             super(Administrator, self).save(*args, **kwargs)
         else:
-            return self.password
+            return super(Administrator,self).save(*args,**kwargs)
 
 
 class ResponsableUnidad(models.Model):
@@ -43,7 +43,7 @@ class ResponsableUnidad(models.Model):
             self.password = make_password(self.password)
             super(ResponsableUnidad, self).save(*args, **kwargs)
         else:
-            return self.password
+            return super(ResponsableUnidad,self).save(*args,**kwargs)
 
 
 class ProveedoresTelefonia(models.Model):

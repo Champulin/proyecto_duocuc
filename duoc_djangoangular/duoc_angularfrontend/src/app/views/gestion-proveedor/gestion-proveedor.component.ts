@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { pdtData } from 'src/app/models/pdt-model';
-import { pdtNew } from 'src/app/models/pdt-new';
+import { pdtData, pdtNew } from 'src/app/models/pdt-model';
 import { ProveedorDataService } from 'src/app/services/proveedor-data/proveedor-data.service';
 
 import { throwError } from 'rxjs';

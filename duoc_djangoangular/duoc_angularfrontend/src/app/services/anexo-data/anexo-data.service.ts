@@ -12,9 +12,17 @@ export class AnexoDataService {
 
   private killOrder:string = '';
   private morphOrder:string = '';
+  private postOrder:string = '';
 
   list(): Observable<anexoData[]>{
     return this.http.get<anexoData[]>('http://localhost:8000/api/anexo/');
   }
-  
+
+  uploadAnexo(anexoForm:any) {
+    const headers = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
+    const options = { headers: headers };
+    
+    this.postOrder = 'http://localhost:8000/insertar_anexo/';
+    return this.http.post(this.postOrder, anexoForm)
+  }  
 }
