@@ -176,6 +176,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('_id', djongo.models.fields.ObjectIdField(auto_created=True, primary_key=True, serialize=False)),
                 ('id_unidad', models.IntegerField()),
+                ('estado', models.BooleanField(default=False)),
                 ('cuerpo', models.CharField(max_length=100)),
                 ('titulo', models.CharField(max_length=50)),
             ],

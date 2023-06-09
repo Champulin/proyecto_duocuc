@@ -64,8 +64,12 @@ def add_data(apps, schema_editor):
     proveedor3 = Proveedor(id_proveedor=3, nombre_proveedor='Claro', costo_seg_cel = 5, costo_seg_ldi = 4, costo_seg_slm = 8)
     proveedor3.save()
     # Crear notificaciones
-    notificacion1 = Notificaciones(id_unidad=1, titulo="Aviso de nuevos reportes tarificación", cuerpo="Ya se encuentran disponibles los nuevos reportes de tarificación.")
+    notificacion1 = Notificaciones(id_unidad=1, titulo="Aviso de nuevos reportes Unidad 1", estado= False,cuerpo="Ya se encuentran disponibles los nuevos reportes de tarificación de Metalurgia.")
     notificacion1.save()
+    notificacion2 = Notificaciones(id_unidad=2, titulo="Aviso de nuevos reportes Unidad 2", estado= False,cuerpo="Ya se encuentran disponibles los nuevos reportes de tarificación de Informatica.")
+    notificacion2.save()
+    notificacion3 = Notificaciones(id_unidad=3, titulo="Aviso de nuevos reportes Unidad 3", estado= False,  cuerpo="Ya se encuentran disponibles los nuevos reportes de tarificación de Hoteleria.")
+    notificacion3.save()
     
 
 
