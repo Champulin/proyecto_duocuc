@@ -13,7 +13,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./consultas.component.scss']
 })
 export class ConsultasComponent implements OnInit {
-  private downloadLink: any;
+  private placeName: any;
 
   public filterList:any[] = [];
   public consultaList:any[] = [];
@@ -119,9 +119,6 @@ export class ConsultasComponent implements OnInit {
     //Service Request, Currently Non Functional
     this._consultorService.getReport(this.downloadBody).subscribe(
       data => {
-
-
-
         this._consultorService.emptyFolder();
       }
     )
@@ -155,13 +152,23 @@ export class ConsultasComponent implements OnInit {
   downloadCSV(): void {
     this.http.post('http://localhost:8000/generar_reporte/', this.downloadBody ,{ responseType: 'blob' }).subscribe(
       (data: Blob) => {
+      console.log(data)
       const csvFile = new Blob([data], { type: 'text/csv' });
-      console.log(JSON.stringify(data))
+      console.log('data:'+JSON.stringify(data))
+      console.log(data)
       const downloadUrl = URL.createObjectURL(csvFile);
-
+      
       const anchor = this.renderer.createElement('a');
       this.renderer.setAttribute(anchor, 'href', downloadUrl);
-      //this.renderer.setAttribute(anchor, 'download', 'Reporte.csv');
+      if (this.markedReport.id_unidad){
+        this.placeName = this.markedReport.nombre_depto;
+      }
+      else {
+        this.placeName = this.markedReport.nombre_facultad
+      }
+      let nombreArchivo = 'Reporte_'+ this.placeName + '_' + String(this.markedReport.fecha_calculo);
+      console.log(nombreArchivo)
+      this.renderer.setAttribute(anchor, 'download', nombreArchivo);
       this.renderer.setStyle(anchor, 'display', 'none');
       this.renderer.appendChild(document.body, anchor);
 
@@ -173,23 +180,23 @@ export class ConsultasComponent implements OnInit {
     });
   }
 
-  downloadPDF():void{
-    this.http.get('http://localhost:8000/generar_reporte/', { responseType: 'blob' }).subscribe((data: Blob) => {
-      const pdfFile = new Blob([data], { type: 'application/pdf' });
-      const downloadUrl = URL.createObjectURL(pdfFile);
+  // downloadPDF():void{
+  //   this.http.get('http://localhost:8000/generar_reporte/', { responseType: 'blob' }).subscribe((data: Blob) => {
+  //     const pdfFile = new Blob([data], { type: 'application/pdf' });
+  //     const downloadUrl = URL.createObjectURL(pdfFile);
 
-      const anchor = document.createElement('a');
-      anchor.href = downloadUrl;
-      anchor.download = 'filename.pdf';
-      anchor.style.display = 'none';
-      document.body.appendChild(anchor);
+  //     const anchor = document.createElement('a');
+  //     anchor.href = downloadUrl;
+  //     anchor.download = 'filename.pdf';
+  //     anchor.style.display = 'none';
+  //     document.body.appendChild(anchor);
 
-      anchor.click();
+  //     anchor.click();
 
-      document.body.removeChild(anchor);
-      URL.revokeObjectURL(downloadUrl);
-    });
-  }
+  //     document.body.removeChild(anchor);
+  //     URL.revokeObjectURL(downloadUrl);
+  //   });
+  // }
 
   filterByUnit(filter:any){
     this.filterList = [];
