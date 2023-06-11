@@ -363,6 +363,10 @@ def insert_anexo(request):
     nombre_anexo = request.POST.get("nombre_anexo")
     file = request.FILES.get("file")
     print("llegue al Try")
+    anexo_preexistente = Anexo.objects.filter(id_anexo=id_anexo)
+    if anexo_preexistente:
+        response_data = {"message": "El anexo ya existe"}
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
     try:
         Anexo.objects.create(
             id_anexo=id_anexo,
