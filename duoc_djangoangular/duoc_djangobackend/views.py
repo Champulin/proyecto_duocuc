@@ -264,21 +264,10 @@ class calculouni_element(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "id_unidad"
     lookup_url_kwarg = "pk"
 
-    # def get_object(self):
-    #     pk = self.kwargs['pk']
-    #     queryset = CalculoMensualUnidad.objects.get(_id=ObjectId(pk))
-
-    #     return queryset
-
-    # serializer_class = CalculoMensualUnidadSerializer
-
 
 # _________________ FIN CALCULO MENSUAL UNIDAD ______________________
 
 # Calculo mensual Facultad
-
-# En el futuro asegurarse que cuando hagan un generic para dos tablas con nombres similares
-# que por favor cambien el nombre tras copiar y pegar, que esto estaba como CalculoMensualUnidad
 class calculofac_collection(generics.ListCreateAPIView):
     queryset = CalculoMensualFacultad.objects.all()
     serializer_class = CalculoMensualFacultadSerializer
@@ -289,12 +278,6 @@ class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CalculoMensualFacultadSerializer
     lookup_field = "id_facultad"
     lookup_url_kwarg = "pk"
-
-    # def get_object(self):
-    #     pk = self.kwargs['pk']
-    #     queryset = CalculoMensualFacultad.objects.get(_id=ObjectId(pk))
-
-    #     return queryset
 
     # serializer_class = CalculoMensualFacultadSerializer
 
