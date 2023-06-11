@@ -10,6 +10,7 @@ export class ConsultorService {
 
   constructor(private http:HttpClient) { }
 
+  private killOrder: string = '';
   private fetchOrder: string = '';
 
   getConUnidad(): Observable<consultaUnidad[]>{
@@ -47,9 +48,17 @@ export class ConsultorService {
   }
 
   emptyFolder(){
-    let killOrder = 'http://localhost:8000/generar_reporte/borrar/';
-    let body:any = '';
-    return this.http.post(killOrder, body);
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    
+    this.killOrder = 'http://localhost:8000/generar_reporte/borrar/';
+
+    console.log('Sending kill order!: ' + this.killOrder)
+    
+    return this.http.post(this.killOrder, this.killOrder, httpOptions);
   }
 }
 

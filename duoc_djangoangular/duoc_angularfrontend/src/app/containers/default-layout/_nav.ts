@@ -45,9 +45,14 @@ export const navItems: INavData[] = [
   },
   {
     title: true,
-    name: 'Consultas'
+    name: 'Consultas y Procesos'
   },
-    {
+  {
+    name: 'Calculo de Reportes',
+    url: '/proceso',
+    iconComponent: { name: 'cil-notes' }
+  },
+  {
     name: 'Consulta de Reportes',
     url: '/consultas',
     iconComponent: { name: 'cil-notes' }

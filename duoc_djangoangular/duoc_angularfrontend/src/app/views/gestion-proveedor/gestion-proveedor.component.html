@@ -1,73 +1,8 @@
 <!--Visibility Toggle Buttons-->
-<button (click)="toggleCollapse(0)" cButton class="me-1" color="primary">Agregar Proveedor</button>
+<button [cModalToggle]="createNewPDTModal.id" color="primary" cButton>Nuevo Proveedor</button>
 <button (click)="toggleCollapse(1)" cButton class="me-1" color="primary">Buscar</button>
 
 <br />
-
-<div [visible]="visible[0]" cCollapse>
-<br />
-<!--Create new entry-->
-<h4>Nuevo Proveedor de Telefonia</h4>
-<c-row>
-  <c-col xs="auto">
-    <input [(ngModel)]="newPdtID" type="text" aria-label="pID" cFormControl placeholder="ID" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newPdtName" aria-label="pName" cFormControl placeholder="Nombre" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newPdtCEL" aria-label="pCEL" cFormControl placeholder="$ CEL" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newPdtLDI" aria-label="pLDI" cFormControl placeholder="$ LDI" />
-  </c-col>
-  <c-col xs="auto">
-    <input [(ngModel)]="newPdtSLM" aria-label="pSLM" cFormControl placeholder="$ SLM" />
-  </c-col>
-  <c-col>
-    <button cButton 
-    (click)="createPDT()"
-    color="info">
-      <svg cIcon name="cilSave"></svg>
-      &nbsp; Guardar
-    </button>
-  </c-col>
-</c-row>
-<br />
-</div>
-
-<!-- Edit marked unit -->
-<div *ngIf="markedPDT._id">
-    <br />
-    <h4>Editar Proveedor:</h4>
-    <c-row>
-      <c-col xs="auto">
-        <input [(ngModel)]="markedPDT.id_proveedor" type="text" aria-label="pID" 
-        cFormControl disabled placeholder="{{ markedPDT.id_proveedor }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editPdtName" aria-label="pName" cFormControl placeholder="{{ markedPDT.nombre_proveedor }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editPdtCEL" aria-label="pCEL" cFormControl placeholder="{{ markedPDT.costo_seg_cel }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editPdtLDI" aria-label="pLID" cFormControl placeholder="{{ markedPDT.costo_seg_ldi }}" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="editPdtSLM" aria-label="pSLM" cFormControl placeholder="{{ markedPDT.costo_seg_slm }}" />
-      </c-col>
-      <c-col>
-        <button cButton 
-          (click)="editPDT()"
-          color="info">
-          <svg cIcon name="cilSave"></svg>
-          &nbsp; Guardar
-        </button>
-      </c-col>
-    </c-row>
-    <br />
-</div>
 
 <!--Search List-->
 <div [visible]="visible[1]" cCollapse>
@@ -110,20 +45,115 @@
       <td>{{ each.costo_seg_ldi }}</td>
       <td>{{ each.costo_seg_slm }}</td>
       <td>
-        <button
-          cButton
-          color="success"
+        <button [cModalToggle]="editProviderModal.id" 
+          color="info" cButton
           (click)="onMarked(each)"
           [class.selected]="each === markedPDT">
           <svg cIcon name="cilPencil"></svg>
-      </button>
-      <button cButton 
-        color="danger"
-        (click)="deletePDT(each)"
-        [class.selected]="each === selectedPDT">
-          <svg cIcon name="cilTrash"></svg>
         </button>
+        <button [cModalToggle]="deletePDTModal.id" 
+        cButton 
+        color="danger"
+        (click)="onSelect(each)">
+        <svg cIcon name="cilTrash"></svg>
+      </button>
       </td>
     </tr>
   </tbody>
 </table>
+
+
+
+
+<!-- MODALS -->
+
+<c-modal #editProviderModal backdrop="static" id="editProviderModal" alignment="center" size="lg">
+  <c-modal-header>
+    <h5 cModalTitle>Editar Proveedor</h5>
+    <button [cModalToggle]="editProviderModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <table cTable class="editarProveedorTabla">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">$CEL</th>
+          <th scope="col">$LDI</th>
+          <th scope="col">$SLM</th>
+        </tr>
+      </thead>
+        <tbody>
+          <tr>
+            <th scope="row"><input [(ngModel)]="markedPDT.id_proveedor" type="text" aria-label="uID" cFormControl disabled placeholder="{{ markedPDT.id_proveedor }}" /></th>
+            <td><input [(ngModel)]="editPdtName" aria-label="pName" cFormControl placeholder="{{ markedPDT.nombre_proveedor }}" /></td>
+            <td><input [(ngModel)]="editPdtCEL" aria-label="pCEL" cFormControl placeholder="{{ markedPDT.costo_seg_cel }}" /></td>
+            <td><input [(ngModel)]="editPdtLDI" aria-label="pLID" cFormControl placeholder="{{ markedPDT.costo_seg_ldi }}" /></td>
+            <td><input [(ngModel)]="editPdtSLM" aria-label="pSLM" cFormControl placeholder="{{ markedPDT.costo_seg_slm }}" /></td>
+          </tr>
+        </tbody>
+    </table>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="editProviderModal.id" cButton color="secondary">
+      Close
+    </button>
+    <button [cModalToggle]="editProviderModal.id" cButton color="success" (click)="editPDT()"><svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar</button>
+  </c-modal-footer>
+</c-modal>
+
+<c-modal #createNewPDTModal backdrop="static" id="createNewPDTModal" alignment="center" size="lg">
+  <c-modal-header>
+    <h5 cModalTitle>Crear Nueva Unidad</h5>
+    <button [cModalToggle]="createNewPDTModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <table cTable class="editUserTable">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">$CEL</th>
+          <th scope="col">$LDI</th>
+          <th scope="col">$SLM</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input [(ngModel)]="newPdtID" type="number" aria-label="pID" cFormControl placeholder="ID" /></td>
+          <td><input [(ngModel)]="newPdtName" type="text" aria-label="pName" cFormControl placeholder="Nombre" /></td>
+          <td><input [(ngModel)]="newPdtCEL" type="number" aria-label="pCEL" cFormControl placeholder="$CEL" /></td>
+          <td><input [(ngModel)]="newPdtLDI" type="number" aria-label="pLDI" cFormControl placeholder="$LDI" /></td>
+          <td><input [(ngModel)]="newPdtSLM" type="number" aria-label="pSLM" cFormControl placeholder="$SLM" /></td>
+        </tr>
+      </tbody>
+    </table>  
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="createNewPDTModal.id" cButton color="secondary">
+      Close
+    </button>
+    <button [cModalToggle]="createNewPDTModal.id" cButton color="success" (click)="createPDT()"><svg cIcon name="cilSave"></svg>
+      &nbsp; Guardar</button>
+  </c-modal-footer>
+</c-modal>
+
+<c-modal #deletePDTModal backdrop="static" id="deletePDTModal">
+  <c-modal-header>
+    <h5 cModalTitle>ELIMINAR PROVEEDOR DE TELEFONIA</h5>
+    <button [cModalToggle]="deletePDTModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <span> Desea eliminar el siguiente proveedor de telefonia de la base de datos? </span><br>
+    <span> ID: {{selectedPDT.id_proveedor}} </span><br>
+    <span> Nombre: {{selectedPDT.nombre_proveedor}} </span><br>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="deletePDTModal.id" cButton color="secondary">
+      Cancelar
+    </button>
+    <button [cModalToggle]="deletePDTModal.id" cButton color="danger" (click)="deletePDT(selectedPDT)"><svg cIcon name="cilTrash"></svg>
+      &nbsp; ELIMINAR</button>
+  </c-modal-footer>
+</c-modal>

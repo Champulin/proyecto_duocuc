@@ -3,11 +3,8 @@
     <h4>Seleccionar Proveedor de Telefonia y Mes.</h4>
     <c-row>
       <c-col xs="auto">
-        <select [(ngModel)]="request.nombre_proveedor" aria-label="nameRequest" cSelect>
-          <option value="Movistar">Movistar</option>
-          <option value="Entel">Entel</option>
-          <option value="Claro">Claro</option>
-        </select>
+        <input [(ngModel)]="request.nombre_proveedor" type="text" aria-label="nameRequest" 
+        cFormControl placeholder="Nombre de Proveedor" />
       </c-col>
       <c-col xs="auto">
         <select [(ngModel)]="request.mes" aria-label="monthRequest" cSelect>

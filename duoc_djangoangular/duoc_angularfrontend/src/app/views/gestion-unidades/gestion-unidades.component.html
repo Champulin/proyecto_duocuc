@@ -167,20 +167,24 @@
     <button [cModalToggle]="createNewUnitModal.id" cButtonClose></button>
   </c-modal-header>
   <c-modal-body>
-    <c-row>
-      <c-col xs="auto">
-        <input [(ngModel)]="newUID" type="text" aria-label="uID" cFormControl placeholder="ID" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="newUNombre" aria-label="uNombre" cFormControl placeholder="Nombre" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="newUSiglas" aria-label="uSigla" cFormControl placeholder="Sigla" />
-      </c-col>
-      <c-col xs="auto">
-        <input [(ngModel)]="newUFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" />
-      </c-col>
-    </c-row>
+    <table cTable class="nuevaUnidadTabla">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Sigla</th>
+          <th scope="col">#Facultad</th>
+        </tr>
+      </thead>
+        <tbody>
+          <tr>
+            <th scope="row"><input [(ngModel)]="newUID" type="text" aria-label="uID" cFormControl placeholder="ID" /></th>
+            <td><input [(ngModel)]="newUNombre" aria-label="uNombre" cFormControl placeholder="Nombre" /></td>
+            <td><input [(ngModel)]="newUSiglas" aria-label="uSigla" cFormControl placeholder="Sigla" /></td>
+            <td><input [(ngModel)]="newUFacultad" aria-label="uFacultad" cFormControl placeholder="# Facultad" /></td>
+          </tr>
+        </tbody>
+    </table>
   </c-modal-body>
   <c-modal-footer>
     <button [cModalToggle]="createNewUnitModal.id" cButton color="secondary">

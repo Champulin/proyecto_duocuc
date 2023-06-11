@@ -1,1 +1,73 @@
-<p>proceso-anexos works!</p>
+<c-button-group [formGroup]="btnRadioGroup">
+    <input class="btn-check" formControlName="radio1" id="radio1" type="radio" value="Radio1" />
+    <label (click)="setRadioValue('Radio1')" cButton cFormCheckLabel for="radio1"
+            variant="ghost">Unidades</label>
+      
+    <input class="btn-check" formControlName="radio1" id="radio2" type="radio" value="Radio2" />
+    <label (click)="setRadioValue('Radio2')" cButton cFormCheckLabel for="radio2"
+            variant="ghost">Facultad</label>
+</c-button-group>
+
+<div [visible]="visible[0]" cCollapse>
+    <table cTable class="listaAnexos">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">#Unidad</th>
+            <th scope="col">#Facultad</th>
+            <th scope="col">Fecha de Creacion</th>
+            <th scope="col">Procesar</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let each of anexos">
+          <tr>
+            <th scope="row">{{ each.id_anexo }}</th>
+            <td>{{ each.nombre_anexo }}</td>
+            <td>{{ each.id_unidad }}</td>
+            <td>{{ each.id_facultad }}</td>
+            <td>{{ each.fecha_creacion }}</td>
+            <td>
+              <button cButton 
+              color="info"
+              (click)="calculateUnitOrder(each)"
+              >
+                <svg cIcon name="cilCheck"></svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+
+<div [visible]="visible[1]" cCollapse>
+    <div>
+        <h4>Facultad a procesar:</h4>
+        <c-row>
+          <c-col xs="auto">
+            <input [(ngModel)]="facultyRequest.id_facultad" type="number" aria-label="idRequest" 
+              cFormControl placeholder="ID de Facultad" />
+          </c-col>
+          <c-col xs="auto">
+            <select [(ngModel)]="facultyRequest.mes" aria-label="typeRequest" cSelect>
+                <option value=1>Enero</option>
+                <option value=2>Febrero</option>
+                <option value=3>Marzo</option>
+                <option value=4>Abril</option>
+                <option value=5>Mayo</option>
+                <option value=6>Junio</option>
+                <option value=7>Julio</option>
+                <option value=8>Agosto</option>
+                <option value=9>Septiembre</option>
+                <option value=10>Octubre</option>
+                <option value=11>Noviembre</option>
+                <option value=12>Diciembre</option>
+              </select>
+          </c-col>
+          <c-col xs="auto">
+            <button cButton color="info" (click)="calculateFacultyOrder(facultyRequest)"><svg cIcon name="cilCheck"></svg>
+              &nbsp; Procesar</button>
+          </c-col>
+        </c-row>
+    </div>
+</div>
