@@ -20,7 +20,7 @@ def crear_anexo_y_procesar(apps, schema_editor):
             defaults={
                 'id_unidad': 1,
                 'id_facultad': 1,
-                'nombre_anexo': 'Asignacion Abril Ingenieria',
+                'nombre_anexo': 'Asignacion Abril Metalurgia',
             }
         )
         # Save the file
