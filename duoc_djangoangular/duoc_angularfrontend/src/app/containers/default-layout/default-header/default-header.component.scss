@@ -1,0 +1,7 @@
+/*override existing styles */
+::ng-deep .modal-backdrop {
+  z-index: 0!important;
+}
+::ng-deep .modal-backdrop.show {
+ opacity: 0!important;
+}
