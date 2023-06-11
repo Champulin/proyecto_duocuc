@@ -399,8 +399,8 @@ def calculo_general(request):
     Args: request (HttpRequest): Request que contiene los datos del anexo.
     Returns: HttpResponse: Respuesta de la petición.
     """
-    id_facultad = request.data.get("id_facultad")
-    mes = request.data.get("mes")
+    id_facultad = int(request.data.get("id_facultad"))
+    mes = int(request.data.get("mes"))
     try:
         calculo_mensual_general(mes, id_facultad)
     except Exception as e:
@@ -481,6 +481,7 @@ def clear_folder(request):
     Args: request (HttpRequest): Request que contiene los datos del usuario a crear.
     Returns: HttpResponse: Respuesta de la petición.
     """
+    print('IM IN')
     try:
         delete_all_files("duoc_djangobackend/media/reportes")
     except Exception as e:

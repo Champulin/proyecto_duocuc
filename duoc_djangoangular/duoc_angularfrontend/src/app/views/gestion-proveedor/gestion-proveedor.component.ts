@@ -16,7 +16,7 @@ export class GestionProveedorComponent implements OnInit{
 
   visible = [false, false];
 
-  selectedPDT?: pdtData;
+  selectedPDT: pdtData = {_id: null, id_proveedor:0, nombre_proveedor:'', costo_seg_cel:0, costo_seg_ldi:0, costo_seg_slm:0};
   public markedPDT: pdtData = {_id: null, id_proveedor: 0, nombre_proveedor: '', 
                                 costo_seg_cel: 0, costo_seg_ldi: 0, costo_seg_slm: 0};
 

@@ -33,10 +33,10 @@ export class ConsultasComponent implements OnInit {
       this.getResponsable(this.sessionData.id_unidad);
     }else if(this.sessionData.user_type == 'Administrator') {
       this.visible[0] = true;
-      console.log('identified as admin');
     }else{
       console.log('SOMETHING HAS GONE TERRIBLE WRONG');
     };
+    this._consultorService.emptyFolder();
   }
 
   onMarked(report:any): void {
@@ -46,6 +46,14 @@ export class ConsultasComponent implements OnInit {
       left: 0, 
       behavior: 'smooth' 
     });
+    this._consultorService.emptyFolder().subscribe(
+      response => {
+        console.log(response);
+      },
+      error => {
+        console.error(error);
+      }
+    );
   }
 
   getResponsable(conID:number) {
@@ -92,7 +100,7 @@ export class ConsultasComponent implements OnInit {
     if (request.type == 1) {
       this.getResponsable(request.id);
     } else if (request.type == 2) {
-      this.getFacultad(request.id)
+      this.getFacultad(request.id);
     }
   }
 
@@ -114,14 +122,8 @@ export class ConsultasComponent implements OnInit {
     this.downloadBody.tipo_reporte = 'unidad';
     this.downloadBody.nombre = report.nombre_depto;
     this.downloadBody.object_id = report._id ;
-    console.log(JSON.stringify(this.downloadBody))
 
-    //Service Request, Currently Non Functional
-    this._consultorService.getReport(this.downloadBody).subscribe(
-      data => {
-        this._consultorService.emptyFolder();
-      }
-    )
+    this.downloadCSV();
   }
 
   downloadAdmin(report:any){
@@ -142,20 +144,14 @@ export class ConsultasComponent implements OnInit {
 
     
     this.downloadBody.object_id = report._id ;
-    console.log('id: '+JSON.stringify(report._id))
-
-    console.log(JSON.stringify(this.downloadBody))
-    this.downloadCSV();
     
+    this.downloadCSV();
   }
 
   downloadCSV(): void {
     this.http.post('http://localhost:8000/generar_reporte/', this.downloadBody ,{ responseType: 'blob' }).subscribe(
       (data: Blob) => {
-      console.log(data)
       const csvFile = new Blob([data], { type: 'text/csv' });
-      console.log('data:'+JSON.stringify(data))
-      console.log(data)
       const downloadUrl = URL.createObjectURL(csvFile);
       
       const anchor = this.renderer.createElement('a');
@@ -167,7 +163,6 @@ export class ConsultasComponent implements OnInit {
         this.placeName = this.markedReport.nombre_facultad
       }
       let nombreArchivo = 'Reporte_'+ this.placeName + '_' + String(this.markedReport.fecha_calculo);
-      console.log(nombreArchivo)
       this.renderer.setAttribute(anchor, 'download', nombreArchivo);
       this.renderer.setStyle(anchor, 'display', 'none');
       this.renderer.appendChild(document.body, anchor);
@@ -176,7 +171,6 @@ export class ConsultasComponent implements OnInit {
 
       this.renderer.removeChild(document.body, anchor);
       URL.revokeObjectURL(downloadUrl);
-
     });
   }
 
@@ -212,7 +206,6 @@ export class ConsultasComponent implements OnInit {
   filterByFaculty(filter:any){
     this.filterList = [];
     for(let i in this.consultaList){
-      console.log(JSON.stringify(this.consultaList[i]));
       if(this.consultaList[i].id_facultad==filter){
         this.filterList.push(this.consultaList[i]);
       }

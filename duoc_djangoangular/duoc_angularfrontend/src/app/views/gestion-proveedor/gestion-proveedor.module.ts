@@ -14,7 +14,14 @@ import {
   ProgressModule,
   TableModule,
   TabsModule,
-  ModalModule
+  ModalModule,
+  PopoverModule,
+  SharedModule,
+  ToastModule,
+  TooltipModule,
+  AlertModule,
+  BadgeModule,
+  UtilitiesModule
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
@@ -27,6 +34,8 @@ import { WidgetsModule } from '../widgets/widgets.module';
 @NgModule({
   imports: [
     GestionProveedorRoutingModule,
+    AlertModule,
+    BadgeModule,
     CardModule,
     CollapseModule,
     NavModule,
@@ -45,7 +54,12 @@ import { WidgetsModule } from '../widgets/widgets.module';
     AvatarModule,
     TableModule,
     WidgetsModule,
-    ModalModule
+    ModalModule,
+    PopoverModule,
+    SharedModule,
+    ToastModule,
+    TooltipModule,
+    UtilitiesModule
   ],
   declarations: [GestionProveedorComponent]
 })

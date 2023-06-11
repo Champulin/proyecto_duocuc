@@ -27,64 +27,79 @@
 <table cTable class="Consultas">
   <thead>
     <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Depto</th>
       <th scope="col">Fecha</th>
-      <th scope="col">Tipo de Llamada</th>
-      <th scope="col">Tiempo (s)</th>
-      <th scope="col">Total ($)</th>
+      <th scope="col">Descarga</th>
     </tr>
   </thead>
   <tbody *ngFor="let each of filterList">
     <tr>
+      <td>{{ each.nombre_calculo }}</td>
+      <td>{{ each.nombre_depto }}{{ each.nombre_facultad }}</td>
       <td>{{ each.fecha_calculo }}</td>
-      <td>Local</td>
-      <td>{{ each.cant_segundos_slm }}</td>
-      <td>$ {{ each.tarificacion_slm }}</td>
-    </tr>
-    <tr>
-      <td>
-        <button cButton 
+      <td><button cButton 
         color="info"
         (click)="onMarked(each)"
         [class.selected]="each === markedReport"
         [cModalToggle]="downloadModal.id"
         >
           <svg cIcon name="cilCloudDownload"></svg>
-        </button>
-      </td>
-      <td>Celular</td>
-      <td>{{ each.cant_segundos_cel }}</td>
-      <td>$ {{ each.tarificacion_cel }}</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>Larga Distancia</td>
-      <td>{{ each.cant_segundos_ldi }}</td>
-      <td>$ {{ each.tarificacion_ldi }}</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>Total</td>
-      <td>{{ each.cant_segundos_total }}</td>
-      <td>$ {{ each.tarificacion_general }}</td>
+        </button></td>
     </tr>
   </tbody>
 </table>
 
-<c-modal #downloadModal backdrop="static" id="downloadModal">
+<c-modal #downloadModal backdrop="static" id="downloadModal" size="xl">
   <c-modal-header>
     <h5 cModalTitle>Descarga de Reporte</h5>
     <button [cModalToggle]="downloadModal.id" cButtonClose></button>
   </c-modal-header>
   <c-modal-body>
-    <span> Opciones de Descarga </span><br>
+    <div *ngIf="markedReport">
+    <table cTable class="DatosConsulta">
+      <thead>
+        <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">Tipo de Llamada</th>
+          <th scope="col">Tiempo (s)</th>
+          <th scope="col">Total ($)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ markedReport.fecha_calculo }}</td>
+          <td>Local</td>
+          <td>{{ markedReport.cant_segundos_slm }}</td>
+          <td>$ {{ markedReport.tarificacion_slm }}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>Celular</td>
+          <td>{{ markedReport.cant_segundos_cel }}</td>
+          <td>$ {{ markedReport.tarificacion_cel }}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>Larga Distancia</td>
+          <td>{{ markedReport.cant_segundos_ldi }}</td>
+          <td>$ {{ markedReport.tarificacion_ldi }}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>Total</td>
+          <td>{{ markedReport.cant_segundos_total }}</td>
+          <td>$ {{ markedReport.tarificacion_general }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   </c-modal-body>
   <c-modal-footer>
     <button [cModalToggle]="downloadModal.id" cButton color="secondary">
       Cancelar
     </button>
     <button [cModalToggle]="downloadModal.id" cButton color="success" (click)="downloadReport(markedReport)"><svg cIcon name="cilCloudDownload"></svg>
-      &nbsp; CVS</button>
-      <button [cModalToggle]="downloadModal.id" cButton color="success"><svg cIcon name="cilCloudDownload"></svg>
-        &nbsp; PDF</button>
+      &nbsp; Descargar</button>
   </c-modal-footer>
 </c-modal>
