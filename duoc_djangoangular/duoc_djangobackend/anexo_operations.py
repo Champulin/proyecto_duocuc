@@ -171,23 +171,37 @@ def calculo_mensual_unidad(id_anexo):
     nombre_depto = unidad.nombre_depto
     # Crea nombre readable
     calculo_nombre = create_calculo_name(nombre_depto)
-    # Crear nuevo calculo_mensual
-    calculo_mensual = CalculoMensualUnidad(
-        id_facultad=id_facultad,
-        id_unidad=id_unidad,
-        nombre_calculo=calculo_nombre,
-        nombre_depto=nombre_depto,
-        tarificacion_general=costo_total_cel + costo_total_ldi + costo_total_slm,
-        tarificacion_slm=costo_total_slm,
-        tarificacion_cel=costo_total_cel,
-        tarificacion_ldi=costo_total_ldi,
-        cant_segundos_total=duracion_total_general,
-        cant_segundos_slm=duracion_total_cel,
-        cant_segundos_ldi=duracion_total_ldi,
-        cant_segundos_cel=duracion_total_slm,
+    # Crear nuevo calculo_mensual o updatear uno existente
+    calculo_general = CalculoMensualUnidad.objects.filter(
+        id_facultad=id_facultad, id_unidad=id_unidad, nombre_calculo=calculo_nombre
     )
-    # Guardar calculo_mensual en la base de datos
-    calculo_mensual.save()
+    if calculo_general.exists():
+        calculo_general.update(
+            tarificacion_general=costo_total_cel + costo_total_ldi + costo_total_slm,
+            tarificacion_slm=costo_total_slm,
+            tarificacion_cel=costo_total_cel,
+            tarificacion_ldi=costo_total_ldi,
+            cant_segundos_total=duracion_total_general,
+            cant_segundos_slm=duracion_total_cel,
+            cant_segundos_ldi=duracion_total_ldi,
+            cant_segundos_cel=duracion_total_slm,
+        )
+    else:
+        calculo_mensual = CalculoMensualUnidad(
+            id_facultad=id_facultad,
+            id_unidad=id_unidad,
+            nombre_calculo=calculo_nombre,
+            nombre_depto=nombre_depto,
+            tarificacion_general=costo_total_cel + costo_total_ldi + costo_total_slm,
+            tarificacion_slm=costo_total_slm,
+            tarificacion_cel=costo_total_cel,
+            tarificacion_ldi=costo_total_ldi,
+            cant_segundos_total=duracion_total_general,
+            cant_segundos_slm=duracion_total_cel,
+            cant_segundos_ldi=duracion_total_ldi,
+            cant_segundos_cel=duracion_total_slm,
+        )
+        calculo_mensual.save()
 
 
 # Calcular tarificacion Mensual general por facultad.
@@ -230,22 +244,37 @@ def calculo_mensual_general(mes: int, id_facultad: int) -> None:
     nombre_facultad = facultad.nombre_facultad
     # Crea nombre readable
     calculo_nombre = create_calculo_name(nombre_facultad)
-    # Crear nuevo calculo_mensual_general
-    calculo_mensual_general = CalculoMensualFacultad(
-        id_facultad=id_facultad,
-        nombre_calculo=calculo_nombre,
-        nombre_facultad=nombre_facultad,
-        cant_segundos_total=duracion_total_general,
-        cant_segundos_slm=duracion_total_cel,
-        cant_segundos_ldi=duracion_total_ldi,
-        cant_segundos_cel=duracion_total_slm,
-        tarificacion_general=costo_total_general,
-        tarificacion_slm=costo_total_slm,
-        tarificacion_cel=costo_total_cel,
-        tarificacion_ldi=costo_total_ldi,
+    # Crear nuevo calculo_mensual_general o updatear si existe
+    calculo_general = CalculoMensualFacultad.objects.filter(
+        id_facultad=id_facultad, nombre_calculo=calculo_nombre
     )
-    # Guardar calculo_mensual_general en la base de datos
-    calculo_mensual_general.save()
+    if calculo_general.exists():
+        calculo_general.update(
+            cant_segundos_total=duracion_total_general,
+            cant_segundos_slm=duracion_total_cel,
+            cant_segundos_ldi=duracion_total_ldi,
+            cant_segundos_cel=duracion_total_slm,
+            tarificacion_general=costo_total_general,
+            tarificacion_slm=costo_total_slm,
+            tarificacion_cel=costo_total_cel,
+            tarificacion_ldi=costo_total_ldi,
+        )
+    else:
+        calculo_mensual_general = CalculoMensualFacultad(
+            id_facultad=id_facultad,
+            nombre_calculo=calculo_nombre,
+            nombre_facultad=nombre_facultad,
+            cant_segundos_total=duracion_total_general,
+            cant_segundos_slm=duracion_total_cel,
+            cant_segundos_ldi=duracion_total_ldi,
+            cant_segundos_cel=duracion_total_slm,
+            tarificacion_general=costo_total_general,
+            tarificacion_slm=costo_total_slm,
+            tarificacion_cel=costo_total_cel,
+            tarificacion_ldi=costo_total_ldi,
+        )
+        # Guardar calculo_mensual_general en la base de datos
+        calculo_mensual_general.save()
 
 
 def consultar_trafico_llamada(nombre_proveedor: str, mes: int):
