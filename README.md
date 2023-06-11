@@ -86,7 +86,6 @@ pip install -r requirements.txt
 Dirigirse a la carpeta duoc_djangoanular
 
 ```
-python manage.py makemigrations
 python manage.py migrate
 ```
 
