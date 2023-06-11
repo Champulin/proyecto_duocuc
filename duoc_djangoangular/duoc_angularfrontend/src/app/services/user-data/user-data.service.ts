@@ -46,4 +46,8 @@ export class UserDataService {
     console.log('killOrder after appending: '+ this.killOrder);
     return this.http.delete(this.killOrder);
   }
+
+  getNotifications(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:8000/api/notificaciones/')
+  }
 }

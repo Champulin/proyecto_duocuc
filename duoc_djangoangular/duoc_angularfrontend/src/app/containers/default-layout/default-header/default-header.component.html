@@ -1,4 +1,4 @@
-<!--<c-header class="mb-4 d-print-none" position="sticky">-->
+<!-- Texto de Dashboard y barra de header-->
 <ng-container>
   <c-container [fluid]="true">
     <button
@@ -18,44 +18,33 @@
           Dashboard
         </a>
       </c-nav-item>
-      <!-- <c-nav-item>
-        <a cNavLink routerLink="/users" routerLinkActive="active">Users</a>
-      </c-nav-item>
-      <c-nav-item>
-        <a cNavLink routerLink="/settings" routerLinkActive="active">
-          Settings
-        </a>
-      </c-nav-item> -->
     </c-header-nav>
 
+    <!--Notificaciones-->
+    <div *ngIf="notAdmin">
     <c-header-nav class="d-none d-lg-flex">
       <c-nav-item>
-        <a routerLink="./" cNavLink>
+        <a [cModalToggle]="notesModal.id">
           <svg cIcon name="cilBell" size="lg"></svg>
-        </a>
-      </c-nav-item>
-      <c-nav-item>
-        <a routerLink="./" cNavLink>
-          <svg cIcon name="cilList" size="lg"></svg>
-        </a>
-      </c-nav-item>
-      <c-nav-item>
-        <a routerLink="./" cNavLink>
-          <svg cIcon name="cilEnvelopeOpen" size="lg"></svg>
+          <c-badge *ngIf="newNotifications" class="ms-2 float-end" color="info">
+            {{newNotifications}}
+          </c-badge>
         </a>
       </c-nav-item>
     </c-header-nav>
+    </div>
+
     <c-header-nav class="ms-3">
       <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
     </c-header-nav>
-
   </c-container>
   <c-header-divider></c-header-divider>
   <c-container [fluid]="true">
     <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
   </c-container>
 </ng-container>
-<!--</c-header>-->
+
+<!-- Dropdown -->
 
 <ng-template #userDropdown>
   <c-dropdown alignment="end" variant="nav-item">
@@ -80,52 +69,6 @@
         <h6 cDropdownHeader class="bg-light fw-semibold py-2">Cuenta</h6>
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
-          <svg cIcon class="me-2" name="cilBell"></svg>
-          Notificación
-          <c-badge class="ms-2 float-end" color="info">
-            5
-          </c-badge>
-        </a>
-      </li>
-      <li>
-        <a routerLink="./" cDropdownItem>
-          <svg cIcon class="me-2" name="cilEnvelopeOpen"></svg>
-          Mensajes
-          <c-badge class="ms-2 float-end" color="success">
-            42
-          </c-badge>
-        </a>
-      </li>
-      <li>
-        <h6 cDropdownHeader class="bg-light fw-semibold py-2">Ajustes</h6>
-      </li>
-      <li></li>
-      <li>
-        <a routerLink="./" cDropdownItem>
-          <svg cIcon class="me-2" name="cilUser"></svg>
-          Perfil
-        </a>
-      </li>
-      <li>
-        <a routerLink="/menu-usuario" cDropdownItem>
-          <svg cIcon class="me-2" name="cilSettings"></svg>
-          Ajustes Personales
-        </a>
-      </li>
-      <li>
-        <a routerLink="./" cDropdownItem>
-          <svg cIcon class="me-2" name="cilFile"></svg>
-          Projects
-          <c-badge class="ms-2 float-end" color="primary">
-            42
-          </c-badge>
-        </a>
-      </li>
-      <li>
-        <hr cDropdownDivider/>
-      </li>
-      <li>
         <a class="dropdown-item" (click)="logOut()">
           <svg cIcon class="me-2" name="cilLockLocked"></svg>
           Cerrar Sesión
@@ -135,4 +78,21 @@
     </ul>
   </c-dropdown>
 </ng-template>
+
+<c-modal #notesModal id="notesModal">
+  <c-modal-header>
+    <h5 cModalTitle>Notificaciones</h5>
+    <button [cModalToggle]="notesModal.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <span>{{newNotifications}}</span>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="notesModal.id" cButton color="secondary">
+      Cancelar
+    </button>
+    <button [cModalToggle]="notesModal.id" cButton color="info" ><svg cIcon name="cilTrash"></svg>
+      &nbsp; Clear All</button>
+  </c-modal-footer>
+</c-modal>
 

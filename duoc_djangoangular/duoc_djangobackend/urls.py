@@ -87,7 +87,7 @@ urlpatterns += [
     # _________________________________________________________________________________
     # Notificaciones
     path("api/notificaciones/", notificaciones_collection.as_view(), name="notificar_collection"),
-    # Notificacion con id_unidad
+    # Notificaciones con id_unidad
     path("api/notificaciones/<int:pk>", notificaciones_element.as_view(), name="notificar_element")
 ]
 
