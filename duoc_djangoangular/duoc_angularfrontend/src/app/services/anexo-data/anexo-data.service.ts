@@ -64,4 +64,13 @@ export class AnexoDataService {
     return this.http.post(this.postOrder, JSON.stringify(body), httpOptions)
   }
 
+  sendNote(body:any) {
+    let httpOptions = {
+      headers: new HttpHeaders({
+       'Content-Type': 'application/json' ,
+      })
+    };
+    return this.http.post('http://localhost:8000/api/notificaciones/', JSON.stringify(body), httpOptions);
+  }
+
 }

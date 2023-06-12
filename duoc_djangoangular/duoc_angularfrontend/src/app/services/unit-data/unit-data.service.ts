@@ -12,9 +12,16 @@ export class UnitDataService {
 
   private killOrder:string = '';
   private morphOrder:string = '';
+  private fetchOrder:any;
 
   list(): Observable<unitData[]>{
     return this.http.get<unitData[]>('http://localhost:8000/api/unidad/');
+  }
+
+  getUnit(code:any): Observable<unitData>{
+    this.fetchOrder = 'http://localhost:8000/api/unidad/' + code;
+    console.log('FetchOrder: ' + this.fetchOrder)
+    return this.http.get<unitData>(this.fetchOrder);
   }
 
   create(newUnit:any) {
