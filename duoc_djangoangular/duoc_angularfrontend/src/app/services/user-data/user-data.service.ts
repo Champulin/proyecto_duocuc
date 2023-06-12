@@ -50,4 +50,15 @@ export class UserDataService {
   getNotifications(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:8000/api/notificaciones/')
   }
+
+  killNotification(note:any){
+    let httpOptions = {
+      headers: new HttpHeaders({
+       'Content-Type': 'application/json' ,
+      })
+    };
+    this.killOrder = 'http://localhost:8000/api/notificaciones/' + note;
+    console.log('killOrder after appending: '+ this.killOrder);
+    return this.http.delete(this.killOrder, httpOptions);
+  }
 }

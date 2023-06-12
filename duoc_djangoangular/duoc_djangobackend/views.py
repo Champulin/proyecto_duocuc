@@ -291,12 +291,13 @@ class notificaciones_collection(generics.ListCreateAPIView):
     serializer_class = NotificacionesSerializer
     
 class notificaciones_element(generics.RetrieveUpdateDestroyAPIView):
-    
-    queryset = Notificaciones.objects.all()
+    def get_object(self):
+        pk = self.kwargs["pk"]
+        queryset = Notificaciones.objects.get(_id=ObjectId(pk))
+
+        return queryset
+
     serializer_class = NotificacionesSerializer
-    
-    lookup_field = 'id_unidad'
-    lookup_url_kwarg = 'pk'
 
 # _________________ FIN NOTIFICACIONES ______________________
 @api_view(["POST"])

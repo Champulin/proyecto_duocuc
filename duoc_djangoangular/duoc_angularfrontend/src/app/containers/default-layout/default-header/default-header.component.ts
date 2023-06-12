@@ -15,8 +15,6 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit{
 
   @Input() sidebarId: string = "sidebar";
 
-  public newMessages = new Array(4)
-  public newTasks = new Array(5)
   public newNotifications:number = 0;
   public notAdmin:boolean = true;
   public allNotes:any[]=[];
@@ -77,6 +75,16 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit{
   
   checkAdmin(){
     this.notAdmin = !this._adminCheck.isAdmin()
+  }
+
+  killNote(note:any){
+    this._notDataService.killNotification(note._id).subscribe(
+      data => {
+        // If data retrieved exists log it in console for testing and assign it to the local variable that handles it.
+      },
+      err => console.error(err),
+      () => console.log('Notification Killed')
+    );
   }
 
 }
