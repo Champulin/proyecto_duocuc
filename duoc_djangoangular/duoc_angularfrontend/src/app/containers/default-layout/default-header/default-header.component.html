@@ -79,20 +79,43 @@
   </c-dropdown>
 </ng-template>
 
-<c-modal #notesModal id="notesModal">
+<c-modal #notesModal id="notesModal" size="lg">
   <c-modal-header>
     <h5 cModalTitle>Notificaciones</h5>
     <button [cModalToggle]="notesModal.id" cButtonClose></button>
   </c-modal-header>
   <c-modal-body>
-    <span>{{newNotifications}}</span>
+    <table cTable class="listNotes">
+      <thead>
+        <tr>
+          <th scope="col">Mensaje</th>
+          <th scope="col">Borrar</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let each of myNotes">
+        <tr>
+          <th scope="row">{{each.titulo}}</th>
+          <td>
+            <button 
+              cButton 
+              color="link"
+              (click)="killNote(each)">
+            <svg cIcon name="cilX"></svg>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>{{each.cuerpo}}</td>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </c-modal-body>
   <c-modal-footer>
     <button [cModalToggle]="notesModal.id" cButton color="secondary">
       Cancelar
     </button>
-    <button [cModalToggle]="notesModal.id" cButton color="info" ><svg cIcon name="cilTrash"></svg>
-      &nbsp; Clear All</button>
   </c-modal-footer>
 </c-modal>
 
