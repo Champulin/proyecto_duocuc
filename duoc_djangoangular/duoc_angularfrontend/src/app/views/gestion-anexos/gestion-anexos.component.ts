@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 })
 export class GestionAnexosComponent implements OnInit {
 
+  visible = [false, false];
+  
   //var para guardar lista desde DB
   public anexos: any;
   public axeID: any;
@@ -65,5 +67,9 @@ export class GestionAnexosComponent implements OnInit {
         console.log('Error uploading the file, fuck')
       }  
     )
+  }
+
+  toggleCollapse(id: number): void {
+    this.visible[id] = !this.visible[id];
   }
 }
