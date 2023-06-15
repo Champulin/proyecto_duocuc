@@ -47,25 +47,25 @@ def add_data(apps, schema_editor):
     facultad2 = Facultad(
         id_facultad=2,
         nombre_facultad="Hoteleria y Turismo",
-        siglas_facultad="HTL",
+        siglas_facultad="HTT",
         id_proveedor=2,
     )
     facultad2.save()
     facultad3 = Facultad(
         id_facultad=3,
         nombre_facultad="Ciencias Forenses",
-        siglas_facultad="CRM",
+        siglas_facultad="CFR",
         id_proveedor=3,
     )
     facultad3.save()
     # Crear Unidades
     unidad1 = Unidad(
-        id_unidad=1, nombre_depto="Metalurgia", siglas_depto="MTL", id_facultad=1
+        id_unidad=1, nombre_depto="Informatica", siglas_depto="INF", id_facultad=1
     )
     unidad1.save()
 
     unidad2 = Unidad(
-        id_unidad=2, nombre_depto="Informatica", siglas_depto="INF", id_facultad=1
+        id_unidad=2, nombre_depto="Metalurgia", siglas_depto="MTL", id_facultad=1
     )
     unidad2.save()
 

@@ -216,6 +216,15 @@ def calculo_mensual_general(mes: int, id_facultad: int) -> None:
     """
     # Consulta la BD por instancias de CalculoUnidad donde coincida la facultad y el mes en fecha_calculo y se agregan sus valores
     calculos = CalculoMensualUnidad.objects.filter(id_facultad=id_facultad)
+    registros = RegistroLlamada.objects.filter(id_facultad=id_facultad)
+    # Obtener el mes actual
+    mes_calculos = mes - 1
+    for registro in registros:
+        if registro.fecha_llamada.month == mes_calculos:
+            mes_actual = registro.fecha_llamada.month
+            break
+        else:
+            continue
     # inicializar costo_total
     costo_total_general = 0
     costo_total_cel = 0
@@ -228,9 +237,8 @@ def calculo_mensual_general(mes: int, id_facultad: int) -> None:
     # iteracion de calculos
     for calculo in calculos:
         # extraer el mes actual del registro en formato int
-        mes_actual = calculo.fecha_calculo.month
         # si el mes_actual coincide con mes se agregan los valores si no se procede al siguiente registro
-        if mes_actual == mes:
+        if mes_actual == mes_calculos:
             costo_total_general += calculo.tarificacion_general
             costo_total_cel += calculo.tarificacion_cel
             costo_total_ldi += calculo.tarificacion_ldi
