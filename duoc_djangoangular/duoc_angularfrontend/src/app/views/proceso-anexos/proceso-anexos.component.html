@@ -28,11 +28,11 @@
             <td>{{ each.id_facultad }}</td>
             <td>{{ each.fecha_creacion }}</td>
             <td>
-              <button cButton 
-              color="info"
-              (click)="calculateUnitOrder(each)"
-              >
-                <svg cIcon name="cilCheck"></svg>
+              <button [cModalToggle]="calculateUnit.id" 
+                color="info" cButton
+                (click)="onMarked(each)"
+                [class.selected]="each === markedCalculus">
+                <svg cIcon name="cilPencil"></svg>
               </button>
             </td>
           </tr>
@@ -71,3 +71,34 @@
         </c-row>
     </div>
 </div>
+
+
+<c-modal #calculateUnit backdrop="static" id="calculateUnit" alignment="center" size="lg">
+  <c-modal-header>
+    <h5 cModalTitle>Calcular Tarificacion de Unidad.</h5>
+    <button [cModalToggle]="calculateUnit.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <select [(ngModel)]="unitRequestMes" aria-label="typeRequest" placeholder="Seleccione el mes al que corresponden los datos." cSelect>
+      <option value=1>Enero</option>
+      <option value=2>Febrero</option>
+      <option value=3>Marzo</option>
+      <option value=4>Abril</option>
+      <option value=5>Mayo</option>
+      <option value=6>Junio</option>
+      <option value=7>Julio</option>
+      <option value=8>Agosto</option>
+      <option value=9>Septiembre</option>
+      <option value=10>Octubre</option>
+      <option value=11>Noviembre</option>
+      <option value=12>Diciembre</option>
+    </select>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="calculateUnit.id" cButton color="secondary">
+      Close
+    </button>
+    <button [cModalToggle]="calculateUnit.id" cButton color="success" (click)="calculateUnitOrder(markedCalculus)"><svg cIcon name="cilCheck"></svg>
+      &nbsp; Calcular</button>
+  </c-modal-footer>
+</c-modal>

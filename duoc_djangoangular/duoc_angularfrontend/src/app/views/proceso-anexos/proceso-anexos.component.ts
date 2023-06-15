@@ -23,6 +23,8 @@ export class ProcesoAnexosComponent implements OnInit {
   public facultyRequest:any = {id_facultad:0, mes:0}
   public newOrder:any = {id_anexo:0}
   public noteBody:any = {id_unidad:0, estado: false, cuerpo:'', titulo: ''};
+  public markedCalculus: any;
+  public unitRequestMes: any = 0;
   private lastMarked:any;
 
   btnRadioGroup = this.formBuilder.group({
@@ -36,6 +38,15 @@ export class ProcesoAnexosComponent implements OnInit {
     this.setRadioValue('Radio1');
   }
 
+  onMarked(calc: any): void {
+    this.markedCalculus = calc;
+    window.scroll({ 
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
+    });
+  }
+   
   getAnexos() {
     //Call for the service function list() to retrieve the info for all units in the DB
     this._anexoDataService.list().subscribe(
@@ -68,6 +79,9 @@ export class ProcesoAnexosComponent implements OnInit {
       })
     };
     let body = anexoForm;
+    body.mes = this.unitRequestMes;
+
+    console.log(JSON.stringify(body))
     
     let postOrder = 'http://localhost:8000/calculo_unidad/';
     this.http.post(postOrder, JSON.stringify(body), httpOptions).subscribe(
