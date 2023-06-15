@@ -1,14 +1,28 @@
 
 <app-widgets-dropdown></app-widgets-dropdown>
 
+<c-carousel>
+  <c-carousel-indicators></c-carousel-indicators>
+  <c-carousel-inner>
+    <c-carousel-item *ngFor="let slide of slides">
+      <img cImg fluid
+        [src]="slide.src"
+        alt="{{ slide.title }}"
+        class="d-block w-100"
+        loading="lazy" />
+    </c-carousel-item>
+  </c-carousel-inner>
+  <c-carousel-control [routerLink] caption="Previous" direction="prev"></c-carousel-control>
+  <c-carousel-control [routerLink] caption="Next" direction="next"></c-carousel-control>
+</c-carousel>
 
-<c-card class="mb-4">
+<!-- <c-card class="mb-4">
   <c-card-body>
     <c-row>
     </c-row>
-<app-widgets-brand [withCharts]="true"></app-widgets-brand>
+<app-widgets-brand [withCharts]="true"></app-widgets-brand> -->
 
-<c-row>
+<!-- <c-row>
   <c-col xs>
     <c-card class="mb-4">
       <c-card-header>Trafico de llamadas {{ "&" }} total de llamadas</c-card-header>
@@ -136,4 +150,4 @@
       </c-card-body>
     </c-card>
   </c-col>
-</c-row>
+</c-row> -->

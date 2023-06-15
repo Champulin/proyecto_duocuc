@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, UntypedFormBuilder } from '@angular/forms';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AnexoDataService } from 'src/app/services/anexo-data/anexo-data.service';
-import { ReportService } from 'src/app/services/report-service/report.service';
+import { UnitDataService } from 'src/app/services/unit-data/unit-data.service';
+
+import { DatePipe } from '@angular/common';
 
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
@@ -20,12 +22,14 @@ export class ProcesoAnexosComponent implements OnInit {
   public anexos: any;
   public facultyRequest:any = {id_facultad:0, mes:0}
   public newOrder:any = {id_anexo:0}
+  public noteBody:any = {id_unidad:0, estado: false, cuerpo:'', titulo: ''};
+  private lastMarked:any;
 
   btnRadioGroup = this.formBuilder.group({
     radio1: this.formBuilder.control({ value: 'Radio2' })
   });
 
-  constructor(private http:HttpClient, private _anexoDataService: AnexoDataService, private formBuilder: UntypedFormBuilder) {}
+  constructor(private _unitService:UnitDataService, private http:HttpClient, private _anexoDataService: AnexoDataService, private formBuilder: UntypedFormBuilder) {}
 
   public ngOnInit() {
     this.getAnexos();
@@ -47,6 +51,7 @@ export class ProcesoAnexosComponent implements OnInit {
 
   calculateUnitOrder(request:any){
     this.newOrder.id_anexo = request.id_anexo;
+    this.lastMarked = request;
     console.log(this.newOrder);
     this.runUnit(this.newOrder);
   }
@@ -65,12 +70,10 @@ export class ProcesoAnexosComponent implements OnInit {
     let body = anexoForm;
     
     let postOrder = 'http://localhost:8000/calculo_unidad/';
-    console.log('In Service Body: ' + body)
-    console.log('In Service URL:' + postOrder)
-    console.log('I went inside the RUN UNIT')
     this.http.post(postOrder, JSON.stringify(body), httpOptions).subscribe(
       response => {
         console.log(response);
+        this.createNote();
       },
       error => {
         console.error(error);
@@ -96,6 +99,36 @@ export class ProcesoAnexosComponent implements OnInit {
     );
   }
 
+  createNote(){
+    this.noteBody.id_unidad = this.lastMarked.id_unidad
+    this.noteBody.estado = false;
+
+    this._unitService.getUnit(this.noteBody.id_unidad).subscribe(
+      data => {
+        this.noteBody.titulo = 'Nuevo Calculo de '+ data.nombre_depto;
+        let today = new Date();
+        let pipe = new DatePipe('en-US');
+        let bodyDate = pipe.transform(today, 'dd/MM/YYYY')
+        this.noteBody.cuerpo = ''+bodyDate+' - Existen nuevos calculos de tarificacion mensuales para la Unidad de '+data.nombre_depto;
+        console.log(JSON.stringify(this.noteBody))
+        this.sendNote();
+      }, error => {
+        console.log(error)
+      }
+    );
+    
+  }
+
+  sendNote(){
+    this._anexoDataService.sendNote(this.noteBody).subscribe(
+      res => {
+        console.log(res)
+      },
+      error => {
+        console.error(error)
+      }
+    );
+  }
 
 
   setRadioValue(value: string): void {

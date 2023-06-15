@@ -1,38 +1,7 @@
-<!--List of Objects-->
-<h4>Anexos</h4>
-<table cTable class="listaAnexos">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Nombre</th>
-      <th scope="col">#Unidad</th>
-      <th scope="col">#Facultad</th>
-      <th scope="col">Fecha de Creacion</th>
-      <th scope="col">Corregir</th>
-    </tr>
-  </thead>
-  <tbody *ngFor="let each of anexos">
-    <tr>
-      <th scope="row">{{ each.id_anexo }}</th>
-      <td>{{ each.nombre_anexo }}</td>
-      <td>{{ each.id_unidad }}</td>
-      <td>{{ each.id_facultad }}</td>
-      <td>{{ each.fecha_creacion }}</td>
-      <td>
-        <button
-          cButton
-          color="success"
+<button (click)="toggleCollapse(0)" cButton class="me-1" color="primary">Nuevo Anexo</button>
+<br />
 
-        >
-          <svg cIcon name="cilFile"></svg>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<br /><br />
-
+<div [visible]="visible[0]" cCollapse>
 <h4>Subir Anexo</h4>
 <br />
 <c-row>
@@ -53,3 +22,41 @@
 <div class="mb-3">
     <input cFormControl id="formFile" type="file" (change)="onFileSelected($event)"/>
 </div>
+<br />
+<br />
+</div>
+
+<!--List of Objects-->
+<h4>Anexos</h4>
+<table cTable class="listaAnexos">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">#Unidad</th>
+      <th scope="col">#Facultad</th>
+      <th scope="col">Fecha de Creacion</th>
+      <!-- <th scope="col">Corregir</th> -->
+    </tr>
+  </thead>
+  <tbody *ngFor="let each of anexos">
+    <tr>
+      <th scope="row">{{ each.id_anexo }}</th>
+      <td>{{ each.nombre_anexo }}</td>
+      <td>{{ each.id_unidad }}</td>
+      <td>{{ each.id_facultad }}</td>
+      <td>{{ each.fecha_creacion }}</td>
+      <!-- <td>
+        <button
+          cButton
+          color="success"
+
+        >
+          <svg cIcon name="cilFile"></svg>
+        </button>
+      </td> -->
+    </tr>
+  </tbody>
+</table>
+
+<br /><br />

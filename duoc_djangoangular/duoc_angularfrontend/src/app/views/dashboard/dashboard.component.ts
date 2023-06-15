@@ -25,86 +25,8 @@ export class DashboardComponent implements OnInit {
   constructor(private chartsData: DashboardChartsData) {
   }
 
-  public users: IUser[] = [
-    {
-      name: 'Yiorgos Avraamu',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'Us',
-      usage: 50,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Mastercard',
-      activity: '1 Hora',
-      avatar: './assets/img/avatars/1.jpg',
-      status: 'success',
-      color: 'success'
-    },
-    {
-      name: 'Avram Tarasios',
-      state: 'Recurring ',
-      registered: 'Jan 1, 2021',
-      country: 'Br',
-      usage: 10,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Visa',
-      activity: '52 minutos ',
-      avatar: './assets/img/avatars/2.jpg',
-      status: 'danger',
-      color: 'info'
-    },
-    {
-      name: 'Quintin Ed',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'In',
-      usage: 74,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Stripe',
-      activity: '5 Horas',
-      avatar: './assets/img/avatars/3.jpg',
-      status: 'warning',
-      color: 'warning'
-    },
-    {
-      name: 'Enéas Kwadwo',
-      state: 'Sleep',
-      registered: 'Jan 1, 2021',
-      country: 'Fr',
-      usage: 98,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Paypal',
-      activity: '2 min',
-      avatar: './assets/img/avatars/4.jpg',
-      status: 'secondary',
-      color: 'danger'
-    },
-    {
-      name: 'Agapetus Tadeáš',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'Es',
-      usage: 22,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'ApplePay',
-      activity: '10 dias',
-      avatar: './assets/img/avatars/5.jpg',
-      status: 'success',
-      color: 'primary'
-    },
-    {
-      name: 'Friderik Dávid',
-      state: 'New',
-      registered: 'Jan 1, 2021',
-      country: 'Pl',
-      usage: 43,
-      period: 'Jun 11, 2021 - Jul 10, 2021',
-      payment: 'Amex',
-      activity: 'Martes',
-      avatar: './assets/img/avatars/6.jpg',
-      status: 'info',
-      color: 'dark'
-    }
-  ];
+  slides: any[] = new Array(3).fill({id: -1, src: '', title: '', subtitle: ''});
+
   public mainChart: IChartProps = {};
   public chart: Array<IChartProps> = [];
   public trafficRadioGroup = new UntypedFormGroup({
@@ -113,6 +35,16 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.initCharts();
+
+    this.slides[0] = {
+      src: '../../../assets/img/car01.png',
+    };
+    this.slides[1] = {
+      src: '../../../assets/img/car02.jpg',
+    }
+    this.slides[2] = {
+      src: '../../../assets/img/car03.jpg',
+    }
   }
 
   initCharts(): void {
@@ -123,5 +55,9 @@ export class DashboardComponent implements OnInit {
     this.trafficRadioGroup.setValue({ trafficRadio: value });
     this.chartsData.initMainChart(value);
     this.initCharts();
+  }
+
+  onItemChange($event: any): void {
+    console.log('Carousel onItemChange', $event);
   }
 }
