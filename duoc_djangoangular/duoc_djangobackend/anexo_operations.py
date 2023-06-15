@@ -11,31 +11,30 @@ import tempfile
 from bson.objectid import ObjectId
 
 
-def create_calculo_name(nombre):
+def create_calculo_name(name: str, month: int = None):
     """Función re-utilizable que crea el nombre del calculo mensual en español y lo retorna para que sea usable en el modelo
     Returns: nombre_calculo (str): Nombre del calculo mensual
     """
     # crea diccionario de nombres de mes en espanol
     month_names = {
-        "January": "Enero",
-        "February": "Febrero",
-        "March": "Marzo",
-        "April": "Abril",
-        "May": "Mayo",
-        "June": "Junio",
-        "July": "Julio",
-        "August": "Agosto",
-        "September": "Septiembre",
-        "October": "Octubre",
-        "November": "Noviembre",
-        "December": "Diciembre",
+        1: "Enero",
+        2: "Febrero",
+        3: "Marzo",
+        4: "Abril",
+        5: "Mayo",
+        6: "Junio",
+        7: "Julio",
+        8: "Agosto",
+        9: "Septiembre",
+        10: "Octubre",
+        11: "Noviembre",
+        12: "Diciembre",
     }
     # obtiene el mes y año actual
-    month_name = datetime.now().strftime("%B")
+    month_name = month_names[month]
     year = datetime.now().strftime("%Y")
-    mes = month_names[month_name]
     # crea el nombre del calculo mensual
-    nombre_calculo = f"Calculo_{nombre}_{mes}_{year}"
+    nombre_calculo = f"Calculo_{name}_{month_name}_{year}"
 
     return nombre_calculo
 
@@ -126,7 +125,7 @@ def reprocess_anexo(id_anexo):
 
 
 # Calcular tarificacion Mensual por unidad.
-def calculo_mensual_unidad(id_anexo):
+def calculo_mensual_unidad(id_anexo, mes):
     """Function que calcula la tarificacion mensual por unidad.
     Args: id_anexo (int): Id del anexo.(cada anexo tiene una unica id_unidad y id_facultad, por lo que toda la info del respectivo anexo corresponde a una unidad y facultad)
     """
@@ -172,7 +171,8 @@ def calculo_mensual_unidad(id_anexo):
     unidad = Unidad.objects.get(id_unidad=id_unidad)
     nombre_depto = unidad.nombre_depto
     # Crea nombre readable
-    calculo_nombre = create_calculo_name(nombre_depto)
+    print("llegue a poner el nombre")
+    calculo_nombre = create_calculo_name(nombre_depto, mes)
     # Crear nuevo calculo_mensual o updatear uno existente
     calculo_general = CalculoMensualUnidad.objects.filter(
         id_facultad=id_facultad, id_unidad=id_unidad, nombre_calculo=calculo_nombre
@@ -245,7 +245,7 @@ def calculo_mensual_general(mes: int, id_facultad: int) -> None:
     facultad = CuentaPresupuestaria.objects.get(id_facultad=id_facultad)
     nombre_facultad = facultad.nombre_facultad
     # Crea nombre readable
-    calculo_nombre = create_calculo_name(nombre_facultad)
+    calculo_nombre = create_calculo_name(nombre_facultad, mes)
     # Crear nuevo calculo_mensual_general o updatear si existe
     calculo_general = CalculoMensualFacultad.objects.filter(
         id_facultad=id_facultad, nombre_calculo=calculo_nombre
