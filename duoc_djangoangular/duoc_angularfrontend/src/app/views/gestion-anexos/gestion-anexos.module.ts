@@ -14,7 +14,9 @@ import {
   ProgressModule,
   TableModule,
   TabsModule,
-  ModalModule
+  ModalModule,
+  AlertModule,
+  AlertComponent
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
@@ -45,7 +47,9 @@ import { WidgetsModule } from '../widgets/widgets.module';
     AvatarModule,
     TableModule,
     WidgetsModule,
-    ModalModule
+    ModalModule,
+    AlertModule,
+    AlertComponent
   ],
   declarations: [GestionAnexosComponent]
 })

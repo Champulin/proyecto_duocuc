@@ -1,4 +1,5 @@
 import {
+  cilWarning,
   cibCcAmex,
   cibCcApplePay,
   cibCcMastercard,
@@ -95,6 +96,7 @@ import {
 
 export const iconSubset = {
   cibCcAmex,
+  cilWarning,
   cibCcApplePay,
   cibCcMastercard,
   cibCcPaypal,
@@ -189,6 +191,7 @@ export const iconSubset = {
 };
 
 export enum IconSubset {
+  cilWarning = 'cilWarning',
   cibCcAmex = 'cibCcAmex',
   cibCcApplePay = 'cibCcApplePay',
   cibCcMastercard = 'cibCcMastercard',

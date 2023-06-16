@@ -22,6 +22,8 @@
 <div class="mb-3">
     <input cFormControl id="formFile" type="file" (change)="onFileSelected($event)"/>
 </div>
+<!--create send button-->
+<button (click)="insertAnexo()" cButton class="me-1" color="primary">Insertar Anexo</button>
 <br />
 <br />
 </div>
@@ -46,17 +48,29 @@
       <td>{{ each.id_unidad }}</td>
       <td>{{ each.id_facultad }}</td>
       <td>{{ each.fecha_creacion }}</td>
-      <!-- <td>
-        <button
-          cButton
-          color="success"
-
-        >
-          <svg cIcon name="cilFile"></svg>
-        </button>
-      </td> -->
     </tr>
   </tbody>
 </table>
 
+<c-alert *ngIf="success_alert" (visibleChange)="successAlert()" color="success" dismissible class="d-flex align-items-center">
+  <svg cIcon name="cilCheck"></svg>
+  &nbsp;&nbsp;
+  <div><strong>
+    Anexo insertado correctamente
+   </strong> 
+  </div>
+  <button (click)="success_alert=false" cButtonClose white>
+  </button>
+</c-alert>
+
+<c-alert *ngIf="error_alert" (visibleChange)="errorAlert('errorxd')" color="warning" dismissible class="d-flex align-items-center">
+  <svg cIcon name="cilWarning">
+</svg>
+<div>
+  <strong>Error al insertar anexo: {{mensaje_error}}</strong>
+</div>
+  <button (click)="error_alert=false" cButtonClose white>
+  </button>
+</c-alert>
+<hr>
 <br /><br />

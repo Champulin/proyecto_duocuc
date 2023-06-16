@@ -267,7 +267,6 @@ class calculouni_element(generics.RetrieveUpdateDestroyAPIView):
 
 # _________________ FIN CALCULO MENSUAL UNIDAD ______________________
 
-
 # Calculo mensual Facultad
 class calculofac_collection(generics.ListCreateAPIView):
     queryset = CalculoMensualFacultad.objects.all()
@@ -287,21 +286,17 @@ class calculofac_element(generics.RetrieveUpdateDestroyAPIView):
 
 # Notificaciones
 
-
 class notificaciones_collection(generics.ListCreateAPIView):
     queryset = Notificaciones.objects.all()
     serializer_class = NotificacionesSerializer
-
-
+    
 class notificaciones_element(generics.RetrieveUpdateDestroyAPIView):
-    def get_object(self):
-        pk = self.kwargs["pk"]
-        queryset = Notificaciones.objects.get(_id=ObjectId(pk))
-
-        return queryset
-
+    
+    queryset = Notificaciones.objects.all()
     serializer_class = NotificacionesSerializer
-
+    
+    lookup_field = 'id_unidad'
+    lookup_url_kwarg = 'pk'
 
 # _________________ FIN NOTIFICACIONES ______________________
 @api_view(["POST"])
@@ -410,9 +405,8 @@ def calculo_unidad(request):
     Returns: HttpResponse: Respuesta de la petición.
     """
     id_anexo = int(request.data.get("id_anexo"))
-    mes = int(request.data.get("mes"))
     try:
-        calculo_mensual_unidad(id_anexo, mes)
+        calculo_mensual_unidad(id_anexo)
     except Exception as e:
         response_data = {"message": f"Error al calcular el costo mensual: {e}"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
@@ -474,7 +468,7 @@ def clear_folder(request):
     Args: request (HttpRequest): Request que contiene los datos del usuario a crear.
     Returns: HttpResponse: Respuesta de la petición.
     """
-    print("IM IN")
+    print('IM IN')
     try:
         delete_all_files("duoc_djangobackend/media/reportes")
     except Exception as e:

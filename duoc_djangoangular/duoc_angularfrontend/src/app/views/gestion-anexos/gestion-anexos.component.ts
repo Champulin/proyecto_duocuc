@@ -15,13 +15,20 @@ import { Router } from '@angular/router';
 export class GestionAnexosComponent implements OnInit {
 
   visible = [false, false];
-  
+  success_alert = false;
+  error_alert = false;
+  mensaje_error = '';
+  public response_message: string = "";
   //var para guardar lista desde DB
   public anexos: any;
   public axeID: any;
   public axeName: any;
   public axeFaculty: any;
   public axeUnit: any;
+  //initialize a void FIle object
+  public file: File = new File([], '');
+  //initialize a void FormData object
+  public formData: FormData = new FormData();
 
   constructor(private _anexoDataService: AnexoDataService, private router:Router) { }
 
@@ -30,18 +37,17 @@ export class GestionAnexosComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    const file:File = event.target.files[0];
-    const formData:FormData = new FormData();
-    formData.append('id_anexo', this.axeID);
-    formData.append('id_facultad', this.axeFaculty); 
-    formData.append('id_unidad', this.axeUnit);
-    formData.append('nombre_anexo', this.axeName );
-    formData.append('file', file);
-
-    this.postAnexos(formData);
-    
+    this.file = event.target.files[0];
   }
-
+  successAlert() {
+    this.success_alert=true;
+    //alert("Anexo agregado con éxito");
+  }
+  errorAlert(mensaje: string) {
+    this.error_alert=true;
+    this.mensaje_error=mensaje;
+    //alert("Error al agregar anexo");
+  }
   getAnexos() {
     //Call for the service function list() to retrieve the info for all units in the DB
     this._anexoDataService.list().subscribe(
@@ -54,22 +60,37 @@ export class GestionAnexosComponent implements OnInit {
       () => console.log('Anexos List Loaded')
     );
   }
-
+  insertAnexo() {
+    const formData:FormData = new FormData();
+    formData.append('id_anexo', this.axeID);
+    formData.append('id_facultad', this.axeFaculty);
+    formData.append('id_unidad', this.axeUnit);
+    formData.append('nombre_anexo', this.axeName );
+    formData.append('file', this.file);
+    this.success_alert=false;
+    this.error_alert=false;
+    this.postAnexos(formData);
+  }
   postAnexos(form:any) {
     this._anexoDataService.uploadAnexo(form).subscribe(
       data => {
-        console.log(data)
-        console.log('We got a response so thats something')
+        this.successAlert();
         this.getAnexos();
       },
       err => {
-        console.error(err)
-        console.log('Error uploading the file, fuck')
+        this.response_message = JSON.stringify(err.error.message);
+        this.errorAlert(this.response_message);
+        //reset form data after error
+        this.axeID = '';
+        this.axeFaculty = '';
+        this.axeUnit = '';
+        this.axeName = '';
+        this.file = new File([], '');
       }  
     )
   }
-
   toggleCollapse(id: number): void {
     this.visible[id] = !this.visible[id];
   }
+
 }
