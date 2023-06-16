@@ -72,6 +72,27 @@
     </div>
 </div>
 
+<c-alert *ngIf="success_alert" (visibleChange)="successAlert()" color="success" dismissible class="d-flex align-items-center">
+  <svg cIcon name="cilCheck"></svg>
+  &nbsp;&nbsp;
+  <div><strong>
+    Calculo realizado con exito.
+   </strong> 
+  </div>
+  <button (click)="success_alert=false" cButtonClose white>
+  </button>
+</c-alert>
+
+<c-alert *ngIf="error_alert" (visibleChange)="errorAlert('Error')" color="warning" dismissible class="d-flex align-items-center">
+  <svg cIcon name="cilWarning">
+</svg>
+<div>
+  <strong>Error al realizar calculo: {{mensaje_error}}</strong>
+</div>
+  <button (click)="error_alert=false" cButtonClose white>
+  </button>
+</c-alert>
+
 
 <c-modal #calculateUnit backdrop="static" id="calculateUnit" alignment="center" size="lg">
   <c-modal-header>
@@ -102,3 +123,4 @@
       &nbsp; Calcular</button>
   </c-modal-footer>
 </c-modal>
+

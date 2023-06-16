@@ -19,6 +19,13 @@ import { Router } from '@angular/router';
 export class ProcesoAnexosComponent implements OnInit {
 
   visible = [false, false];
+
+  public success_alert = false;
+  public error_alert = false;
+  public mensaje_error = '';
+  public response_message: string = "";
+
+
   public anexos: any;
   public facultyRequest:any = {id_facultad:0, mes:0}
   public newOrder:any = {id_anexo:0}
@@ -40,6 +47,8 @@ export class ProcesoAnexosComponent implements OnInit {
 
   onMarked(calc: any): void {
     this.markedCalculus = calc;
+    this.success_alert=false;
+    this.error_alert=false;
     window.scroll({ 
       top: 0, 
       left: 0, 
@@ -73,6 +82,8 @@ export class ProcesoAnexosComponent implements OnInit {
   }
 
   runUnit(anexoForm:any) {
+    this.success_alert=false;
+    this.error_alert=false;
     let httpOptions = {
       headers: new HttpHeaders({
        'Content-Type': 'application/json' ,
@@ -87,15 +98,20 @@ export class ProcesoAnexosComponent implements OnInit {
     this.http.post(postOrder, JSON.stringify(body), httpOptions).subscribe(
       response => {
         console.log(response);
+        this.successAlert();
         this.createNote();
       },
-      error => {
-        console.error(error);
+      err => {
+        this.response_message = JSON.stringify(err.error.message);
+        this.errorAlert(this.response_message);
+        console.error(err);
       }
     );
   } 
 
   runFaculty(body:any){
+    this.success_alert=false;
+    this.error_alert=false;
     let httpOptions = {
       headers: new HttpHeaders({
        'Content-Type': 'application/json' ,
@@ -105,10 +121,13 @@ export class ProcesoAnexosComponent implements OnInit {
     console.log('I went inside the RUN')
     return this.http.post(postOrder, JSON.stringify(body), httpOptions).subscribe(
       response => {
+        this.successAlert();
         console.log(response);
       },
-      error => {
-        console.error(error);
+      err => {
+        this.response_message = JSON.stringify(err.error.message);
+        this.errorAlert(this.response_message);
+        console.error(err);
       }
     );
   }
@@ -146,6 +165,8 @@ export class ProcesoAnexosComponent implements OnInit {
 
 
   setRadioValue(value: string): void {
+    this.success_alert=false;
+    this.error_alert=false;
     this.btnRadioGroup.setValue({ radio1: value });
     console.log(this.btnRadioGroup.value)
     if (this.btnRadioGroup.value.radio1 == 'Radio1') {
@@ -165,4 +186,15 @@ export class ProcesoAnexosComponent implements OnInit {
     this.visible[id] = !this.visible[id];
   }
 
+  successAlert() {
+    this.success_alert=true;
+    //alert("Anexo agregado con éxito");
+  }
+
+  errorAlert(mensaje: string) {
+    this.error_alert = true;
+    this.mensaje_error = mensaje;
+    //alert("Error al agregar anexo");
+  }
+  
 }

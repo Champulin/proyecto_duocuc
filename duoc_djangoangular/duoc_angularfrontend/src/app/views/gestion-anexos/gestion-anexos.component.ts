@@ -39,15 +39,18 @@ export class GestionAnexosComponent implements OnInit {
   onFileSelected(event: any) {
     this.file = event.target.files[0];
   }
+  
   successAlert() {
     this.success_alert=true;
     //alert("Anexo agregado con éxito");
   }
+
   errorAlert(mensaje: string) {
     this.error_alert=true;
     this.mensaje_error=mensaje;
     //alert("Error al agregar anexo");
   }
+
   getAnexos() {
     //Call for the service function list() to retrieve the info for all units in the DB
     this._anexoDataService.list().subscribe(
@@ -60,6 +63,7 @@ export class GestionAnexosComponent implements OnInit {
       () => console.log('Anexos List Loaded')
     );
   }
+
   insertAnexo() {
     const formData:FormData = new FormData();
     formData.append('id_anexo', this.axeID);
@@ -71,6 +75,7 @@ export class GestionAnexosComponent implements OnInit {
     this.error_alert=false;
     this.postAnexos(formData);
   }
+
   postAnexos(form:any) {
     this._anexoDataService.uploadAnexo(form).subscribe(
       data => {
@@ -89,6 +94,7 @@ export class GestionAnexosComponent implements OnInit {
       }  
     )
   }
+
   toggleCollapse(id: number): void {
     this.visible[id] = !this.visible[id];
   }
