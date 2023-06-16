@@ -78,9 +78,8 @@ export class GestionProveedorComponent implements OnInit{
     this.savePDT();
     this._pdtDataService.create(this.newPDT).subscribe(
      data => {
-        // console.log('Data Sent: ' + data);
-        console.log('Make order executed')
         this.getPDT();
+        this.toggleCollapse(0);
         return true;
       },
       error => {
@@ -88,7 +87,6 @@ export class GestionProveedorComponent implements OnInit{
         return throwError(error);
       }
     )
-    this.toggleCollapse(0);
   }
 
   // Deletes the corresponding element from the list and the database
