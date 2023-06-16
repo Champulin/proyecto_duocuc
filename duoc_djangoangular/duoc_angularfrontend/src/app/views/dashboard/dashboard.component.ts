@@ -37,13 +37,13 @@ export class DashboardComponent implements OnInit {
     this.initCharts();
 
     this.slides[0] = {
-      src: '../../../assets/img/car01.png',
+      src: '/assets/img/car01.png',
     };
     this.slides[1] = {
-      src: '../../../assets/img/car02.jpg',
+      src: '/assets/img/car02.jpg',
     }
     this.slides[2] = {
-      src: '../../../assets/img/car03.jpg',
+      src: '/assets/img/car03.jpg',
     }
   }
 

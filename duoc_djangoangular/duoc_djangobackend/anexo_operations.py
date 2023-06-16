@@ -303,7 +303,7 @@ def consultar_trafico_llamada(nombre_proveedor: str, mes: int):
     duracion_total_cel = 0
     duracion_total_ldi = 0
     duracion_total_slm = 0
-    mes_actual = mes
+    mes_actual = mes - 1
     # iteracion de registros
     for registro in registros:
         # extraer el tipo_llamada y duracion_llamada del registro
