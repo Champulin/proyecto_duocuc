@@ -16,7 +16,7 @@ Tambien se puede descargar desde [aqui](https://www.mongodb.com/try/download/com
 
 > Ejecutar mongosh.exe
 
-![1682279232927](image/README_MONGO/1682279232927.png)
+![1686803118517](image/README/1686803118517.png)
 
 Escribir los siguientes comandos:
 
@@ -125,7 +125,9 @@ Para iniciar el Backend seguir los siguientes pasos.
 
 Desde el root del proyecto realizar
 
-> cd duoc_djangoangular/
+```
+cd duoc_djangoangular/
+```
 
 Verificar con comandos LS o DIR que estamos bien en la carpeta donde esta manage.py
 
@@ -133,17 +135,23 @@ Verificar con comandos LS o DIR que estamos bien en la carpeta donde esta manage
 
 una vez dentro ejecutar el siguiente comando:
 
-> python manage.py runserver
+```
+python manage.py runserver
+```
 
 ![1686521555470](image/README/1686521555470.png)Si todo fue instalado de manera correcta deberia ver una imagen que se asemeje a la siguiente, con su servidor andando en el puerto 8000.
 
 Ahora toca inicializar el FrontEnd desde la otra terminal en la carpeta root.
 
-> cd duoc_djangoangular/duoc_angularfrontend/
+```
+cd duoc_djangoangular/duoc_angularfrontend/
+```
 
 una vez dentro ejecutar el comando
 
-> ng serve
+```
+ng serve
+```
 
 Si se siguieron de manera correcta los previos pasos de instalacion deberia de verse asi su terminal:
 ![1686521740716](image/README/1686521740716.png)
