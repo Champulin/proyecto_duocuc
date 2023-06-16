@@ -3,9 +3,6 @@
 
 from django.db import migrations
 from django.contrib.auth.hashers import make_password
-from django.core.files import File
-from ..anexo_operations import process_anexo, calculo_mensual_unidad
-import os
 
 
 def add_data(apps, schema_editor):

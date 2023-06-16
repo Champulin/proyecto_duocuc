@@ -2,7 +2,6 @@ import pandas as pd
 from .models import *
 from .views import *
 from datetime import datetime
-from rest_framework.response import Response
 
 # from weasyprint import HTML
 from django.http import FileResponse
